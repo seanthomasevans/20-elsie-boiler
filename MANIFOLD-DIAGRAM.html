@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rinnai RXP199iN Manifold Layout - 20 Elsie Lane Unit 217</title>
+<style>
+  @media print {
+    body { margin: 0; }
+    .no-print { display: none; }
+  }
+  body {
+    background: #1a1a1a;
+    color: #e0e0e0;
+    font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+    margin: 0;
+    padding: 20px;
+  }
+  h1 {
+    font-size: 18px;
+    color: #fff;
+    margin: 0 0 5px 0;
+    letter-spacing: 1px;
+  }
+  h2 {
+    font-size: 13px;
+    color: #888;
+    margin: 0 0 20px 0;
+    font-weight: normal;
+  }
+  .diagram-container {
+    display: flex;
+    gap: 30px;
+    align-items: flex-start;
+  }
+  .legend {
+    background: #222;
+    border: 1px solid #444;
+    border-radius: 6px;
+    padding: 15px;
+    min-width: 220px;
+    font-size: 12px;
+  }
+  .legend h3 {
+    margin: 0 0 12px 0;
+    font-size: 13px;
+    color: #ccc;
+    border-bottom: 1px solid #444;
+    padding-bottom: 8px;
+  }
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 8px;
+  }
+  .legend-swatch {
+    width: 30px;
+    height: 4px;
+    border-radius: 2px;
+    flex-shrink: 0;
+  }
+  .legend-label { color: #bbb; }
+  .parts-list {
+    background: #222;
+    border: 1px solid #444;
+    border-radius: 6px;
+    padding: 15px;
+    min-width: 260px;
+    font-size: 11px;
+  }
+  .parts-list h3 {
+    margin: 0 0 12px 0;
+    font-size: 13px;
+    color: #ccc;
+    border-bottom: 1px solid #444;
+    padding-bottom: 8px;
+  }
+  .parts-list table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  .parts-list td {
+    padding: 3px 5px;
+    border-bottom: 1px solid #333;
+    vertical-align: top;
+  }
+  .parts-list td:first-child {
+    color: #f0c040;
+    font-weight: bold;
+    white-space: nowrap;
+    width: 30px;
+  }
+  .parts-list td:last-child {
+    color: #999;
+    text-align: right;
+    white-space: nowrap;
+  }
+  .note {
+    background: #2a2520;
+    border: 1px solid #665530;
+    border-radius: 6px;
+    padding: 12px 15px;
+    margin-top: 15px;
+    font-size: 11px;
+    color: #d4a050;
+    line-height: 1.5;
+  }
+  svg text {
+    font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+  }
+</style>
+</head>
+<body>
+
+<h1>MANIFOLD PIPING DIAGRAM</h1>
+<h2>Rinnai RXP199iN  //  20 Elsie Lane, Unit 217  //  DHW + Hydronic Heating (Open Loop)</h2>
+
+<div class="diagram-container">
+
+<svg width="740" height="920" viewBox="0 0 740 920" xmlns="http://www.w3.org/2000/svg">
+
+  <!-- Background grid (subtle) -->
+  <defs>
+    <pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse">
+      <path d="M 20 0 L 0 0 0 20" fill="none" stroke="#252525" stroke-width="0.5"/>
+    </pattern>
+    <!-- Arrowhead markers -->
+    <marker id="arrow-red" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L8,3 L0,6 Z" fill="#e05050"/>
+    </marker>
+    <marker id="arrow-blue" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L8,3 L0,6 Z" fill="#4488dd"/>
+    </marker>
+    <marker id="arrow-green" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L8,3 L0,6 Z" fill="#50b050"/>
+    </marker>
+    <marker id="arrow-purple" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L8,3 L0,6 Z" fill="#9966cc"/>
+    </marker>
+    <marker id="arrow-orange" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L8,3 L0,6 Z" fill="#e09030"/>
+    </marker>
+    <marker id="arrow-gray" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L8,3 L0,6 Z" fill="#888"/>
+    </marker>
+    <!-- Ball valve symbol -->
+    <symbol id="ball-valve" viewBox="0 0 20 20">
+      <line x1="0" y1="10" x2="6" y2="10" stroke="currentColor" stroke-width="2.5"/>
+      <circle cx="10" cy="10" r="4" fill="none" stroke="currentColor" stroke-width="2"/>
+      <line x1="14" y1="10" x2="20" y2="10" stroke="currentColor" stroke-width="2.5"/>
+    </symbol>
+    <!-- Valve handle (red diamond) -->
+    <symbol id="valve-handle" viewBox="0 0 16 10">
+      <rect x="2" y="1" width="12" height="8" rx="1.5" fill="#cc3333" stroke="#aa2222" stroke-width="0.5"/>
+    </symbol>
+  </defs>
+
+  <rect width="740" height="920" fill="#1a1a1a"/>
+  <rect width="740" height="920" fill="url(#grid)"/>
+
+  <!-- ==================== WALL OUTLINE ==================== -->
+  <rect x="100" y="30" width="540" height="870" rx="4" fill="none" stroke="#333" stroke-width="1" stroke-dasharray="8,4"/>
+  <text x="370" y="22" text-anchor="middle" fill="#444" font-size="10">WALL (REAR OF CLOSET)</text>
+
+  <!-- ==================== VENTING (top) ==================== -->
+  <!-- Exhaust pipe (PVC) -->
+  <line x1="280" y1="30" x2="280" y2="100" stroke="#888" stroke-width="6" stroke-linecap="round"/>
+  <text x="280" y="45" text-anchor="middle" fill="#aaa" font-size="9" font-weight="bold">EXHAUST</text>
+  <text x="280" y="56" text-anchor="middle" fill="#666" font-size="8">2" or 3" PVC</text>
+
+  <!-- Intake pipe (PVC) -->
+  <line x1="380" y1="30" x2="380" y2="100" stroke="#888" stroke-width="6" stroke-linecap="round"/>
+  <text x="380" y="45" text-anchor="middle" fill="#aaa" font-size="9" font-weight="bold">INTAKE</text>
+  <text x="380" y="56" text-anchor="middle" fill="#666" font-size="8">2" or 3" PVC</text>
+
+  <!-- Arrow up to exterior wall -->
+  <path d="M270,35 L280,25 L290,35" fill="none" stroke="#888" stroke-width="1.5"/>
+  <path d="M370,35 L380,25 L390,35" fill="none" stroke="#888" stroke-width="1.5"/>
+  <text x="330" y="75" text-anchor="middle" fill="#555" font-size="8">TO EXTERIOR</text>
+
+  <!-- ==================== RINNAI UNIT ==================== -->
+  <rect x="220" y="100" width="220" height="170" rx="6" fill="#2a2a30" stroke="#556" stroke-width="2"/>
+  <rect x="230" y="110" width="200" height="30" rx="3" fill="#334" stroke="none"/>
+  <text x="330" y="130" text-anchor="middle" fill="#8899bb" font-size="13" font-weight="bold">RINNAI RXP199iN</text>
+  <text x="330" y="155" text-anchor="middle" fill="#667" font-size="10">199,000 BTU  |  11.1 GPM</text>
+  <text x="330" y="170" text-anchor="middle" fill="#667" font-size="10">Condensing  |  0.96 UEF</text>
+  <text x="330" y="190" text-anchor="middle" fill="#556" font-size="9">Built-in Recirc Pump</text>
+
+  <!-- Unit connection stubs -->
+  <!-- Labels for unit connections -->
+  <text x="250" y="252" text-anchor="middle" fill="#4488dd" font-size="8" font-weight="bold">COLD</text>
+  <text x="250" y="261" text-anchor="middle" fill="#4488dd" font-size="8">IN</text>
+  <text x="310" y="252" text-anchor="middle" fill="#e05050" font-size="8" font-weight="bold">HOT</text>
+  <text x="310" y="261" text-anchor="middle" fill="#e05050" font-size="8">OUT</text>
+  <text x="370" y="252" text-anchor="middle" fill="#e09030" font-size="8" font-weight="bold">GAS</text>
+  <text x="370" y="261" text-anchor="middle" fill="#e09030" font-size="8">IN</text>
+  <text x="420" y="252" text-anchor="middle" fill="#9966cc" font-size="8" font-weight="bold">RECIRC</text>
+  <text x="420" y="261" text-anchor="middle" fill="#9966cc" font-size="8">RETURN</text>
+
+  <!-- ==================== COLD WATER LINE (Blue) ==================== -->
+  <!-- Vertical drop from unit -->
+  <line x1="250" y1="270" x2="250" y2="450" stroke="#4488dd" stroke-width="4" stroke-linecap="round"/>
+
+  <!-- BV1: Cold inlet isolation valve -->
+  <rect x="240" y="305" width="20" height="16" rx="3" fill="#333" stroke="#4488dd" stroke-width="1.5"/>
+  <rect x="243" y="300" width="14" height="6" rx="1.5" fill="#cc3333"/>
+  <text x="225" y="316" text-anchor="end" fill="#4488dd" font-size="8" font-weight="bold">BV1</text>
+
+  <!-- Tee: branch to TMV cold bypass -->
+  <circle cx="250" cy="380" r="4" fill="#4488dd"/>
+  <line x1="250" y1="380" x2="510" y2="380" stroke="#4488dd" stroke-width="3" stroke-linecap="round"/>
+  <text x="350" y="375" text-anchor="middle" fill="#4488dd" font-size="7">COLD BYPASS TO TMV</text>
+
+  <!-- Expansion tank tee -->
+  <circle cx="250" cy="430" r="4" fill="#4488dd"/>
+  <line x1="250" y1="430" x2="160" y2="430" stroke="#4488dd" stroke-width="3" stroke-linecap="round"/>
+
+  <!-- DHW Expansion tank -->
+  <rect x="120" y="420" width="40" height="55" rx="5" fill="#2a3040" stroke="#4488dd" stroke-width="1.5"/>
+  <text x="140" y="443" text-anchor="middle" fill="#6688aa" font-size="7" font-weight="bold">EXP</text>
+  <text x="140" y="453" text-anchor="middle" fill="#6688aa" font-size="7">TANK</text>
+  <text x="140" y="463" text-anchor="middle" fill="#556" font-size="6">2 gal</text>
+  <text x="140" y="490" text-anchor="middle" fill="#445" font-size="7">Amtrol ST-5</text>
+
+  <!-- Cold supply continues down to main -->
+  <line x1="250" y1="450" x2="250" y2="500" stroke="#4488dd" stroke-width="4" stroke-linecap="round"/>
+
+  <!-- Heating return merges here -->
+  <circle cx="250" cy="500" r="5" fill="#4488dd" stroke="#9966cc" stroke-width="1.5"/>
+  <text x="234" y="518" text-anchor="end" fill="#556" font-size="7">HEATING RETURN</text>
+  <text x="234" y="527" text-anchor="end" fill="#556" font-size="7">MERGES HERE</text>
+
+  <!-- Cold supply arrow from main -->
+  <line x1="250" y1="500" x2="250" y2="560" stroke="#4488dd" stroke-width="4" stroke-linecap="round"/>
+  <path d="M250,560 L250,570" stroke="#4488dd" stroke-width="4" marker-end="url(#arrow-blue)"/>
+  <text x="250" y="590" text-anchor="middle" fill="#4488dd" font-size="9" font-weight="bold">COLD SUPPLY IN</text>
+  <text x="250" y="602" text-anchor="middle" fill="#556" font-size="8">from main shutoff</text>
+
+  <!-- ==================== HOT WATER LINE (Red) ==================== -->
+  <!-- Vertical drop from unit -->
+  <line x1="310" y1="270" x2="310" y2="380" stroke="#e05050" stroke-width="4" stroke-linecap="round"/>
+
+  <!-- BV2: Hot outlet isolation valve -->
+  <rect x="300" y="305" width="20" height="16" rx="3" fill="#333" stroke="#e05050" stroke-width="1.5"/>
+  <rect x="303" y="300" width="14" height="6" rx="1.5" fill="#cc3333"/>
+  <text x="335" y="316" text-anchor="start" fill="#e05050" font-size="8" font-weight="bold">BV2</text>
+
+  <!-- Tee: split to heating supply and TMV -->
+  <circle cx="310" cy="380" r="4" fill="#e05050"/>
+
+  <!-- Branch right to TMV hot inlet -->
+  <line x1="310" y1="380" x2="510" y2="380" stroke="#e05050" stroke-width="3" stroke-linecap="round" stroke-dasharray="0"/>
+  <!-- This overlaps with cold bypass - let me adjust. Cold bypass goes to TMV at a different Y -->
+
+  <!-- Actually, let me reorganize. The hot goes to TMV and also tees down to heating supply -->
+
+  <!-- Hot continues down to heating supply tee -->
+  <line x1="310" y1="380" x2="310" y2="440" stroke="#e05050" stroke-width="4" stroke-linecap="round"/>
+  <circle cx="310" cy="440" r="4" fill="#e05050"/>
+
+  <!-- Branch left: HEATING SUPPLY -->
+  <line x1="310" y1="440" x2="160" y2="440" stroke="#e05050" stroke-width="3" stroke-linecap="round" marker-end="url(#arrow-red)"/>
+
+  <!-- Zone valve on heating supply -->
+  <rect x="210" y="432" width="24" height="16" rx="3" fill="#333" stroke="#e09030" stroke-width="1.5"/>
+  <text x="222" y="444" text-anchor="middle" fill="#e09030" font-size="6" font-weight="bold">ZV</text>
+  <text x="222" y="462" text-anchor="middle" fill="#888" font-size="7">Zone Valve</text>
+
+  <!-- BV3: Heating supply isolation -->
+  <rect x="170" y="432" width="20" height="16" rx="3" fill="#333" stroke="#e05050" stroke-width="1.5"/>
+  <rect x="173" y="427" width="14" height="6" rx="1.5" fill="#cc3333"/>
+  <text x="180" y="462" text-anchor="middle" fill="#e05050" font-size="7" font-weight="bold">BV3</text>
+
+  <text x="140" y="444" text-anchor="middle" fill="#e05050" font-size="8" font-weight="bold">TO</text>
+  <text x="140" y="454" text-anchor="middle" fill="#e05050" font-size="8" font-weight="bold">FAN COIL</text>
+
+  <!-- Hot continues right to TMV -->
+  <line x1="310" y1="380" x2="510" y2="380" stroke="#e05050" stroke-width="3" stroke-linecap="round"/>
+
+  <!-- ==================== TMV (Thermostatic Mixing Valve) ==================== -->
+  <rect x="500" y="355" width="70" height="75" rx="6" fill="#2a3028" stroke="#50b050" stroke-width="1.5"/>
+  <text x="535" y="375" text-anchor="middle" fill="#50b050" font-size="9" font-weight="bold">TMV</text>
+  <text x="535" y="388" text-anchor="middle" fill="#556" font-size="7">Watts</text>
+  <text x="535" y="398" text-anchor="middle" fill="#556" font-size="7">LFMMVM1</text>
+
+  <!-- Hot inlet to TMV (top) -->
+  <text x="498" y="373" text-anchor="end" fill="#e05050" font-size="7">HOT IN</text>
+
+  <!-- Cold bypass to TMV - route at different Y -->
+  <line x1="250" y1="380" x2="250" y2="410" stroke="#4488dd" stroke-width="3" stroke-linecap="round"/>
+  <line x1="250" y1="410" x2="500" y2="410" stroke="#4488dd" stroke-width="3" stroke-linecap="round"/>
+  <text x="498" y="415" text-anchor="end" fill="#4488dd" font-size="7">COLD IN</text>
+
+  <!-- TMV mixed output -->
+  <line x1="535" y1="430" x2="535" y2="470" stroke="#50b050" stroke-width="4" stroke-linecap="round"/>
+  <line x1="535" y1="470" x2="610" y2="470" stroke="#50b050" stroke-width="4" stroke-linecap="round" marker-end="url(#arrow-green)"/>
+  <text x="630" y="465" text-anchor="start" fill="#50b050" font-size="9" font-weight="bold">HOUSE</text>
+  <text x="630" y="477" text-anchor="start" fill="#50b050" font-size="9" font-weight="bold">HOT</text>
+  <text x="630" y="489" text-anchor="start" fill="#556" font-size="8">120F mixed</text>
+
+  <!-- Check valves on TMV inlets -->
+  <text x="460" y="373" text-anchor="middle" fill="#888" font-size="7">CV</text>
+  <circle cx="460" cy="380" r="5" fill="none" stroke="#888" stroke-width="1"/>
+  <text x="460" y="405" text-anchor="middle" fill="#888" font-size="7">CV</text>
+  <circle cx="460" cy="410" r="5" fill="none" stroke="#888" stroke-width="1"/>
+
+  <!-- ==================== GAS LINE (Orange) ==================== -->
+  <line x1="370" y1="270" x2="370" y2="380" stroke="#e09030" stroke-width="4" stroke-linecap="round"/>
+
+  <!-- Gas shutoff valve -->
+  <rect x="360" y="305" width="20" height="16" rx="3" fill="#333" stroke="#e09030" stroke-width="1.5"/>
+  <rect x="363" y="300" width="14" height="6" rx="1.5" fill="#e09030"/>
+  <text x="395" y="316" text-anchor="start" fill="#e09030" font-size="8" font-weight="bold">GAS V</text>
+
+  <!-- Sediment trap (drip leg) -->
+  <line x1="370" y1="350" x2="370" y2="380" stroke="#e09030" stroke-width="4" stroke-linecap="round"/>
+  <line x1="370" y1="380" x2="370" y2="410" stroke="#e09030" stroke-width="3" stroke-linecap="round"/>
+  <rect x="363" y="405" width="14" height="20" rx="2" fill="#333" stroke="#e09030" stroke-width="1"/>
+  <text x="395" y="370" text-anchor="start" fill="#e09030" font-size="7">DRIP LEG</text>
+  <text x="395" y="380" text-anchor="start" fill="#666" font-size="7">(sediment trap)</text>
+
+  <!-- Gas supply from meter -->
+  <line x1="370" y1="380" x2="370" y2="380" stroke="#e09030" stroke-width="3"/>
+  <line x1="370" y1="380" x2="600" y2="380" stroke="none"/>
+  <!-- Gas comes from below/side -->
+  <line x1="370" y1="410" x2="370" y2="410" stroke="#e09030" stroke-width="3"/>
+  <path d="M370,555 L370,575" stroke="#e09030" stroke-width="4" marker-end="url(#arrow-orange)"/>
+  <line x1="370" y1="380" x2="370" y2="555" stroke="none"/>
+  <!-- Simplify: gas comes up from below -->
+  <line x1="370" y1="425" x2="370" y2="560" stroke="#e09030" stroke-width="3" stroke-linecap="round" stroke-dasharray="6,4"/>
+  <text x="370" y="590" text-anchor="middle" fill="#e09030" font-size="9" font-weight="bold">GAS SUPPLY</text>
+  <text x="370" y="602" text-anchor="middle" fill="#666" font-size="8">3/4" from meter</text>
+  <text x="370" y="614" text-anchor="middle" fill="#884420" font-size="8">GAS FITTER ONLY</text>
+
+  <!-- ==================== RECIRC RETURN (Purple) ==================== -->
+  <line x1="420" y1="270" x2="420" y2="340" stroke="#9966cc" stroke-width="3" stroke-linecap="round"/>
+  <line x1="420" y1="340" x2="600" y2="340" stroke="#9966cc" stroke-width="3" stroke-linecap="round" stroke-dasharray="6,4"/>
+  <text x="610" y="335" text-anchor="start" fill="#9966cc" font-size="8" font-weight="bold">DHW RECIRC</text>
+  <text x="610" y="347" text-anchor="start" fill="#666" font-size="7">from furthest fixture</text>
+  <text x="610" y="359" text-anchor="start" fill="#556" font-size="7">(optional, built-in pump</text>
+  <text x="610" y="370" text-anchor="start" fill="#556" font-size="7">handles this)</text>
+
+  <!-- ==================== HEATING RETURN (Purple, from fan coil) ==================== -->
+  <!-- Return line from fan coil -->
+  <line x1="140" y1="500" x2="250" y2="500" stroke="#9966cc" stroke-width="3" stroke-linecap="round"/>
+
+  <text x="120" y="497" text-anchor="middle" fill="#9966cc" font-size="8" font-weight="bold">FROM</text>
+  <text x="120" y="508" text-anchor="middle" fill="#9966cc" font-size="8" font-weight="bold">FAN COIL</text>
+  <text x="120" y="519" text-anchor="middle" fill="#556" font-size="7">return</text>
+
+  <!-- Check valve on return -->
+  <text x="195" y="495" text-anchor="middle" fill="#888" font-size="7">CV</text>
+  <circle cx="195" cy="500" r="5" fill="none" stroke="#9966cc" stroke-width="1.5"/>
+
+  <!-- BV4: Heating return isolation -->
+  <rect x="155" y="492" width="20" height="16" rx="3" fill="#333" stroke="#9966cc" stroke-width="1.5"/>
+  <rect x="158" y="487" width="14" height="6" rx="1.5" fill="#cc3333"/>
+  <text x="165" y="522" text-anchor="middle" fill="#9966cc" font-size="7" font-weight="bold">BV4</text>
+
+  <!-- Heating expansion tank -->
+  <rect x="120" y="540" width="40" height="55" rx="5" fill="#2a2a38" stroke="#9966cc" stroke-width="1.5"/>
+  <text x="140" y="563" text-anchor="middle" fill="#9966cc" font-size="7" font-weight="bold">EXP</text>
+  <text x="140" y="573" text-anchor="middle" fill="#9966cc" font-size="7">TANK</text>
+  <text x="140" y="583" text-anchor="middle" fill="#556" font-size="6">HTG</text>
+  <text x="140" y="610" text-anchor="middle" fill="#445" font-size="7">Extrol 15</text>
+  <line x1="165" y1="500" x2="165" y2="540" stroke="#9966cc" stroke-width="2" stroke-linecap="round"/>
+  <line x1="165" y1="540" x2="160" y2="540" stroke="#9966cc" stroke-width="2"/>
+
+  <!-- ==================== CONDENSATE DRAIN (Gray) ==================== -->
+  <line x1="440" y1="270" x2="440" y2="290" stroke="#888" stroke-width="2" stroke-linecap="round"/>
+  <text x="455" y="277" text-anchor="start" fill="#888" font-size="7">CONDENSATE</text>
+  <line x1="440" y1="290" x2="530" y2="290" stroke="#888" stroke-width="2" stroke-linecap="round"/>
+  <line x1="530" y1="290" x2="530" y2="320" stroke="#888" stroke-width="2" stroke-linecap="round"/>
+
+  <!-- Neutralizer -->
+  <rect x="515" y="290" width="30" height="35" rx="4" fill="#2a2a28" stroke="#888" stroke-width="1"/>
+  <text x="530" y="305" text-anchor="middle" fill="#888" font-size="6" font-weight="bold">NEU</text>
+  <text x="530" y="314" text-anchor="middle" fill="#888" font-size="6">TRA</text>
+
+  <!-- To floor drain -->
+  <line x1="530" y1="325" x2="530" y2="340" stroke="#888" stroke-width="2" stroke-linecap="round" stroke-dasharray="4,3"/>
+  <!-- Floor drain symbol would go here -->
+
+  <!-- ==================== BOILER DRAINS ==================== -->
+  <!-- Drain on cold side -->
+  <line x1="250" y1="450" x2="200" y2="450" stroke="#4488dd" stroke-width="2" stroke-dasharray="4,3"/>
+  <text x="195" y="448" text-anchor="end" fill="#556" font-size="7">DRAIN</text>
+
+  <!-- ==================== FAN COIL BOX (Left side reference) ==================== -->
+  <rect x="30" y="435" width="85" height="90" rx="4" fill="none" stroke="#555" stroke-width="1" stroke-dasharray="5,3"/>
+  <text x="72" y="460" text-anchor="middle" fill="#666" font-size="9" font-weight="bold">FAN COIL</text>
+  <text x="72" y="472" text-anchor="middle" fill="#555" font-size="7">(existing in</text>
+  <text x="72" y="482" text-anchor="middle" fill="#555" font-size="7">plenum)</text>
+  <text x="72" y="500" text-anchor="middle" fill="#555" font-size="7">CIRC PUMP</text>
+  <text x="72" y="510" text-anchor="middle" fill="#555" font-size="7">(existing)</text>
+
+  <!-- Supply arrow to fan coil -->
+  <path d="M140,440 L115,440" stroke="#e05050" stroke-width="2" marker-end="url(#arrow-red)"/>
+  <!-- Return arrow from fan coil -->
+  <path d="M115,500 L140,500" stroke="#9966cc" stroke-width="2" marker-end="url(#arrow-purple)"/>
+
+
+  <!-- ==================== ELECTRICAL ==================== -->
+  <rect x="570" y="530" width="60" height="35" rx="4" fill="#2a2a2a" stroke="#555" stroke-width="1"/>
+  <text x="600" y="548" text-anchor="middle" fill="#888" font-size="8">120V</text>
+  <text x="600" y="559" text-anchor="middle" fill="#888" font-size="7">GFCI</text>
+  <text x="600" y="580" text-anchor="middle" fill="#555" font-size="7">Dedicated 15A</text>
+
+  <!-- ==================== THERMOSTAT ==================== -->
+  <rect x="570" y="620" width="60" height="35" rx="4" fill="#2a2a2a" stroke="#e09030" stroke-width="1"/>
+  <text x="600" y="638" text-anchor="middle" fill="#e09030" font-size="8">T-STAT</text>
+  <text x="600" y="650" text-anchor="middle" fill="#666" font-size="7">24V to ZV</text>
+
+  <!-- ==================== MCC-91-2 CONTROLLER ==================== -->
+  <rect x="460" y="115" width="80" height="35" rx="4" fill="#2a2a28" stroke="#e09030" stroke-width="1.5"/>
+  <text x="500" y="133" text-anchor="middle" fill="#e09030" font-size="8" font-weight="bold">MCC-91-2</text>
+  <text x="500" y="144" text-anchor="middle" fill="#666" font-size="7">Temp Controller</text>
+  <text x="500" y="161" text-anchor="middle" fill="#884420" font-size="7">Unlocks 160F</text>
+  <line x1="460" y1="135" x2="440" y2="135" stroke="#666" stroke-width="1" stroke-dasharray="3,2"/>
+
+  <!-- ==================== TITLE BLOCK / NOTES ==================== -->
+
+  <!-- Dimension callouts -->
+  <text x="330" y="640" text-anchor="middle" fill="#444" font-size="9">MANIFOLD HEIGHT GUIDE</text>
+  <line x1="180" y1="655" x2="480" y2="655" stroke="#333" stroke-width="0.5"/>
+
+  <!-- Height labels -->
+  <text x="180" y="675" fill="#555" font-size="8">Unit bottom:  ~48" from floor</text>
+  <text x="180" y="690" fill="#555" font-size="8">Ball valves:   ~40" from floor (all same height)</text>
+  <text x="180" y="705" fill="#555" font-size="8">TMV:            ~36" from floor</text>
+  <text x="180" y="720" fill="#555" font-size="8">Tees/branches: ~30-34" from floor</text>
+  <text x="180" y="735" fill="#555" font-size="8">Exp tanks:     ~24" from floor (or floor-mount)</text>
+  <text x="180" y="750" fill="#555" font-size="8">Cold supply:   from below/behind</text>
+
+  <!-- Pipe spacing note -->
+  <text x="330" y="780" text-anchor="middle" fill="#444" font-size="9">PIPE SPACING</text>
+  <line x1="180" y1="790" x2="480" y2="790" stroke="#333" stroke-width="0.5"/>
+  <text x="180" y="808" fill="#555" font-size="8">Vertical drops: 2" apart (center to center)</text>
+  <text x="180" y="823" fill="#555" font-size="8">All copper near unit, PEX for runs to fan coil</text>
+  <text x="180" y="838" fill="#555" font-size="8">P-clamp every 4 ft on horizontal, 6 ft vertical</text>
+  <text x="180" y="853" fill="#555" font-size="8">1/4" per foot slope on horizontal (drain back)</text>
+
+  <!-- Pipe labels for the vertical drops -->
+  <text x="250" y="290" text-anchor="middle" fill="#4488dd" font-size="7">3/4"</text>
+  <text x="310" y="290" text-anchor="middle" fill="#e05050" font-size="7">3/4"</text>
+  <text x="370" y="290" text-anchor="middle" fill="#e09030" font-size="7">3/4"</text>
+  <text x="420" y="290" text-anchor="middle" fill="#9966cc" font-size="7">3/4"</text>
+
+  <!-- Flow direction arrows on main lines -->
+  <!-- Cold in: arrow pointing up -->
+  <polygon points="246,335 250,325 254,335" fill="#4488dd" opacity="0.6"/>
+  <!-- Hot out: arrow pointing down -->
+  <polygon points="306,335 310,345 314,335" fill="#e05050" opacity="0.6"/>
+
+</svg>
+
+<div style="display: flex; flex-direction: column; gap: 15px;">
+
+<div class="legend">
+  <h3>PIPE COLORS</h3>
+  <div class="legend-item">
+    <div class="legend-swatch" style="background: #4488dd;"></div>
+    <span class="legend-label">Cold water supply</span>
+  </div>
+  <div class="legend-item">
+    <div class="legend-swatch" style="background: #e05050;"></div>
+    <span class="legend-label">Hot water / heating supply</span>
+  </div>
+  <div class="legend-item">
+    <div class="legend-swatch" style="background: #50b050;"></div>
+    <span class="legend-label">Mixed DHW out (120F)</span>
+  </div>
+  <div class="legend-item">
+    <div class="legend-swatch" style="background: #9966cc;"></div>
+    <span class="legend-label">Heating return / recirc</span>
+  </div>
+  <div class="legend-item">
+    <div class="legend-swatch" style="background: #e09030;"></div>
+    <span class="legend-label">Gas supply</span>
+  </div>
+  <div class="legend-item">
+    <div class="legend-swatch" style="background: #888;"></div>
+    <span class="legend-label">Condensate / vent</span>
+  </div>
+
+  <h3 style="margin-top: 15px;">COMPONENTS</h3>
+  <div class="legend-item">
+    <div style="width:30px; height:12px; background:#333; border:1px solid #666; border-radius:2px; flex-shrink:0; position:relative;">
+      <div style="width:14px; height:5px; background:#cc3333; border-radius:1px; position:absolute; top:-3px; left:7px;"></div>
+    </div>
+    <span class="legend-label">Ball valve (red handle)</span>
+  </div>
+  <div class="legend-item">
+    <div style="width:12px; height:12px; border-radius:50%; border:1.5px solid #888; flex-shrink:0;"></div>
+    <span class="legend-label">Check valve</span>
+  </div>
+  <div class="legend-item">
+    <div style="width:12px; height:12px; border-radius:50%; background:#4488dd; flex-shrink:0;"></div>
+    <span class="legend-label">Tee / junction</span>
+  </div>
+</div>
+
+<div class="parts-list">
+  <h3>VALVE SCHEDULE</h3>
+  <table>
+    <tr><td>BV1</td><td>Cold inlet isolation</td><td>3/4" ball</td></tr>
+    <tr><td>BV2</td><td>Hot outlet isolation</td><td>3/4" ball</td></tr>
+    <tr><td>BV3</td><td>Heating supply isolation</td><td>3/4" ball</td></tr>
+    <tr><td>BV4</td><td>Heating return isolation</td><td>3/4" ball</td></tr>
+    <tr><td>ZV</td><td>Heating zone valve</td><td>Honeywell V8043E</td></tr>
+    <tr><td>CV</td><td>Check valves (x3)</td><td>3/4" spring</td></tr>
+    <tr><td>TMV</td><td>Thermostatic mixing</td><td>Watts LFMMVM1</td></tr>
+    <tr><td>GAS V</td><td>Gas shutoff</td><td>3/4" lever</td></tr>
+  </table>
+</div>
+
+<div class="parts-list">
+  <h3>FLOW LOGIC</h3>
+  <table>
+    <tr><td style="color:#4488dd;">1</td><td colspan="2">Cold supply enters from main shutoff</td></tr>
+    <tr><td style="color:#4488dd;">2</td><td colspan="2">Passes BV1, feeds expansion tank, enters unit</td></tr>
+    <tr><td style="color:#4488dd;">3</td><td colspan="2">Cold also branches to TMV cold bypass</td></tr>
+    <tr><td style="color:#e05050;">4</td><td colspan="2">Hot exits unit through BV2</td></tr>
+    <tr><td style="color:#e05050;">5</td><td colspan="2">Tee splits: right to TMV, left to heating</td></tr>
+    <tr><td style="color:#e05050;">6</td><td colspan="2">Heating supply passes ZV + BV3 to fan coil</td></tr>
+    <tr><td style="color:#50b050;">7</td><td colspan="2">TMV mixes hot+cold to 120F for house DHW</td></tr>
+    <tr><td style="color:#9966cc;">8</td><td colspan="2">Heating return from fan coil (via existing circ pump) through BV4 + check valve back to cold line</td></tr>
+  </table>
+</div>
+
+<div class="note">
+  <strong>MAKING IT BEAUTIFUL:</strong><br><br>
+  1. All four vertical drops from unit at exactly 2" spacing, plumb and parallel<br>
+  2. All ball valves at the SAME height (40" from floor)<br>
+  3. Use copper for everything within 24" of unit, transition to PEX for long runs<br>
+  4. P-clamp pipes to wall with consistent spacing<br>
+  5. SharkBite transitions at PEX-to-copper joints (red caps for hot, blue for cold)<br>
+  6. Expansion tanks either both floor-mounted or both wall-hung at same height<br>
+  7. Label every valve with adhesive tags<br>
+  8. Run pipes parallel, never crossing unless unavoidable<br>
+  9. Reference: your neighbor's Rinnai Empower install (photo 579) is the standard
+</div>
+
+</div>
+</div>
+
+</body>
+</html>
