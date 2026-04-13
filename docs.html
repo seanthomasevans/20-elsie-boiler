@@ -9,6 +9,7 @@
       --bg: #0e1218;
       --surface: #151b24;
       --border: rgba(164, 180, 201, 0.15);
+      --border-accent: rgba(126, 192, 255, 0.25);
       --text: #e8ecf2;
       --text-muted: #8a95a8;
       --accent: #7ec0ff;
@@ -25,6 +26,7 @@
       background: var(--bg);
       color: var(--text);
       min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
     }
     .top-bar {
       position: sticky; top: 0; z-index: 100;
@@ -47,8 +49,28 @@
     }
     .back-btn:hover { background: var(--accent-dim); }
     .top-title { font-size: 0.9rem; color: var(--text-muted); }
+
+    /* Hero */
+    .hero {
+      max-width: 960px;
+      margin: 2rem auto 0;
+      padding: 0 1.5rem;
+    }
+    .hero-img {
+      width: 100%;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      display: block;
+    }
+    .hero-caption {
+      text-align: center;
+      margin-top: 0.6rem;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+    }
+
     .nav-grid {
-      max-width: 900px;
+      max-width: 960px;
       margin: 2rem auto;
       padding: 0 1.5rem;
     }
@@ -108,6 +130,20 @@
       border-radius: 4px;
       background: var(--accent-dim);
       color: var(--accent);
+    }
+    .tag-hot { background: rgba(224, 96, 80, 0.12); color: var(--hot); }
+    .tag-cold { background: rgba(80, 144, 208, 0.12); color: var(--cold); }
+    .tag-green { background: rgba(80, 184, 112, 0.12); color: var(--green); }
+    .tag-gas { background: rgba(212, 176, 48, 0.12); color: var(--gas); }
+
+    /* Card thumbnails */
+    .card-thumb {
+      width: 100%;
+      height: 120px;
+      object-fit: cover;
+      border-radius: 6px;
+      margin-bottom: 0.8rem;
+      border: 1px solid var(--border);
     }
 
     /* Markdown viewer */
@@ -190,8 +226,14 @@
 
   <!-- Navigation grid (home state) -->
   <div class="nav-grid" id="navGrid">
-    <h1>20 Elsie Lane #217</h1>
-    <p class="sub">Rinnai RXP199iN Tankless + Open-Loop Hydronic Heating. Complete installation package.</p>
+
+    <div class="hero">
+      <img src="generated/05-hero-render.png" alt="3D render of Rinnai RXP199iN installation" class="hero-img"/>
+      <p class="hero-caption">Rinnai RXP199iN tankless water heater with open-loop hydronic heating manifold</p>
+    </div>
+
+    <h1 style="margin-top: 2rem;">20 Elsie Lane #217</h1>
+    <p class="sub">Rinnai RXP199iN Tankless + Open-Loop Hydronic Heating. Complete installation package for Michael.</p>
 
     <div class="card-section">
       <h2>Interactive</h2>
@@ -205,17 +247,43 @@
     </div>
 
     <div class="card-section">
-      <h2>Schematics</h2>
+      <h2>Technical Diagrams</h2>
       <div class="cards">
-        <a href="SYSTEM-DIAGRAM.html" class="card">
-          <h3>System Elevation + P&amp;ID</h3>
-          <p>Front elevation view, plumbing schematic, electrical wiring, and heat call sequence.</p>
-          <span class="tag">SVG Diagram</span>
+        <a href="ELEVATION.html" class="card">
+          <img src="generated/01-elevation.png" alt="" class="card-thumb"/>
+          <h3>System Elevation</h3>
+          <p>Front view of utility closet showing Rinnai and air handler positions, pipe routing, vent exit.</p>
+          <span class="tag tag-cold">Diagram</span>
         </a>
-        <a href="MANIFOLD-DIAGRAM.html" class="card">
-          <h3>Manifold Layout</h3>
-          <p>Detailed pipe routing, component positions, and manifold heights.</p>
-          <span class="tag">SVG Diagram</span>
+        <a href="PID.html" class="card">
+          <img src="generated/02-pid.png" alt="" class="card-thumb"/>
+          <h3>P&amp;ID Schematic</h3>
+          <p>Complete piping and instrumentation diagram. DHW loop, hydronic circuit, all valves and sensors.</p>
+          <span class="tag tag-hot">Diagram</span>
+        </a>
+        <a href="MANIFOLD-DETAIL.html" class="card">
+          <img src="generated/03-manifold.png" alt="" class="card-thumb"/>
+          <h3>Manifold Detail</h3>
+          <p>Pipe routing, valve positions, tee locations. TMV, expansion tank, zone valve, circulation pump.</p>
+          <span class="tag tag-green">Diagram</span>
+        </a>
+        <a href="ELECTRICAL.html" class="card">
+          <img src="generated/04-electrical.png" alt="" class="card-thumb"/>
+          <h3>Electrical Wiring</h3>
+          <p>Complete wiring diagram. Thermostat to zone valve to pump relay to Rinnai flow activation.</p>
+          <span class="tag tag-gas">Diagram</span>
+        </a>
+        <a href="VENTING.html" class="card">
+          <img src="generated/07-venting-detail.png" alt="" class="card-thumb"/>
+          <h3>Venting Detail</h3>
+          <p>System 636 concentric vent termination. Wall penetration, clearances, condensate management.</p>
+          <span class="tag tag-cold">Diagram</span>
+        </a>
+        <a href="HEAT-SEQUENCE.html" class="card">
+          <img src="generated/08-heat-sequence.png" alt="" class="card-thumb"/>
+          <h3>Heat Call Sequence</h3>
+          <p>Step-by-step flowchart. How a thermostat call propagates through the system to warm air.</p>
+          <span class="tag tag-hot">Diagram</span>
         </a>
       </div>
     </div>
@@ -291,17 +359,14 @@
           history.pushState({ doc: file, title: title }, '', 'docs.html#' + file);
         })
         .catch(() => {
-          // Fallback: open raw file
           window.location.href = file;
         });
     }
 
-    // Handle browser back button
     window.addEventListener('popstate', function() {
       showNav();
     });
 
-    // Handle hash on load (direct link to a doc)
     if (location.hash && location.hash.length > 1) {
       const file = location.hash.slice(1);
       const title = file.replace('.md', '').replace(/-/g, ' ');
