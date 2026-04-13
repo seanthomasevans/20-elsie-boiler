@@ -10,7 +10,7 @@
       --border: rgba(164,180,201,0.15); --border-accent: rgba(126,192,255,0.25);
       --text: #e8ecf2; --text-muted: #8a95a8; --text-dim: #5a6578;
       --accent: #7ec0ff; --accent-dim: rgba(126,192,255,0.10);
-      --hot: #e06050; --cold: #5090d0;
+      --hot: #e06050; --cold: #5090d0; --exhaust: #e8a050; --intake: #70b8b0;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
     html { font-size: 15px; scroll-behavior: smooth; }
@@ -30,6 +30,8 @@
     .page-header .subtitle { font-size: 0.88rem; color: var(--text-muted); line-height: 1.5; }
     .diagram-section { margin-bottom: 2.5rem; }
     .diagram-section h2 { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); margin-bottom: 0.8rem; }
+    .svg-frame { background: #0a0e14; border: 1px solid var(--border); border-radius: 10px; padding: 1.5rem; margin-bottom: 0.8rem; overflow-x: auto; }
+    .svg-frame svg { display: block; margin: 0 auto; }
     .diagram-frame { position: relative; border-radius: 10px; overflow: hidden; border: 1px solid var(--border); background: #0a0e14; cursor: zoom-in; margin-bottom: 0.8rem; }
     .diagram-frame.zoomed { cursor: zoom-out; position: fixed; inset: 0; z-index: 200; border-radius: 0; border: none; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.92); }
     .diagram-frame img { width: 100%; height: auto; display: block; }
@@ -74,173 +76,288 @@
   <div class="content">
     <div class="page-header">
       <h1>Venting Detail</h1>
-      <p class="subtitle">System 636 PVC concentric vent. 3" exhaust inside 5" air intake. Exits through the left exterior wall (brick). The RXP199iN is a sealed combustion (direct vent) Category IV appliance.</p>
+      <p class="subtitle"><strong>Two-pipe system:</strong> separate 3" PVC exhaust and 3" PVC intake. Both exit from the <strong>top of the Rinnai</strong> at 62" AFF, run under the air handler, and penetrate the left exterior brick wall. Not concentric. The RXP199iN is a sealed combustion (direct vent) Category IV appliance.</p>
     </div>
 
     <div class="specs-grid">
-      <div class="spec-card"><div class="label">Type</div><div class="value">Concentric <span class="unit">(direct vent)</span></div></div>
-      <div class="spec-card"><div class="label">Exhaust</div><div class="value">3" <span class="unit">PVC (inner)</span></div></div>
-      <div class="spec-card"><div class="label">Air intake</div><div class="value">5" <span class="unit">PVC (outer)</span></div></div>
-      <div class="spec-card"><div class="label">Cert</div><div class="value">ULC S636 <span class="unit">(System 636)</span></div></div>
-      <div class="spec-card"><div class="label">Material</div><div class="value">Sched 40 <span class="unit">PVC</span></div></div>
+      <div class="spec-card"><div class="label">Type</div><div class="value">Two-pipe <span class="unit">(direct vent)</span></div></div>
+      <div class="spec-card"><div class="label">Exhaust</div><div class="value">3" <span class="unit">PVC (back)</span></div></div>
+      <div class="spec-card"><div class="label">Intake</div><div class="value">3" <span class="unit">PVC (front, 12" fwd)</span></div></div>
+      <div class="spec-card"><div class="label">Height</div><div class="value">62" <span class="unit">AFF (under AH)</span></div></div>
+      <div class="spec-card"><div class="label">Material</div><div class="value">Sched 40 <span class="unit">PVC (ULC S636)</span></div></div>
       <div class="spec-card"><div class="label">Slope</div><div class="value">1/4"/ft <span class="unit">back to unit</span></div></div>
     </div>
 
     <hr class="section-divider"/>
 
-    <!-- Wall penetration cross-section - Programmatic SVG -->
+    <!-- Side cross-section: two pipes from top of Rinnai to exterior wall -->
     <div class="diagram-section">
-      <h2>Wall Penetration Cross-Section</h2>
-      <div style="background: #0a0e14; border: 1px solid var(--border); border-radius: 10px; padding: 1.5rem; margin-bottom: 0.8rem; overflow-x: auto;">
-        <svg viewBox="0 0 700 420" width="700" height="420" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system, system-ui, sans-serif" style="display:block; margin:0 auto;">
-          <rect x="0" y="0" width="700" height="420" fill="#0a0e14"/>
+      <h2>Side Cross-Section (Looking Left)</h2>
+      <div class="svg-frame">
+        <!-- Closet: 32" deep x 80" tall. Scale: 1"=7px. Extra space for labels. -->
+        <svg viewBox="0 0 520 680" width="520" height="680" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system, system-ui, sans-serif">
+          <defs>
+            <pattern id="brickPat" x="0" y="0" width="24" height="14" patternUnits="userSpaceOnUse">
+              <rect width="24" height="14" fill="rgba(138,96,64,0.12)"/>
+              <line x1="0" y1="7" x2="24" y2="7" stroke="#8a6040" stroke-width="0.4" opacity="0.35"/>
+              <line x1="0" y1="14" x2="24" y2="14" stroke="#8a6040" stroke-width="0.4" opacity="0.35"/>
+              <line x1="12" y1="0" x2="12" y2="7" stroke="#8a6040" stroke-width="0.4" opacity="0.25"/>
+              <line x1="0" y1="7" x2="0" y2="14" stroke="#8a6040" stroke-width="0.4" opacity="0.25"/>
+              <line x1="24" y1="7" x2="24" y2="14" stroke="#8a6040" stroke-width="0.4" opacity="0.25"/>
+            </pattern>
+          </defs>
+          <rect x="0" y="0" width="520" height="680" fill="#0a0e14"/>
 
-          <!-- EXTERIOR (left side) -->
-          <text x="40" y="30" fill="#8a95a8" font-size="10" text-anchor="middle">EXTERIOR</text>
+          <!-- Zone labels -->
+          <text x="40" y="28" fill="#8a95a8" font-size="10" font-weight="600">EXTERIOR</text>
+          <text x="340" y="28" fill="#8a95a8" font-size="10" font-weight="600">INTERIOR (CLOSET)</text>
 
-          <!-- Exterior brick wall -->
-          <rect x="80" y="40" width="40" height="320" fill="rgba(138,96,64,0.15)" stroke="#8a6040" stroke-width="2"/>
-          <!-- Brick pattern -->
-          <line x1="80" y1="70" x2="120" y2="70" stroke="#8a6040" stroke-width="0.5" opacity="0.4"/>
-          <line x1="80" y1="100" x2="120" y2="100" stroke="#8a6040" stroke-width="0.5" opacity="0.4"/>
-          <line x1="80" y1="130" x2="120" y2="130" stroke="#8a6040" stroke-width="0.5" opacity="0.4"/>
-          <line x1="80" y1="160" x2="120" y2="160" stroke="#8a6040" stroke-width="0.5" opacity="0.4"/>
-          <line x1="80" y1="190" x2="120" y2="190" stroke="#8a6040" stroke-width="0.5" opacity="0.4"/>
-          <line x1="80" y1="220" x2="120" y2="220" stroke="#8a6040" stroke-width="0.5" opacity="0.4"/>
-          <line x1="80" y1="250" x2="120" y2="250" stroke="#8a6040" stroke-width="0.5" opacity="0.4"/>
-          <line x1="80" y1="280" x2="120" y2="280" stroke="#8a6040" stroke-width="0.5" opacity="0.4"/>
-          <line x1="80" y1="310" x2="120" y2="310" stroke="#8a6040" stroke-width="0.5" opacity="0.4"/>
-          <line x1="80" y1="340" x2="120" y2="340" stroke="#8a6040" stroke-width="0.5" opacity="0.4"/>
-          <line x1="100" y1="40" x2="100" y2="360" stroke="#8a6040" stroke-width="0.5" opacity="0.2"/>
-          <text x="100" y="380" fill="#8a6040" font-size="8" text-anchor="middle">BRICK</text>
+          <!-- Floor line -->
+          <line x1="20" y1="600" x2="460" y2="600" stroke="#3a4555" stroke-width="2"/>
+          <text x="462" y="604" fill="#5a6578" font-size="8">FLOOR</text>
 
-          <!-- Air gap -->
-          <rect x="120" y="40" width="12" height="320" fill="none" stroke="#3a4555" stroke-width="0.5" stroke-dasharray="2,3"/>
-          <text x="126" y="380" fill="#5a6578" font-size="6" text-anchor="middle">GAP</text>
+          <!-- Ceiling line -->
+          <line x1="68" y1="40" x2="460" y2="40" stroke="#3a4555" stroke-width="2"/>
+          <text x="462" y="44" fill="#5a6578" font-size="8">CEILING</text>
 
-          <!-- Sheathing -->
-          <rect x="132" y="40" width="10" height="320" fill="rgba(160,160,160,0.06)" stroke="#5a6578" stroke-width="1"/>
-          <text x="137" y="380" fill="#5a6578" font-size="6" text-anchor="middle">PLY</text>
+          <!-- Exterior brick wall (left) -->
+          <rect x="68" y="40" width="32" height="560" fill="url(#brickPat)" stroke="#8a6040" stroke-width="2"/>
+          <text x="84" y="620" fill="#8a6040" font-size="8" text-anchor="middle">BRICK</text>
 
-          <!-- Stud cavity -->
-          <rect x="142" y="40" width="40" height="320" fill="rgba(100,120,140,0.04)" stroke="#3a4555" stroke-width="1"/>
-          <!-- Studs -->
-          <rect x="142" y="40" width="5" height="320" fill="rgba(160,140,100,0.08)" stroke="#5a6578" stroke-width="0.5"/>
-          <rect x="177" y="40" width="5" height="320" fill="rgba(160,140,100,0.08)" stroke="#5a6578" stroke-width="0.5"/>
-          <text x="162" y="380" fill="#5a6578" font-size="6" text-anchor="middle">STUDS</text>
+          <!-- Wall cavity: sheathing + studs + drywall -->
+          <rect x="100" y="40" width="8" height="560" fill="rgba(140,130,110,0.08)" stroke="#5a6578" stroke-width="0.8"/>
+          <rect x="108" y="40" width="32" height="560" fill="rgba(100,120,140,0.03)" stroke="#3a4555" stroke-width="0.8"/>
+          <rect x="108" y="40" width="4" height="560" fill="rgba(160,140,100,0.06)" stroke="#5a6578" stroke-width="0.3"/>
+          <rect x="136" y="40" width="4" height="560" fill="rgba(160,140,100,0.06)" stroke="#5a6578" stroke-width="0.3"/>
+          <rect x="140" y="40" width="6" height="560" fill="rgba(200,200,200,0.05)" stroke="#5a6578" stroke-width="0.8"/>
+          <text x="120" y="620" fill="#5a6578" font-size="7" text-anchor="middle">WALL</text>
 
-          <!-- Drywall -->
-          <rect x="182" y="40" width="8" height="320" fill="rgba(200,200,200,0.06)" stroke="#5a6578" stroke-width="1"/>
-          <text x="186" y="380" fill="#5a6578" font-size="6" text-anchor="middle">DW</text>
+          <!-- Back wall (right edge of closet) -->
+          <line x1="370" y1="40" x2="370" y2="600" stroke="#3a4555" stroke-width="2"/>
+          <text x="378" y="320" fill="#5a6578" font-size="8" transform="rotate(90,378,320)">BACK WALL</text>
 
-          <!-- INTERIOR (right side) -->
-          <text x="440" y="30" fill="#8a95a8" font-size="10" text-anchor="middle">INTERIOR (UTILITY CLOSET)</text>
+          <!-- Rinnai mounted on back wall -->
+          <!-- 31.3"H x 11.45"D. Bottom at 24" AFF. Scale: 1"=7px -->
+          <!-- Bottom: 600-168=432. Top: 432-219=213. Depth: 80px from back wall -->
+          <rect x="290" y="213" width="80" height="219" rx="5" fill="rgba(126,192,255,0.04)" stroke="#7ec0ff" stroke-width="2"/>
+          <!-- Unit face detail -->
+          <rect x="296" y="225" width="68" height="195" rx="3" fill="none" stroke="rgba(126,192,255,0.12)" stroke-width="0.8"/>
+          <rect x="310" y="260" width="40" height="30" rx="2" fill="none" stroke="rgba(126,192,255,0.15)" stroke-width="0.5"/>
+          <text x="330" y="280" fill="rgba(126,192,255,0.3)" font-size="7" text-anchor="middle">DISPLAY</text>
+          <text x="330" y="310" fill="#7ec0ff" font-size="12" text-anchor="middle" font-weight="700">RINNAI</text>
+          <text x="330" y="326" fill="#7ec0ff" font-size="9" text-anchor="middle">RXP199iN</text>
+          <text x="330" y="345" fill="#8a95a8" font-size="8" text-anchor="middle">18.5"W x 31.3"H</text>
+          <text x="330" y="360" fill="#8a95a8" font-size="8" text-anchor="middle">x 11.45"D</text>
+          <text x="330" y="380" fill="#5a6578" font-size="7" text-anchor="middle">73 lb wall-mounted</text>
+          <text x="330" y="400" fill="#5a6578" font-size="7" text-anchor="middle">Vents from TOP</text>
 
-          <!-- Wall thimble at penetration -->
-          <rect x="78" y="170" width="114" height="50" rx="2" fill="rgba(224,96,80,0.06)" stroke="#e06050" stroke-width="1" stroke-dasharray="3,2"/>
-          <text x="135" y="165" fill="#e06050" font-size="7" text-anchor="middle">WALL THIMBLE + FIRESTOP</text>
+          <!-- Air handler above Rinnai -->
+          <!-- 64-80" AFF = y=600-448=152 to y=600-560=40 -->
+          <rect x="240" y="40" width="130" height="112" rx="4" fill="rgba(126,192,255,0.03)" stroke="#7ec0ff" stroke-width="1.5" stroke-dasharray="4,3"/>
+          <text x="305" y="90" fill="#7ec0ff" font-size="10" text-anchor="middle" font-weight="600">AIR HANDLER</text>
+          <text x="305" y="106" fill="#5a6578" font-size="8" text-anchor="middle">36HX (64-80" AFF)</text>
 
-          <!-- Concentric vent pipe - 5" outer -->
-          <line x1="20" y1="195" x2="440" y2="192" stroke="#a0a0a0" stroke-width="10" stroke-linecap="round"/>
-          <!-- 3" inner exhaust -->
-          <line x1="20" y1="195" x2="440" y2="192" stroke="#e06050" stroke-width="5" stroke-linecap="round"/>
-          <!-- Center line -->
-          <line x1="20" y1="195" x2="440" y2="192" stroke="#0a0e14" stroke-width="1.5"/>
+          <!-- === EXHAUST PIPE (back, closer to back wall) === -->
+          <!-- Exits top of Rinnai at y=213, routes up to 62" AFF = y=600-434=166 -->
+          <!-- Then horizontal to left wall -->
 
-          <!-- Label outer pipe -->
-          <text x="300" y="178" fill="#a0a0a0" font-size="9" text-anchor="middle">5" PVC AIR INTAKE (outer)</text>
-          <!-- Label inner pipe -->
-          <text x="300" y="214" fill="#e06050" font-size="9" text-anchor="middle">3" PVC EXHAUST (inner)</text>
+          <!-- Vertical rise from top of Rinnai -->
+          <line x1="340" y1="213" x2="340" y2="166" stroke="#e8a050" stroke-width="6" stroke-linecap="round"/>
+          <!-- 90° elbow indicator -->
+          <circle cx="340" cy="166" r="4" fill="#e8a050" opacity="0.5"/>
+          <!-- Horizontal run to wall -->
+          <line x1="340" y1="166" x2="68" y2="166" stroke="#e8a050" stroke-width="6" stroke-linecap="round"/>
+          <!-- Through wall -->
+          <line x1="68" y1="166" x2="30" y2="166" stroke="#e8a050" stroke-width="6" stroke-linecap="round"/>
+          <!-- Termination cap -->
+          <rect x="20" y="157" width="14" height="18" rx="3" fill="rgba(232,160,80,0.15)" stroke="#e8a050" stroke-width="1.5"/>
 
-          <!-- Slope indicator -->
-          <line x1="200" y1="235" x2="420" y2="233" stroke="#5a6578" stroke-width="0.5" stroke-dasharray="3,2"/>
-          <text x="310" y="248" fill="#5a6578" font-size="7" text-anchor="middle">1/4"/ft slope back to unit for condensate</text>
-          <!-- Slope arrow -->
-          <polygon points="415,230 420,233 415,236" fill="#5a6578"/>
+          <!-- Exhaust label -->
+          <text x="200" y="156" fill="#e8a050" font-size="9" text-anchor="middle" font-weight="600">3" PVC EXHAUST</text>
+          <text x="200" y="182" fill="#5a6578" font-size="7" text-anchor="middle">Back vent, against back wall</text>
+          <text x="16" y="152" fill="#e8a050" font-size="7" text-anchor="middle">EXH</text>
 
-          <!-- Exterior termination cap -->
-          <circle cx="20" cy="195" r="14" fill="none" stroke="#a0a0a0" stroke-width="2"/>
-          <circle cx="20" cy="195" r="7" fill="none" stroke="#e06050" stroke-width="1.5"/>
-          <text x="20" y="172" fill="#a0a0a0" font-size="8" text-anchor="middle" font-weight="600">TERM CAP</text>
-          <text x="20" y="225" fill="#5a6578" font-size="7" text-anchor="middle">Rain/snow</text>
-          <text x="20" y="234" fill="#5a6578" font-size="7" text-anchor="middle">guard</text>
+          <!-- === INTAKE PIPE (front, 12" forward of exhaust) === -->
+          <!-- 12" forward = 84px forward from exhaust. Exhaust at x=340, intake at x=256 -->
+          <!-- Same height: 62" AFF = y=166 -->
+          <!-- But offset slightly for visibility: show at y=190 (still 62" AFF, just drawn offset) -->
+          <!-- Actually, both are at same height but different depths. In this side view, they're horizontally separated. -->
 
-          <!-- RINNAI (wall-mounted on interior wall, right side) -->
-          <rect x="440" y="100" width="80" height="180" rx="4" fill="rgba(126,192,255,0.05)" stroke="#7ec0ff" stroke-width="2"/>
-          <text x="480" y="155" fill="#7ec0ff" font-size="11" text-anchor="middle" font-weight="700">RINNAI</text>
-          <text x="480" y="172" fill="#7ec0ff" font-size="9" text-anchor="middle">RXP199iN</text>
-          <text x="480" y="190" fill="#5a6578" font-size="7" text-anchor="middle">WALL MOUNTED</text>
+          <!-- Vertical rise from top of Rinnai (front vent port) -->
+          <line x1="310" y1="213" x2="310" y2="190" stroke="#70b8b0" stroke-width="6" stroke-linecap="round"/>
+          <!-- Elbow -->
+          <circle cx="310" cy="190" r="4" fill="#70b8b0" opacity="0.5"/>
+          <!-- Forward jog: from back wall area to 12" forward position -->
+          <line x1="310" y1="190" x2="256" y2="190" stroke="#70b8b0" stroke-width="6" stroke-linecap="round"/>
+          <!-- Elbow -->
+          <circle cx="256" cy="190" r="4" fill="#70b8b0" opacity="0.5"/>
+          <!-- Horizontal run to wall (at a slightly lower position to show separation) -->
+          <line x1="256" y1="190" x2="68" y2="190" stroke="#70b8b0" stroke-width="6" stroke-linecap="round"/>
+          <!-- Through wall -->
+          <line x1="68" y1="190" x2="30" y2="190" stroke="#70b8b0" stroke-width="6" stroke-linecap="round"/>
+          <!-- Termination cap -->
+          <rect x="20" y="181" width="14" height="18" rx="3" fill="rgba(112,184,176,0.15)" stroke="#70b8b0" stroke-width="1.5"/>
 
-          <!-- Wall mount bracket indicators -->
-          <line x1="520" y1="130" x2="540" y2="130" stroke="#7ec0ff" stroke-width="1.5"/>
-          <line x1="520" y1="250" x2="540" y2="250" stroke="#7ec0ff" stroke-width="1.5"/>
-          <text x="555" y="190" fill="#5a6578" font-size="7" text-anchor="middle" transform="rotate(90,555,190)">MOUNTING BRACKET</text>
+          <!-- Intake label -->
+          <text x="200" y="206" fill="#70b8b0" font-size="9" text-anchor="middle" font-weight="600">3" PVC INTAKE</text>
+          <text x="200" y="218" fill="#5a6578" font-size="7" text-anchor="middle">Front vent, 12" forward of exhaust</text>
+          <text x="16" y="196" fill="#70b8b0" font-size="7" text-anchor="middle">INT</text>
 
-          <!-- Vent connection from Rinnai (exits from rear/top area of unit, goes left) -->
-          <text x="430" y="188" fill="#a0a0a0" font-size="7" text-anchor="end">VENT</text>
-          <text x="430" y="198" fill="#a0a0a0" font-size="7" text-anchor="end">CONN</text>
+          <!-- 12" spacing callout between pipes -->
+          <line x1="354" y1="166" x2="354" y2="190" stroke="#5a6578" stroke-width="0.8"/>
+          <line x1="350" y1="166" x2="358" y2="166" stroke="#5a6578" stroke-width="0.8"/>
+          <line x1="350" y1="190" x2="358" y2="190" stroke="#5a6578" stroke-width="0.8"/>
+          <text x="366" y="182" fill="#5a6578" font-size="7">12"</text>
+
+          <!-- Wall thimble / firestop callouts -->
+          <rect x="64" y="155" width="82" height="14" rx="2" fill="none" stroke="#e06050" stroke-width="0.8" stroke-dasharray="3,2"/>
+          <rect x="64" y="179" width="82" height="14" rx="2" fill="none" stroke="#e06050" stroke-width="0.8" stroke-dasharray="3,2"/>
+          <text x="105" y="148" fill="#e06050" font-size="7" text-anchor="middle">FIRESTOP + THIMBLE</text>
+
+          <!-- Slope indicator on exhaust -->
+          <line x1="160" y1="160" x2="330" y2="158" stroke="#5a6578" stroke-width="0.5" stroke-dasharray="2,2"/>
+          <text x="245" y="146" fill="#5a6578" font-size="7" text-anchor="middle">1/4"/ft slope to unit</text>
+          <polygon points="325,155 330,158 325,161" fill="#5a6578"/>
+
+          <!-- Height dimensions on right -->
+          <!-- 24" AFF (Rinnai bottom) -->
+          <line x1="400" y1="432" x2="460" y2="432" stroke="#5a6578" stroke-width="0.5" stroke-dasharray="2,2"/>
+          <text x="462" y="436" fill="#5a6578" font-size="7">24" AFF</text>
+
+          <!-- 55.3" AFF (Rinnai top) -->
+          <line x1="372" y1="213" x2="460" y2="213" stroke="#5a6578" stroke-width="0.5" stroke-dasharray="2,2"/>
+          <text x="462" y="217" fill="#5a6578" font-size="7">55.3" AFF</text>
+
+          <!-- 62" AFF (vent height) -->
+          <line x1="372" y1="166" x2="460" y2="166" stroke="#e8a050" stroke-width="0.5" stroke-dasharray="2,2"/>
+          <text x="462" y="170" fill="#e8a050" font-size="8" font-weight="600">62" AFF</text>
+
+          <!-- 64" AFF (AH bottom) -->
+          <line x1="372" y1="152" x2="460" y2="152" stroke="#5a6578" stroke-width="0.5" stroke-dasharray="2,2"/>
+          <text x="462" y="156" fill="#5a6578" font-size="7">64" AFF</text>
 
           <!-- Bottom connections from Rinnai -->
-          <line x1="455" y1="280" x2="455" y2="330" stroke="#d4b030" stroke-width="2.5"/>
-          <text x="455" y="345" fill="#d4b030" font-size="7" text-anchor="middle">GAS</text>
+          <line x1="310" y1="432" x2="310" y2="480" stroke="#5090d0" stroke-width="3"/>
+          <line x1="330" y1="432" x2="330" y2="480" stroke="#e06050" stroke-width="3"/>
+          <line x1="350" y1="432" x2="350" y2="480" stroke="#d4b030" stroke-width="3"/>
+          <text x="310" y="495" fill="#5090d0" font-size="7" text-anchor="middle">COLD</text>
+          <text x="330" y="495" fill="#e06050" font-size="7" text-anchor="middle">HOT</text>
+          <text x="350" y="495" fill="#d4b030" font-size="7" text-anchor="middle">GAS</text>
+          <text x="330" y="520" fill="#3a4555" font-size="8" text-anchor="middle">Manifold zone below</text>
 
-          <line x1="472" y1="280" x2="472" y2="330" stroke="#5090d0" stroke-width="2.5"/>
-          <text x="472" y="345" fill="#5090d0" font-size="7" text-anchor="middle">COLD</text>
-
-          <line x1="489" y1="280" x2="489" y2="330" stroke="#e06050" stroke-width="2.5"/>
-          <text x="489" y="345" fill="#e06050" font-size="7" text-anchor="middle">HOT</text>
-
-          <line x1="506" y1="280" x2="506" y2="320" stroke="#80c0c0" stroke-width="1.5"/>
-          <text x="506" y="335" fill="#80c0c0" font-size="7" text-anchor="middle">COND</text>
-          <text x="506" y="345" fill="#5a6578" font-size="6" text-anchor="middle">1/2" NPT</text>
-
-          <!-- Condensate drain routing -->
-          <line x1="506" y1="320" x2="560" y2="320" stroke="#80c0c0" stroke-width="1"/>
-          <line x1="560" y1="320" x2="560" y2="360" stroke="#80c0c0" stroke-width="1"/>
-          <text x="575" y="345" fill="#80c0c0" font-size="7">TO DRAIN</text>
-
-          <!-- Clearance dimensions -->
-          <!-- 12" min above grade for exterior -->
-          <line x1="20" y1="360" x2="80" y2="360" stroke="#5a6578" stroke-width="0.5" stroke-dasharray="2,2"/>
-          <text x="50" y="354" fill="#5a6578" font-size="7" text-anchor="middle">GRADE LINE</text>
+          <!-- Depth dimension -->
+          <line x1="146" y1="640" x2="370" y2="640" stroke="#5090d0" stroke-width="0.75"/>
+          <line x1="146" y1="635" x2="146" y2="645" stroke="#5090d0" stroke-width="0.75"/>
+          <line x1="370" y1="635" x2="370" y2="645" stroke="#5090d0" stroke-width="0.75"/>
+          <text x="258" y="655" fill="#5090d0" font-size="10" text-anchor="middle" font-weight="600">32" (closet depth)</text>
 
           <!-- Legend -->
-          <rect x="560" y="50" width="130" height="100" rx="4" fill="rgba(21,27,36,0.9)" stroke="rgba(164,180,201,0.15)" stroke-width="1"/>
-          <text x="625" y="68" fill="#8a95a8" font-size="8" text-anchor="middle" font-weight="600">LEGEND</text>
-          <line x1="575" y1="80" x2="595" y2="80" stroke="#a0a0a0" stroke-width="4"/>
-          <text x="600" y="84" fill="#a0a0a0" font-size="7">5" air intake</text>
-          <line x1="575" y1="96" x2="595" y2="96" stroke="#e06050" stroke-width="2.5"/>
-          <text x="600" y="100" fill="#e06050" font-size="7">3" exhaust</text>
-          <rect x="575" y="108" width="20" height="8" fill="rgba(138,96,64,0.15)" stroke="#8a6040" stroke-width="0.5"/>
-          <text x="600" y="115" fill="#8a6040" font-size="7">Brick</text>
-          <rect x="575" y="124" width="20" height="8" rx="1" fill="rgba(224,96,80,0.06)" stroke="#e06050" stroke-width="0.5" stroke-dasharray="2,1"/>
-          <text x="600" y="131" fill="#e06050" font-size="7">Firestop</text>
+          <rect x="390" y="430" width="120" height="90" rx="5" fill="rgba(21,27,36,0.95)" stroke="var(--border)" stroke-width="1"/>
+          <text x="450" y="448" fill="#8a95a8" font-size="8" text-anchor="middle" font-weight="600">LEGEND</text>
+          <line x1="405" y1="462" x2="425" y2="462" stroke="#e8a050" stroke-width="4" stroke-linecap="round"/>
+          <text x="430" y="466" fill="#e8a050" font-size="8">Exhaust (3" PVC)</text>
+          <line x1="405" y1="480" x2="425" y2="480" stroke="#70b8b0" stroke-width="4" stroke-linecap="round"/>
+          <text x="430" y="484" fill="#70b8b0" font-size="8">Intake (3" PVC)</text>
+          <rect x="405" y="493" width="20" height="8" fill="url(#brickPat)" stroke="#8a6040" stroke-width="0.5"/>
+          <text x="430" y="500" fill="#8a6040" font-size="8">Exterior brick</text>
 
           <!-- Title -->
-          <text x="350" y="405" fill="#5a6578" font-size="9" text-anchor="middle">WALL PENETRATION CROSS-SECTION - CONCENTRIC VENT</text>
+          <text x="260" y="670" fill="#5a6578" font-size="9" text-anchor="middle">SIDE CROSS-SECTION - TWO-PIPE VENTING - 20 ELSIE LN #217</text>
         </svg>
       </div>
-      <p class="diagram-caption">Side view showing the concentric vent running horizontally from the <strong>wall-mounted Rinnai</strong> through the exterior brick wall. The <strong>3" exhaust</strong> pipe sits inside the <strong>5" air intake</strong> pipe. Wall thimble with fire-stop caulk seals the penetration. Exterior termination cap prevents rain/snow ingestion. Horizontal run slopes 1/4" per foot back toward the unit for condensate drainage. All four Rinnai connections (gas, cold, hot, condensate) exit from the <strong>bottom</strong> of the unit.</p>
+      <p class="diagram-caption">Side cross-section showing both vent pipes. <strong>Exhaust</strong> (orange) exits the top of the Rinnai, runs at 62" AFF along the back wall, and penetrates the exterior brick wall. <strong>Intake</strong> (teal) exits the top of the Rinnai, jogs 12" forward, and runs parallel to the exhaust through the wall. Both pipes are 3" PVC Schedule 40. Each penetration gets a wall thimble with fire-stop caulk. Horizontal runs slope 1/4" per foot back toward the unit for condensate drainage.</p>
     </div>
 
-    <!-- Concentric pipe end view -->
+    <hr class="section-divider"/>
+
+    <!-- Exterior wall face: two terminations -->
     <div class="diagram-section">
-      <h2>Concentric Pipe End View</h2>
-      <div class="diagram-frame" onclick="this.classList.toggle('zoomed')">
-        <img src="generated/v2-10-vent-endview.png" alt="End view of concentric vent showing 5 inch outer intake and 3 inch inner exhaust"/>
-        <span class="zoom-hint">Click to zoom</span>
+      <h2>Exterior Wall Face (Two Terminations)</h2>
+      <div class="svg-frame">
+        <svg viewBox="0 0 500 360" width="500" height="360" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system, system-ui, sans-serif">
+          <defs>
+            <pattern id="brickPat2" x="0" y="0" width="36" height="18" patternUnits="userSpaceOnUse">
+              <rect width="36" height="18" fill="rgba(138,96,64,0.1)"/>
+              <line x1="0" y1="9" x2="36" y2="9" stroke="#8a6040" stroke-width="0.5" opacity="0.3"/>
+              <line x1="0" y1="18" x2="36" y2="18" stroke="#8a6040" stroke-width="0.5" opacity="0.3"/>
+              <line x1="18" y1="0" x2="18" y2="9" stroke="#8a6040" stroke-width="0.5" opacity="0.2"/>
+              <line x1="0" y1="9" x2="0" y2="18" stroke="#8a6040" stroke-width="0.5" opacity="0.2"/>
+              <line x1="36" y1="9" x2="36" y2="18" stroke="#8a6040" stroke-width="0.5" opacity="0.2"/>
+            </pattern>
+          </defs>
+          <rect x="0" y="0" width="500" height="360" fill="#0a0e14"/>
+
+          <!-- Brick wall background -->
+          <rect x="30" y="30" width="440" height="280" rx="2" fill="url(#brickPat2)" stroke="#8a6040" stroke-width="2"/>
+
+          <!-- Window above vents -->
+          <rect x="160" y="45" width="100" height="65" rx="2" fill="rgba(100,140,180,0.06)" stroke="#5a6578" stroke-width="1.5"/>
+          <line x1="210" y1="45" x2="210" y2="110" stroke="#5a6578" stroke-width="0.8"/>
+          <line x1="160" y1="77" x2="260" y2="77" stroke="#5a6578" stroke-width="0.8"/>
+          <text x="210" y="130" fill="#5a6578" font-size="8" text-anchor="middle">WINDOW</text>
+
+          <!-- Exhaust termination (back = higher in exterior view, or just side by side) -->
+          <!-- Show them side by side horizontally, 12" apart -->
+          <circle cx="185" cy="185" r="18" fill="rgba(232,160,80,0.08)" stroke="#e8a050" stroke-width="2.5"/>
+          <circle cx="185" cy="185" r="8" fill="rgba(232,160,80,0.15)" stroke="#e8a050" stroke-width="1.5"/>
+          <text x="185" y="188" fill="#e8a050" font-size="7" text-anchor="middle" font-weight="600">3"</text>
+          <text x="185" y="215" fill="#e8a050" font-size="9" text-anchor="middle" font-weight="600">EXHAUST</text>
+          <text x="185" y="227" fill="#5a6578" font-size="7" text-anchor="middle">Back vent</text>
+
+          <!-- Intake termination, 12" to the right -->
+          <circle cx="275" cy="185" r="18" fill="rgba(112,184,176,0.08)" stroke="#70b8b0" stroke-width="2.5"/>
+          <circle cx="275" cy="185" r="8" fill="rgba(112,184,176,0.15)" stroke="#70b8b0" stroke-width="1.5"/>
+          <text x="275" y="188" fill="#70b8b0" font-size="7" text-anchor="middle" font-weight="600">3"</text>
+          <text x="275" y="215" fill="#70b8b0" font-size="9" text-anchor="middle" font-weight="600">INTAKE</text>
+          <text x="275" y="227" fill="#5a6578" font-size="7" text-anchor="middle">Front vent</text>
+
+          <!-- 12" spacing between pipes -->
+          <line x1="185" y1="242" x2="275" y2="242" stroke="#5a6578" stroke-width="0.8"/>
+          <line x1="185" y1="238" x2="185" y2="246" stroke="#5a6578" stroke-width="0.8"/>
+          <line x1="275" y1="238" x2="275" y2="246" stroke="#5a6578" stroke-width="0.8"/>
+          <text x="230" y="256" fill="#5a6578" font-size="9" text-anchor="middle" font-weight="600">12"</text>
+
+          <!-- Min 12" below window callout -->
+          <line x1="145" y1="110" x2="145" y2="167" stroke="#accent" stroke-width="0.6" stroke-dasharray="2,2"/>
+          <line x1="141" y1="110" x2="149" y2="110" stroke="#7ec0ff" stroke-width="0.6"/>
+          <line x1="141" y1="167" x2="149" y2="167" stroke="#7ec0ff" stroke-width="0.6"/>
+          <text x="130" y="143" fill="#7ec0ff" font-size="7" text-anchor="end">12" min</text>
+          <text x="130" y="153" fill="#7ec0ff" font-size="7" text-anchor="end">below</text>
+
+          <!-- Grade line -->
+          <line x1="30" y1="310" x2="470" y2="310" stroke="#5a6578" stroke-width="1.5"/>
+          <text x="475" y="314" fill="#5a6578" font-size="8">GRADE</text>
+
+          <!-- Min 12" above grade -->
+          <line x1="340" y1="203" x2="340" y2="310" stroke="#7ec0ff" stroke-width="0.6" stroke-dasharray="2,2"/>
+          <line x1="336" y1="203" x2="344" y2="203" stroke="#7ec0ff" stroke-width="0.6"/>
+          <line x1="336" y1="310" x2="344" y2="310" stroke="#7ec0ff" stroke-width="0.6"/>
+          <text x="354" y="260" fill="#7ec0ff" font-size="7">12" min</text>
+          <text x="354" y="270" fill="#7ec0ff" font-size="7">above grade</text>
+
+          <!-- Arrows showing air flow -->
+          <text x="185" y="165" fill="#e8a050" font-size="14" text-anchor="middle">&#x2191;</text>
+          <text x="275" y="165" fill="#70b8b0" font-size="14" text-anchor="middle">&#x2193;</text>
+          <text x="185" y="155" fill="#e8a050" font-size="6" text-anchor="middle">OUT</text>
+          <text x="275" y="155" fill="#70b8b0" font-size="6" text-anchor="middle">IN</text>
+
+          <!-- Title -->
+          <text x="250" y="340" fill="#5a6578" font-size="9" text-anchor="middle">EXTERIOR WALL FACE - TWO-PIPE TERMINATIONS</text>
+        </svg>
       </div>
-      <p class="diagram-caption">Looking into the end of the concentric vent. The outer 5" pipe (cyan) draws <strong>combustion air inward</strong>. The inner 3" pipe (red) exhausts <strong>flue gases outward</strong>. Spacers hold the inner pipe centered. This design means all combustion air comes from outside. No room air is consumed. No additional ventilation openings needed in the closet.</p>
+      <p class="diagram-caption">View of the exterior brick wall showing both vent terminations. <strong>Exhaust</strong> cap (left, orange) expels flue gases. <strong>Intake</strong> cap (right, teal) draws fresh combustion air. 12" separation between centers. Both must clear 12" below any window, 12" above grade, 6" from inside corners, and 3' from gas meters. Each pipe gets its own termination cap. Reuse existing caps from the previous unit.</p>
     </div>
 
-    <!-- Clearance diagram -->
+    <hr class="section-divider"/>
+
+    <!-- Clearance diagram (AI image - generic, still applicable) -->
     <div class="diagram-section">
-      <h2>Exterior Termination Clearances</h2>
+      <h2>Termination Clearances (Per Rinnai Manual)</h2>
       <div class="diagram-frame" onclick="this.classList.toggle('zoomed')">
-        <img src="generated/v2-08-vent-clearance.png" alt="Vent termination clearance diagram showing minimum distances from windows, grade, gas meter, and corners"/>
+        <img src="generated/v2-08-vent-clearance.png" alt="Vent termination clearance diagram showing minimum distances"/>
         <span class="zoom-hint">Click to zoom</span>
       </div>
-      <p class="diagram-caption">Exterior wall face showing required minimum clearances from the vent termination to nearby features. All distances per Rinnai installation manual. Measure from the edge of the termination cap, not the center of the pipe.</p>
+      <p class="diagram-caption">Generic clearance diagram. These minimums apply to <strong>both</strong> termination caps independently. Measure from the edge of each cap, not the center of the pipe.</p>
     </div>
 
     <h2 style="font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); margin-bottom: 0.8rem;">Minimum Clearances (Rinnai Manual)</h2>
@@ -253,10 +370,16 @@
       <div class="clearance-item"><span class="c-label">From gas meter or regulator</span><span class="c-value">3' min</span></div>
       <div class="clearance-item"><span class="c-label">From dryer or furnace vent</span><span class="c-value">3' min</span></div>
       <div class="clearance-item"><span class="c-label">Adjacent to public walkway</span><span class="c-value">7' above if within 6'</span></div>
+      <div class="clearance-item"><span class="c-label">Between exhaust and intake</span><span class="c-value">12" min</span></div>
+    </div>
+
+    <div class="note-box">
+      <strong>Why two-pipe instead of concentric?</strong> The RXP199iN supports both concentric and two-pipe venting. Two-pipe is more common in townhouse installs. Both pipes are the same diameter (3" PVC), unlike concentric which uses a 5" outer and 3" inner. The existing PVC from the old unit can be reused with new elbows.
     </div>
 
     <div class="warn-box">
-      <strong>Never mix vent materials.</strong> System 636 PVC throughout. Never connect to an existing B-vent or chimney. The RXP199iN is Category IV (positive pressure, condensing). Use only Rinnai-approved concentric termination caps. Condensate is acidic (pH 3-4), route to floor drain via 1/2" NPT at unit bottom.</div>
+      <strong>Never mix vent materials.</strong> System 636 PVC throughout. Never connect to an existing B-vent or chimney. Use only Rinnai-approved termination caps. Both pipes must have independent wall penetrations with firestop. Condensate is acidic (pH 3-4), route to floor drain via 1/2" NPT at unit bottom. Slope all horizontal runs 1/4" per foot back to unit.
+    </div>
   </div>
 
   <script>

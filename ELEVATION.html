@@ -136,13 +136,21 @@
           <text x="225" y="512" fill="#80c0c0" font-size="7" text-anchor="middle">COND</text>
           <text x="225" y="520" fill="#5a6578" font-size="6" text-anchor="middle">1/2" NPT</text>
 
-          <!-- Vent pipe: exits left from Rinnai at ~40" AFF (mid-unit), goes through left wall -->
-          <!-- 40" AFF = y=660-320=340 -->
-          <line x1="100" y1="340" x2="58" y2="340" stroke="#a0a0a0" stroke-width="5"/>
-          <line x1="100" y1="340" x2="58" y2="340" stroke="#e06050" stroke-width="2"/>
-          <text x="56" y="332" fill="#a0a0a0" font-size="8" text-anchor="end">PVC VENT</text>
-          <text x="56" y="352" fill="#a0a0a0" font-size="7" text-anchor="end">5"/3" concentric</text>
-          <text x="56" y="362" fill="#5a6578" font-size="7" text-anchor="end">to exterior</text>
+          <!-- Vent pipes: TWO separate 3" PVC from TOP of Rinnai at 62" AFF -->
+          <!-- 62" AFF = y=660-496=164. Rinnai top at y=218. -->
+          <!-- Exhaust: rises from top of Rinnai, runs at 62" AFF to left wall -->
+          <line x1="150" y1="218" x2="150" y2="164" stroke="#e8a050" stroke-width="4"/>
+          <line x1="150" y1="164" x2="58" y2="164" stroke="#e8a050" stroke-width="4" stroke-linecap="round"/>
+          <!-- Intake: 12" forward (shown slightly below for visibility in front view) -->
+          <line x1="170" y1="218" x2="170" y2="176" stroke="#70b8b0" stroke-width="4"/>
+          <line x1="170" y1="176" x2="58" y2="176" stroke="#70b8b0" stroke-width="4" stroke-linecap="round"/>
+          <!-- Labels -->
+          <text x="56" y="158" fill="#e8a050" font-size="7" text-anchor="end">EXHAUST 3"</text>
+          <text x="56" y="182" fill="#70b8b0" font-size="7" text-anchor="end">INTAKE 3"</text>
+          <text x="56" y="194" fill="#5a6578" font-size="7" text-anchor="end">to exterior</text>
+          <!-- 62" AFF marker -->
+          <line x1="250" y1="164" x2="395" y2="164" stroke="#5a6578" stroke-width="0.5" stroke-dasharray="2,2"/>
+          <text x="393" y="168" fill="#5a6578" font-size="7" text-anchor="end">62"</text>
 
           <!-- Expansion tank: on cold supply, right side of Rinnai -->
           <!-- Small cylinder at ~18" AFF = y=660-144=516, to the right of the cold pipe -->
@@ -201,7 +209,7 @@
           <text x="224" y="735" fill="#5a6578" font-size="9" text-anchor="middle">FRONT ELEVATION - UTILITY CLOSET - 20 ELSIE LN #217</text>
         </svg>
       </div>
-      <p class="diagram-caption">Front elevation to scale (1" = 8px). Looking at the <strong>back wall</strong>. Both the Rinnai and the air handler mount on this wall. The Rinnai sits slightly left of center, allowing room for the expansion tank and heating supply/return pipes on the right side. All four Rinnai connections exit from the <strong>bottom</strong>. Gas supply enters from the left wall and includes a drip leg with sediment trap. PVC vent exits horizontally through the left exterior brick wall at mid-unit height.</p>
+      <p class="diagram-caption">Front elevation to scale (1" = 8px). Looking at the <strong>back wall</strong>. Both the Rinnai and the air handler mount on this wall. The Rinnai sits slightly left of center, allowing room for the expansion tank and heating supply/return pipes on the right side. All four Rinnai connections exit from the <strong>bottom</strong>. Gas supply enters from the left wall and includes a drip leg with sediment trap. Two 3" PVC vent pipes exit from the top of the Rinnai, run at 62" AFF under the air handler, and penetrate the left exterior brick wall.</p>
     </div>
 
     <hr class="section-divider"/>
@@ -246,19 +254,22 @@
           <text x="253" y="80" fill="#7ec0ff" font-size="10" text-anchor="middle" font-weight="600">AIR HANDLER</text>
           <text x="253" y="96" fill="#8a95a8" font-size="8" text-anchor="middle">36HX</text>
 
-          <!-- PVC Vent: horizontal from Rinnai to left wall and through it -->
-          <!-- At ~40" AFF = y=340 -->
-          <!-- Outer pipe (5" = 40px diameter = 20px radius) -->
-          <line x1="224" y1="330" x2="20" y2="330" stroke="#a0a0a0" stroke-width="6"/>
-          <!-- Inner pipe (3" exhaust) -->
-          <line x1="224" y1="330" x2="20" y2="330" stroke="#e06050" stroke-width="2.5"/>
-          <!-- Slope indicator -->
-          <line x1="64" y1="330" x2="224" y2="326" stroke="#a0a0a0" stroke-width="0.5" stroke-dasharray="2,2"/>
-          <text x="140" y="318" fill="#a0a0a0" font-size="7" text-anchor="middle">1/4"/ft slope to unit</text>
-          <!-- Vent termination outside -->
-          <circle cx="20" cy="330" r="6" fill="none" stroke="#a0a0a0" stroke-width="1.5"/>
-          <text x="14" y="318" fill="#a0a0a0" font-size="7" text-anchor="end">VENT</text>
-          <text x="14" y="342" fill="#a0a0a0" font-size="7" text-anchor="end">TERM.</text>
+          <!-- TWO SEPARATE 3" PVC vents from TOP of Rinnai at 62" AFF -->
+          <!-- 62" AFF = y=660-62*8=660-496=164. Rinnai top at y=218 -->
+          <!-- Exhaust: back vent, against back wall -->
+          <line x1="260" y1="218" x2="260" y2="164" stroke="#e8a050" stroke-width="4"/>
+          <line x1="260" y1="164" x2="20" y2="164" stroke="#e8a050" stroke-width="4" stroke-linecap="round"/>
+          <circle cx="20" cy="164" r="5" fill="none" stroke="#e8a050" stroke-width="1.5"/>
+          <!-- Intake: front vent, 12" forward (12"=96px at scale) -->
+          <line x1="240" y1="218" x2="240" y2="176" stroke="#70b8b0" stroke-width="4"/>
+          <line x1="240" y1="176" x2="20" y2="176" stroke="#70b8b0" stroke-width="4" stroke-linecap="round"/>
+          <circle cx="20" cy="176" r="5" fill="none" stroke="#70b8b0" stroke-width="1.5"/>
+          <!-- Labels -->
+          <text x="14" y="158" fill="#e8a050" font-size="7" text-anchor="end">EXH 3"</text>
+          <text x="14" y="186" fill="#70b8b0" font-size="7" text-anchor="end">INT 3"</text>
+          <text x="140" y="154" fill="#5a6578" font-size="7" text-anchor="middle">1/4"/ft slope to unit</text>
+          <!-- 12" spacing -->
+          <text x="14" y="174" fill="#5a6578" font-size="6" text-anchor="end">12"</text>
 
           <!-- Pipe connections below Rinnai - just show them dropping down -->
           <line x1="250" y1="468" x2="250" y2="540" stroke="#e06050" stroke-width="2.5"/>
@@ -295,7 +306,7 @@
           <text x="190" y="714" fill="#5a6578" font-size="9" text-anchor="middle" dy="20">SIDE ELEVATION (CROSS-SECTION) - LOOKING LEFT</text>
         </svg>
       </div>
-      <p class="diagram-caption">Side cross-section showing the 32" closet depth. <strong>Left wall is exterior brick</strong> (with vent penetration). <strong>Back wall (right)</strong> is where both units mount. The Rinnai protrudes 11.45" from the back wall. The vent runs horizontally from the Rinnai through the exterior wall, sloping 1/4" per foot back toward the unit. Heating supply and return pipes run vertically between the Rinnai and the air handler above. Condensate drains down from the Rinnai to the floor drain.</p>
+      <p class="diagram-caption">Side cross-section showing the 32" closet depth. <strong>Left wall is exterior brick</strong> (with two vent penetrations). <strong>Back wall (right)</strong> is where both units mount. The Rinnai protrudes 11.45" from the back wall. Two 3" PVC vent pipes run from the top of the Rinnai at 62" AFF through the exterior wall. Exhaust against the back wall, intake 12" forward. Heating supply and return pipes run vertically between the Rinnai and the air handler above. Condensate drains down from the Rinnai to the floor drain.</p>
     </div>
 
     <div class="legend">
@@ -305,14 +316,15 @@
         <div class="legend-item"><span class="legend-dot" style="background: #d4b030"></span> Gas</div>
         <div class="legend-item"><span class="legend-dot" style="background: #50b870"></span> Heating supply</div>
         <div class="legend-item"><span class="legend-dot" style="background: #6a9060"></span> Heating return</div>
-        <div class="legend-item"><span class="legend-dot" style="background: #a0a0a0"></span> PVC vent (5"/3")</div>
+        <div class="legend-item"><span class="legend-dot" style="background: #e8a050"></span> Exhaust (3" PVC)</div>
+        <div class="legend-item"><span class="legend-dot" style="background: #70b8b0"></span> Intake (3" PVC)</div>
         <div class="legend-item"><span class="legend-dot" style="background: #80c0c0"></span> Condensate</div>
         <div class="legend-item"><span class="legend-dot" style="background: #8a6040"></span> Exterior brick</div>
       </div>
     </div>
 
     <div class="note-box">
-      <strong>Key spatial facts:</strong> Both units mount on the back wall (not separate walls). The vent exits the left wall (exterior brick), not through the ceiling or the back wall. The expansion tank sits on the cold supply line, right side of the manifold zone. Heating supply and return pipes run vertically on the right side of the closet between Rinnai and AH. For the interactive 3D view, <a href="index.html" style="color: var(--accent);">open the Three.js model viewer</a>.
+      <strong>Key spatial facts:</strong> Both units mount on the back wall (not separate walls). Both vent pipes (exhaust and intake) exit through the left wall (exterior brick) at 62" AFF, running just under the air handler. The expansion tank sits on the cold supply line, right side of the manifold zone. Heating supply and return pipes run vertically on the right side of the closet between Rinnai and AH. For the interactive 3D view, <a href="index.html" style="color: var(--accent);">open the Three.js model viewer</a>.
     </div>
   </div>
 </body>
