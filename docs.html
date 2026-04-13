@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title>20 Elsie #217 - Documentation</title>
+  <title>20 Elsie #217 - Boiler Replacement</title>
   <style>
     :root {
       --bg: #0e1218;
@@ -36,6 +36,8 @@
       backdrop-filter: blur(12px);
       border-bottom: 1px solid var(--border);
     }
+    .top-title { font-size: 0.95rem; font-weight: 600; }
+    .top-sub { font-size: 0.8rem; color: var(--text-muted); margin-left: auto; }
     .back-btn {
       display: inline-flex; align-items: center; gap: 0.4rem;
       padding: 0.4rem 0.8rem;
@@ -46,118 +48,29 @@
       text-decoration: none;
       font-size: 0.85rem;
       transition: background 150ms;
+      cursor: pointer;
     }
     .back-btn:hover { background: var(--accent-dim); }
-    .top-title { font-size: 0.9rem; color: var(--text-muted); }
-
-    /* Hero */
-    .hero {
-      max-width: 960px;
-      margin: 2rem auto 0;
-      padding: 0 1.5rem;
-    }
-    .hero-img {
-      width: 100%;
-      border-radius: 12px;
-      border: 1px solid var(--border);
-      display: block;
-    }
-    .hero-caption {
-      text-align: center;
-      margin-top: 0.6rem;
-      font-size: 0.78rem;
-      color: var(--text-muted);
-    }
-
-    .nav-grid {
-      max-width: 960px;
-      margin: 2rem auto;
-      padding: 0 1.5rem;
-    }
-    .nav-grid h1 {
-      font-size: 1.6rem;
-      margin-bottom: 0.3rem;
-    }
-    .nav-grid .sub {
-      color: var(--text-muted);
-      font-size: 0.9rem;
-      margin-bottom: 2rem;
-    }
-    .card-section {
-      margin-bottom: 2rem;
-    }
-    .card-section h2 {
-      font-size: 0.75rem;
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      color: var(--text-muted);
-      margin-bottom: 0.8rem;
-    }
-    .cards {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-      gap: 0.8rem;
-    }
-    .card {
-      display: block;
-      padding: 1.2rem;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      text-decoration: none;
-      color: var(--text);
-      transition: border-color 200ms, transform 100ms;
-    }
-    .card:hover {
-      border-color: var(--accent);
-      transform: translateY(-1px);
-    }
-    .card h3 {
-      font-size: 1rem;
-      margin-bottom: 0.4rem;
-      color: var(--accent);
-    }
-    .card p {
-      font-size: 0.82rem;
-      color: var(--text-muted);
-      line-height: 1.5;
-    }
-    .card .tag {
-      display: inline-block;
-      margin-top: 0.6rem;
-      padding: 0.15rem 0.5rem;
-      font-size: 0.7rem;
-      border-radius: 4px;
-      background: var(--accent-dim);
-      color: var(--accent);
-    }
-    .tag-hot { background: rgba(224, 96, 80, 0.12); color: var(--hot); }
-    .tag-cold { background: rgba(80, 144, 208, 0.12); color: var(--cold); }
-    .tag-green { background: rgba(80, 184, 112, 0.12); color: var(--green); }
-    .tag-gas { background: rgba(212, 176, 48, 0.12); color: var(--gas); }
-
-    /* Card thumbnails */
-    .card-thumb {
-      width: 100%;
-      height: 120px;
-      object-fit: cover;
-      border-radius: 6px;
-      margin-bottom: 0.8rem;
-      border: 1px solid var(--border);
-    }
-
-    /* Markdown viewer */
-    .doc-view {
-      display: none;
-      max-width: 800px;
-      margin: 0 auto;
-      padding: 2rem 1.5rem 4rem;
-    }
+    .nav-grid { max-width: 960px; margin: 0 auto; padding: 1.5rem; }
+    .page-header { margin-bottom: 1.5rem; }
+    .page-header h1 { font-size: 1.6rem; margin-bottom: 0.3rem; }
+    .page-header .sub { color: var(--text-muted); font-size: 0.9rem; line-height: 1.6; }
+    .card-section { margin-bottom: 2rem; }
+    .card-section h2 { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); margin-bottom: 0.8rem; }
+    .cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 0.8rem; }
+    .card { display: block; padding: 1.2rem; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; text-decoration: none; color: var(--text); transition: border-color 200ms, transform 100ms; }
+    .card:hover { border-color: var(--accent); transform: translateY(-1px); }
+    .card h3 { font-size: 1rem; margin-bottom: 0.4rem; color: var(--accent); }
+    .card p { font-size: 0.82rem; color: var(--text-muted); line-height: 1.5; }
+    .card .tag { display: inline-block; margin-top: 0.6rem; padding: 0.15rem 0.5rem; font-size: 0.7rem; border-radius: 4px; background: var(--accent-dim); color: var(--accent); }
+    .tag-hot { background: rgba(224,96,80,0.12); color: var(--hot); }
+    .tag-cold { background: rgba(80,144,208,0.12); color: var(--cold); }
+    .tag-green { background: rgba(80,184,112,0.12); color: var(--green); }
+    .tag-gas { background: rgba(212,176,48,0.12); color: var(--gas); }
+    .card-thumb { width: 100%; height: 120px; object-fit: cover; border-radius: 6px; margin-bottom: 0.8rem; border: 1px solid var(--border); }
+    .doc-view { display: none; max-width: 800px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
     .doc-view.active { display: block; }
-    .doc-content {
-      line-height: 1.7;
-      font-size: 0.95rem;
-    }
+    .doc-content { line-height: 1.7; font-size: 0.95rem; }
     .doc-content h1 { font-size: 1.5rem; margin: 2rem 0 1rem; border-bottom: 1px solid var(--border); padding-bottom: 0.5rem; }
     .doc-content h2 { font-size: 1.25rem; margin: 1.8rem 0 0.8rem; color: var(--accent); }
     .doc-content h3 { font-size: 1.05rem; margin: 1.4rem 0 0.6rem; }
@@ -166,114 +79,61 @@
     .doc-content ul, .doc-content ol { margin: 0.6rem 0; padding-left: 1.5rem; }
     .doc-content li { margin: 0.3rem 0; }
     .doc-content strong { color: #fff; }
-    .doc-content code {
-      background: rgba(126, 192, 255, 0.08);
-      padding: 0.15rem 0.4rem;
-      border-radius: 3px;
-      font-size: 0.88em;
-      font-family: 'SF Mono', 'Fira Code', monospace;
-    }
-    .doc-content pre {
-      background: #0a0e14;
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      padding: 1rem;
-      overflow-x: auto;
-      margin: 1rem 0;
-    }
+    .doc-content code { background: rgba(126,192,255,0.08); padding: 0.15rem 0.4rem; border-radius: 3px; font-size: 0.88em; font-family: 'SF Mono', 'Fira Code', monospace; }
+    .doc-content pre { background: #0a0e14; border: 1px solid var(--border); border-radius: 6px; padding: 1rem; overflow-x: auto; margin: 1rem 0; }
     .doc-content pre code { background: none; padding: 0; }
-    .doc-content table {
-      width: 100%;
-      border-collapse: collapse;
-      margin: 1rem 0;
-      font-size: 0.85rem;
-    }
-    .doc-content th {
-      text-align: left;
-      padding: 0.6rem 0.8rem;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      color: var(--accent);
-      font-weight: 600;
-    }
-    .doc-content td {
-      padding: 0.5rem 0.8rem;
-      border: 1px solid var(--border);
-    }
+    .doc-content table { width: 100%; border-collapse: collapse; margin: 1rem 0; font-size: 0.85rem; }
+    .doc-content th { text-align: left; padding: 0.6rem 0.8rem; background: var(--surface); border: 1px solid var(--border); color: var(--accent); font-weight: 600; }
+    .doc-content td { padding: 0.5rem 0.8rem; border: 1px solid var(--border); }
     .doc-content tr:nth-child(even) td { background: rgba(255,255,255,0.02); }
     .doc-content a { color: var(--accent); }
-    .doc-content blockquote {
-      border-left: 3px solid var(--accent);
-      padding: 0.5rem 1rem;
-      margin: 1rem 0;
-      background: var(--accent-dim);
-      border-radius: 0 6px 6px 0;
-    }
-    .doc-content hr {
-      border: none;
-      border-top: 1px solid var(--border);
-      margin: 2rem 0;
-    }
+    .doc-content blockquote { border-left: 3px solid var(--accent); padding: 0.5rem 1rem; margin: 1rem 0; background: var(--accent-dim); border-radius: 0 6px 6px 0; }
+    .doc-content hr { border: none; border-top: 1px solid var(--border); margin: 2rem 0; }
+    .doc-error { padding: 2rem; text-align: center; color: var(--text-muted); }
+    .doc-error a { color: var(--accent); }
   </style>
   <script src="https://cdn.jsdelivr.net/npm/marked@14.0.0/marked.min.js"></script>
 </head>
 <body>
-
-  <div class="top-bar">
-    <a href="index.html" class="back-btn" id="backBtn">&larr; 3D Model</a>
-    <span class="top-title" id="topTitle">20 Elsie Lane #217 - Boiler Replacement</span>
+  <div class="top-bar" id="topBar">
+    <span class="top-title">20 Elsie Lane #217</span>
+    <span class="top-sub">Boiler Replacement Package</span>
   </div>
 
-  <!-- Navigation grid (home state) -->
   <div class="nav-grid" id="navGrid">
-
-    <div class="hero">
-      <img src="generated/v2-04-pid-openloop.png" alt="Open-loop P&amp;ID schematic showing DHW and hydronic circuits" class="hero-img"/>
-      <p class="hero-caption">Open-loop system: Rinnai RXP199iN serving DHW (through TMV) and hydronic heating (through fan coil) from a single unit</p>
-    </div>
-
-    <h1 style="margin-top: 2rem;">20 Elsie Lane #217</h1>
-    <p class="sub">Rinnai RXP199iN Tankless + Open-Loop Hydronic Heating. Complete installation package for Michael.</p>
-
-    <div class="card-section">
-      <h2>Interactive</h2>
-      <div class="cards">
-        <a href="index.html" class="card">
-          <h3>3D Installation Model</h3>
-          <p>Interactive Three.js viewer. Orbit, zoom, toggle layers, click to inspect components.</p>
-          <span class="tag">3D Viewer</span>
-        </a>
-      </div>
+    <div class="page-header">
+      <h1>20 Elsie Lane #217</h1>
+      <p class="sub">Rinnai RXP199iN tankless water heater + open-loop hydronic heating. Complete installation package: technical diagrams, step-by-step guide, parts list, cost model.</p>
     </div>
 
     <div class="card-section">
       <h2>Technical Diagrams</h2>
       <div class="cards">
         <a href="ELEVATION.html" class="card">
-          <h3>Overview &amp; Elevation</h3>
-          <p>Programmatic SVG front elevation and side cross-section. Precise closet dimensions, appliance positions, vent routing, expansion tank.</p>
-          <span class="tag tag-cold">2 SVG Diagrams</span>
+          <h3>Overview + Elevation</h3>
+          <p>Front elevation and side cross-section of the 36" x 32" x 80" utility closet. Component positions, vent routing, dimensions.</p>
+          <span class="tag tag-cold">2 Diagrams</span>
         </a>
         <a href="PID.html" class="card">
           <img src="generated/v2-04-pid-openloop.png" alt="" class="card-thumb"/>
-          <h3>P&amp;ID Schematic</h3>
-          <p>Open-loop system schematic. DHW and hydronic circuits, component schedule, TMV detail cutaway.</p>
+          <h3>P+ID Schematic</h3>
+          <p>Open-loop system schematic. DHW and hydronic circuits, component schedule, TMV cutaway.</p>
           <span class="tag tag-hot">2 Diagrams</span>
         </a>
         <a href="MANIFOLD-DETAIL.html" class="card">
-          <h3>Manifold &amp; Connections</h3>
-          <p>SVG pipe routing schematic with DHW and heating circuits. SharkBite fitting cutaway, assembly order, pressure testing.</p>
-          <span class="tag tag-green">SVG + 1 Image</span>
+          <h3>Manifold + Connections</h3>
+          <p>Pipe routing schematic. Six components, two circuits, assembly order, pressure testing.</p>
+          <span class="tag tag-green">1 Diagram</span>
         </a>
         <a href="VENTING.html" class="card">
           <h3>Venting Detail</h3>
-          <p>SVG wall penetration cross-section, concentric pipe end view, exterior clearance diagram.</p>
-          <span class="tag tag-cold">SVG + 2 Images</span>
+          <p>Twin 3" PVC two-pipe venting from top of unit. Side cross-section, clearances.</p>
+          <span class="tag tag-cold">1 Diagram</span>
         </a>
         <a href="ELECTRICAL.html" class="card">
-          <h3>Electrical &amp; Heat Call</h3>
-          <p>7-step heat call sequence, SVG single-zone wiring diagram, zone valve cutaway.</p>
-          <span class="tag tag-gas">SVG + 2 Images</span>
+          <h3>Electrical + Heat Call</h3>
+          <p>7-step heat call sequence, single-zone wiring diagram, zone valve cutaway.</p>
+          <span class="tag tag-gas">3 Diagrams</span>
         </a>
       </div>
     </div>
@@ -283,34 +143,44 @@
       <div class="cards">
         <a href="#" class="card" onclick="loadDoc('INSTALLATION-GUIDE.md','Installation Guide');return false;">
           <h3>Step-by-Step Installation Guide</h3>
-          <p>Complete 7-step guide: tools, materials, mounting, venting, piping, electrical, testing. With safety notes and troubleshooting.</p>
+          <p>Complete 7-step guide: tools, materials, mounting, venting, piping, electrical, testing.</p>
           <span class="tag">Guide</span>
-        </a>
-        <a href="#" class="card" onclick="loadDoc('BOILER-REPLACEMENT-PLAN.md','Full Replacement Plan');return false;">
-          <h3>Full Replacement Plan</h3>
-          <p>Complete analysis: combi vs tankless, code compliance, unit selection, neighbor installs, wiring.</p>
-          <span class="tag">Reference</span>
-        </a>
-        <a href="#" class="card" onclick="loadDoc('COMBI-VS-TANKLESS-DEEP-DIVE.md','Combi vs Tankless');return false;">
-          <h3>Combi vs Tankless Deep Dive</h3>
-          <p>What's actually inside a combi boiler vs Sean's build. Open-loop vs closed-loop tradeoffs.</p>
-          <span class="tag">Technical</span>
         </a>
         <a href="#" class="card" onclick="loadDoc('COMPONENT-INVENTORY.md','Component Inventory');return false;">
           <h3>Component Inventory + Shopping List</h3>
-          <p>What you have, what to buy, Home Depot + Amazon links, prices, where to get what.</p>
+          <p>What you have, what to buy, Home Depot + Amazon links, prices.</p>
           <span class="tag">Shopping</span>
+        </a>
+        <a href="#" class="card" onclick="loadDoc('BOILER-REPLACEMENT-PLAN.md','Full Replacement Plan');return false;">
+          <h3>Full Replacement Plan</h3>
+          <p>Complete analysis: combi vs tankless, code compliance, unit selection, wiring.</p>
+          <span class="tag">Reference</span>
         </a>
         <a href="#" class="card" onclick="loadDoc('COST-MODEL-80-MONTH.md','80-Month Cost Model');return false;">
           <h3>80-Month Cost Model</h3>
-          <p>DIY vs Enbridge rental vs pro install. Break-even analysis, sensitivity scenarios.</p>
+          <p>DIY vs Enbridge rental vs pro install. Break-even analysis.</p>
           <span class="tag">Financial</span>
+        </a>
+        <a href="#" class="card" onclick="loadDoc('COMBI-VS-TANKLESS-DEEP-DIVE.md','Combi vs Tankless');return false;">
+          <h3>Combi vs Tankless Deep Dive</h3>
+          <p>What's inside a combi boiler vs this open-loop build. Tradeoffs.</p>
+          <span class="tag">Technical</span>
+        </a>
+      </div>
+    </div>
+
+    <div class="card-section">
+      <h2>Interactive</h2>
+      <div class="cards">
+        <a href="viewer.html" class="card">
+          <h3>3D Installation Model</h3>
+          <p>Interactive Three.js viewer. Orbit, zoom, toggle layers, click to inspect components.</p>
+          <span class="tag">3D Viewer</span>
         </a>
       </div>
     </div>
   </div>
 
-  <!-- Document viewer (loads markdown) -->
   <div class="doc-view" id="docView">
     <div class="doc-content" id="docContent"></div>
   </div>
@@ -319,47 +189,42 @@
     const navGrid = document.getElementById('navGrid');
     const docView = document.getElementById('docView');
     const docContent = document.getElementById('docContent');
-    const backBtn = document.getElementById('backBtn');
-    const topTitle = document.getElementById('topTitle');
+    const topBar = document.getElementById('topBar');
 
     function showNav() {
       navGrid.style.display = '';
       docView.classList.remove('active');
-      backBtn.href = 'index.html';
-      backBtn.innerHTML = '&larr; 3D Model';
-      topTitle.textContent = '20 Elsie Lane #217 - Boiler Replacement';
-      history.pushState(null, '', 'docs.html');
+      topBar.innerHTML = '<span class="top-title">20 Elsie Lane #217</span><span class="top-sub">Boiler Replacement Package</span>';
+      history.pushState(null, '', './');
     }
 
     function loadDoc(file, title) {
       fetch(file)
-        .then(r => {
-          if (!r.ok) throw new Error('Not found');
+        .then(function(r) {
+          if (!r.ok) throw new Error('Could not load file (HTTP ' + r.status + ')');
           return r.text();
         })
-        .then(md => {
+        .then(function(md) {
           navGrid.style.display = 'none';
           docContent.innerHTML = marked.parse(md);
           docView.classList.add('active');
-          backBtn.href = '#';
-          backBtn.innerHTML = '&larr; Back';
-          backBtn.onclick = function(e) { e.preventDefault(); showNav(); backBtn.onclick = null; };
-          topTitle.textContent = title;
+          topBar.innerHTML = '<a class="back-btn" onclick="showNav();return false;" href="#">&larr; Back</a><span class="top-title" style="margin-left:0.8rem;">' + title + '</span>';
           window.scrollTo(0, 0);
-          history.pushState({ doc: file, title: title }, '', 'docs.html#' + file);
+          history.pushState({ doc: file, title: title }, '', '#' + file);
         })
-        .catch(() => {
-          window.location.href = file;
+        .catch(function(err) {
+          navGrid.style.display = 'none';
+          docContent.innerHTML = '<div class="doc-error"><p>Could not load <strong>' + file + '</strong></p><p style="font-size:0.85rem;">' + err.message + '</p><p style="margin-top:1rem;"><a href="#" onclick="showNav();return false;">&larr; Back to index</a></p></div>';
+          docView.classList.add('active');
+          topBar.innerHTML = '<a class="back-btn" onclick="showNav();return false;" href="#">&larr; Back</a><span class="top-title" style="margin-left:0.8rem;">Error</span>';
         });
     }
 
-    window.addEventListener('popstate', function() {
-      showNav();
-    });
+    window.addEventListener('popstate', function() { showNav(); });
 
     if (location.hash && location.hash.length > 1) {
-      const file = location.hash.slice(1);
-      const title = file.replace('.md', '').replace(/-/g, ' ');
+      var file = decodeURIComponent(location.hash.slice(1));
+      var title = file.replace('.md', '').replace(/-/g, ' ');
       loadDoc(file, title);
     }
   </script>

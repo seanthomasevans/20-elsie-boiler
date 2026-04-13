@@ -69,7 +69,7 @@
   <div class="content">
     <div class="page-header">
       <h1>Overview &amp; Elevation</h1>
-      <p class="subtitle">Utility closet at 20 Elsie Lane #217. Interior closet, 36" wide, 32" deep, 80" tall. Both the Rinnai and the air handler mount on the <strong>back wall</strong>. The <strong>left wall is exterior brick</strong>; the vent exits through it.</p>
+      <p class="subtitle">Utility closet at 20 Elsie Lane #217. Interior closet, 36" wide, 32" deep, 80" tall. Both the Rinnai and the air handler mount on the <strong>back wall</strong>. The <strong>left wall is exterior</strong>; the vent exits through it.</p>
     </div>
 
     <div class="specs-grid">
@@ -99,8 +99,8 @@
           <text x="76" y="678" fill="#5a6578" font-size="9" text-anchor="end">FIN. FLOOR</text>
 
           <!-- Left wall label (exterior) -->
-          <rect x="58" y="20" width="22" height="640" fill="none" stroke="#8a6040" stroke-width="1.5" stroke-dasharray="4,3"/>
-          <text x="48" y="345" fill="#8a6040" font-size="8" text-anchor="middle" transform="rotate(-90,48,345)">EXTERIOR BRICK WALL</text>
+          <rect x="58" y="20" width="22" height="640" fill="none" stroke="#5a6578" stroke-width="1.5" stroke-dasharray="4,3"/>
+          <text x="48" y="345" fill="#5a6578" font-size="8" text-anchor="middle" transform="rotate(-90,48,345)">EXTERIOR WALL</text>
 
           <!-- Air Handler: 64-80" AFF = y=660-512=148 to y=660-640=20. Full width. -->
           <rect x="84" y="20" width="280" height="128" rx="3" fill="rgba(126,192,255,0.06)" stroke="#7ec0ff" stroke-width="1.5"/>
@@ -209,7 +209,7 @@
           <text x="224" y="735" fill="#5a6578" font-size="9" text-anchor="middle">FRONT ELEVATION - UTILITY CLOSET - 20 ELSIE LN #217</text>
         </svg>
       </div>
-      <p class="diagram-caption">Front elevation to scale (1" = 8px). Looking at the <strong>back wall</strong>. Both the Rinnai and the air handler mount on this wall. The Rinnai sits slightly left of center, allowing room for the expansion tank and heating supply/return pipes on the right side. All four Rinnai connections exit from the <strong>bottom</strong>. Gas supply enters from the left wall and includes a drip leg with sediment trap. Two 3" PVC vent pipes exit from the top of the Rinnai, run at 62" AFF under the air handler, and penetrate the left exterior brick wall.</p>
+      <p class="diagram-caption">Front elevation to scale (1" = 8px). Looking at the <strong>back wall</strong>. Both the Rinnai and the air handler mount on this wall. The Rinnai sits slightly left of center, allowing room for the expansion tank and heating supply/return pipes on the right side. All four Rinnai connections exit from the <strong>bottom</strong>. Gas supply enters from the left wall and includes a drip leg with sediment trap. Two 3" PVC vent pipes exit from the top of the Rinnai, run at 62" AFF under the air handler, and penetrate the left exterior wall.</p>
     </div>
 
     <hr class="section-divider"/>
@@ -222,19 +222,19 @@
         <svg viewBox="0 0 420 720" width="420" height="720" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system, system-ui, sans-serif">
           <rect x="0" y="0" width="420" height="720" fill="#0a0e14"/>
 
-          <!-- Left wall = exterior brick (front of closet from this view) -->
+          <!-- Left wall = exterior (front of closet from this view) -->
           <!-- Right wall = back wall where units mount -->
           <rect x="60" y="20" width="256" height="640" fill="none" stroke="#3a4555" stroke-width="2"/>
 
-          <!-- Exterior brick wall (left side) - thicker wall -->
-          <rect x="40" y="20" width="24" height="640" fill="rgba(138,96,64,0.1)" stroke="#8a6040" stroke-width="1.5"/>
-          <!-- Brick pattern -->
-          <line x1="40" y1="60" x2="64" y2="60" stroke="#8a6040" stroke-width="0.5" opacity="0.3"/>
-          <line x1="40" y1="100" x2="64" y2="100" stroke="#8a6040" stroke-width="0.5" opacity="0.3"/>
-          <line x1="40" y1="140" x2="64" y2="140" stroke="#8a6040" stroke-width="0.5" opacity="0.3"/>
-          <line x1="40" y1="180" x2="64" y2="180" stroke="#8a6040" stroke-width="0.5" opacity="0.3"/>
-          <line x1="52" y1="20" x2="52" y2="660" stroke="#8a6040" stroke-width="0.5" opacity="0.15"/>
-          <text x="30" y="345" fill="#8a6040" font-size="8" text-anchor="middle" transform="rotate(-90,30,345)">EXTERIOR BRICK</text>
+          <!-- Exterior wall (left side) - thicker wall, diagonal hatch -->
+          <defs>
+            <pattern id="wallHatch" x="0" y="0" width="8" height="8" patternUnits="userSpaceOnUse">
+              <rect width="8" height="8" fill="rgba(100,110,120,0.10)"/>
+              <line x1="0" y1="8" x2="8" y2="0" stroke="#5a6578" stroke-width="0.4" opacity="0.25"/>
+            </pattern>
+          </defs>
+          <rect x="40" y="20" width="24" height="640" fill="url(#wallHatch)" stroke="#5a6578" stroke-width="1.5"/>
+          <text x="30" y="345" fill="#5a6578" font-size="8" text-anchor="middle" transform="rotate(-90,30,345)">EXTERIOR</text>
 
           <!-- Interior wall (right side) = back wall -->
           <text x="326" y="345" fill="#5a6578" font-size="8" text-anchor="middle" transform="rotate(90,326,345)">BACK WALL (MOUNTING)</text>
@@ -306,7 +306,7 @@
           <text x="190" y="714" fill="#5a6578" font-size="9" text-anchor="middle" dy="20">SIDE ELEVATION (CROSS-SECTION) - LOOKING LEFT</text>
         </svg>
       </div>
-      <p class="diagram-caption">Side cross-section showing the 32" closet depth. <strong>Left wall is exterior brick</strong> (with two vent penetrations). <strong>Back wall (right)</strong> is where both units mount. The Rinnai protrudes 11.45" from the back wall. Two 3" PVC vent pipes run from the top of the Rinnai at 62" AFF through the exterior wall. Exhaust against the back wall, intake 12" forward. Heating supply and return pipes run vertically between the Rinnai and the air handler above. Condensate drains down from the Rinnai to the floor drain.</p>
+      <p class="diagram-caption">Side cross-section showing the 32" closet depth. <strong>Left wall is exterior</strong> (with two vent penetrations). <strong>Back wall (right)</strong> is where both units mount. The Rinnai protrudes 11.45" from the back wall. Two 3" PVC vent pipes run from the top of the Rinnai at 62" AFF through the exterior wall. Exhaust against the back wall, intake 12" forward. Heating supply and return pipes run vertically between the Rinnai and the air handler above. Condensate drains down from the Rinnai to the floor drain.</p>
     </div>
 
     <div class="legend">
@@ -319,12 +319,12 @@
         <div class="legend-item"><span class="legend-dot" style="background: #e8a050"></span> Exhaust (3" PVC)</div>
         <div class="legend-item"><span class="legend-dot" style="background: #70b8b0"></span> Intake (3" PVC)</div>
         <div class="legend-item"><span class="legend-dot" style="background: #80c0c0"></span> Condensate</div>
-        <div class="legend-item"><span class="legend-dot" style="background: #8a6040"></span> Exterior brick</div>
+        <div class="legend-item"><span class="legend-dot" style="background: #5a6578"></span> Exterior wall</div>
       </div>
     </div>
 
     <div class="note-box">
-      <strong>Key spatial facts:</strong> Both units mount on the back wall (not separate walls). Both vent pipes (exhaust and intake) exit through the left wall (exterior brick) at 62" AFF, running just under the air handler. The expansion tank sits on the cold supply line, right side of the manifold zone. Heating supply and return pipes run vertically on the right side of the closet between Rinnai and AH. For the interactive 3D view, <a href="index.html" style="color: var(--accent);">open the Three.js model viewer</a>.
+      <strong>Key spatial facts:</strong> Both units mount on the back wall (not separate walls). Both vent pipes (exhaust and intake) exit through the left wall (exterior) at 62" AFF, running just under the air handler. The expansion tank sits on the cold supply line, right side of the manifold zone. Heating supply and return pipes run vertically on the right side of the closet between Rinnai and AH. For the interactive 3D view, <a href="index.html" style="color: var(--accent);">open the Three.js model viewer</a>.
     </div>
   </div>
 </body>

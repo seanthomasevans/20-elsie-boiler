@@ -1,620 +1,232 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>20 Elsie #217 - Boiler Replacement - 3D Viewer</title>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>20 Elsie #217 - Boiler Replacement</title>
   <style>
     :root {
-      --bg-main: radial-gradient(circle at 18% 18%, #1c2530 0%, #0e1218 55%, #080b0f 100%);
-      --panel-bg: rgba(14, 18, 24, 0.86);
-      --panel-border: rgba(164, 180, 201, 0.22);
-      --text-main: #f5f7fb;
-      --text-muted: #aeb8c8;
+      --bg: #0e1218;
+      --surface: #151b24;
+      --border: rgba(164, 180, 201, 0.15);
+      --border-accent: rgba(126, 192, 255, 0.25);
+      --text: #e8ecf2;
+      --text-muted: #8a95a8;
       --accent: #7ec0ff;
-      --accent-soft: rgba(126, 192, 255, 0.2);
-      --chip-border: rgba(255, 255, 255, 0.12);
-      --button-bg: #1f2a37;
-      --button-bg-active: #2e4358;
-      --button-border: rgba(156, 182, 207, 0.4);
+      --accent-dim: rgba(126, 192, 255, 0.12);
+      --hot: #e06050;
+      --cold: #5090d0;
+      --gas: #d4b030;
+      --green: #50b870;
     }
     * { box-sizing: border-box; margin: 0; }
-    html, body {
-      height: 100%;
-      font-family: "Manrope", "Segoe UI", system-ui, sans-serif;
-      color: var(--text-main);
-      background: #080b0f;
-      background-image: var(--bg-main);
-      overflow: hidden;
+    html { font-size: 15px; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
     }
-    .app {
-      display: grid;
-      grid-template-columns: 320px minmax(0, 1fr);
-      height: 100dvh;
-      gap: 1rem;
-      padding: 1rem;
+    .top-bar {
+      position: sticky; top: 0; z-index: 100;
+      display: flex; align-items: center; gap: 1rem;
+      padding: 0.8rem 1.5rem;
+      background: rgba(14, 18, 24, 0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
     }
-    .sidebar {
-      display: flex;
-      flex-direction: column;
-      gap: 0.8rem;
-      background: var(--panel-bg);
-      border: 1px solid var(--panel-border);
-      border-radius: 18px;
-      padding: 1rem;
-      backdrop-filter: blur(16px);
-      box-shadow: 0 16px 38px rgba(0, 0, 0, 0.35);
-      overflow-y: auto;
-    }
-    .sidebar::-webkit-scrollbar { width: 4px; }
-    .sidebar::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); border-radius: 2px; }
-    .title-block h1 { font-size: 1.05rem; line-height: 1.3; font-weight: 650; }
-    .title-block p { margin-top: 0.3rem; color: var(--text-muted); font-size: 0.82rem; line-height: 1.5; }
-    .section-label {
-      margin: 0 0 0.4rem;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      font-size: 0.68rem;
-      color: var(--text-muted);
-    }
-    .info-panel {
-      border: 1px solid var(--accent);
-      border-radius: 12px;
-      padding: 0.65rem;
-      background: rgba(126, 192, 255, 0.06);
-      font-size: 0.82rem;
-      line-height: 1.5;
-      min-height: 52px;
-      transition: border-color 300ms ease;
-    }
-    .info-panel.empty { border-color: var(--chip-border); background: rgba(255,255,255,0.02); }
-    .info-name { color: var(--accent); font-weight: 600; margin-bottom: 0.2rem; }
-    .info-group { color: var(--text-muted); font-size: 0.76rem; }
-    .info-desc { color: var(--text-main); margin-top: 0.25rem; font-size: 0.78rem; }
-    .info-hint { color: var(--text-muted); font-size: 0.76rem; font-style: italic; }
-    .layers-panel {
-      border: 1px solid var(--chip-border);
-      border-radius: 12px;
-      padding: 0.5rem;
-      background: rgba(255, 255, 255, 0.02);
-      max-height: 280px;
-      overflow-y: auto;
-    }
-    .layer-item {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      padding: 0.35rem 0.4rem;
-      border-radius: 8px;
+    .top-title { font-size: 0.95rem; font-weight: 600; }
+    .top-sub { font-size: 0.8rem; color: var(--text-muted); margin-left: auto; }
+    .back-btn {
+      display: inline-flex; align-items: center; gap: 0.4rem;
+      padding: 0.4rem 0.8rem;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      color: var(--accent);
+      text-decoration: none;
+      font-size: 0.85rem;
+      transition: background 150ms;
       cursor: pointer;
-      user-select: none;
-      transition: background 160ms ease;
-      font-size: 0.8rem;
-      color: #d7dfeb;
     }
-    .layer-item:hover { background: rgba(255, 255, 255, 0.05); }
-    .layer-item input {
-      accent-color: #8dc9ff;
-      width: 0.9rem; height: 0.9rem; margin: 0; cursor: pointer;
-    }
-    .layer-dot {
-      width: 8px; height: 8px; border-radius: 3px; flex-shrink: 0;
-    }
-    .spec-panel {
-      border: 1px solid var(--chip-border);
-      border-radius: 12px;
-      padding: 0.6rem;
-      background: rgba(255, 255, 255, 0.02);
-      font-size: 0.78rem;
-      line-height: 1.5;
-      color: var(--text-muted);
-    }
-    .spec-row {
-      display: flex;
-      justify-content: space-between;
-      padding: 0.2rem 0;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-    }
-    .spec-row:last-child { border-bottom: none; }
-    .spec-value { color: var(--text-main); font-weight: 500; }
-    .notes {
-      border: 1px solid var(--chip-border);
-      border-radius: 12px;
-      padding: 0.6rem;
-      background: rgba(255, 255, 255, 0.02);
-      font-size: 0.74rem;
-      line-height: 1.5;
-      color: var(--text-muted);
-    }
-    .notes ul { padding-left: 0.9rem; margin: 0.2rem 0; }
-    .notes li { margin-bottom: 0.2rem; }
-    .notes strong { color: var(--text-main); }
-    .footer-note {
-      margin-top: auto;
-      color: var(--text-muted);
-      font-size: 0.68rem;
-      line-height: 1.5;
-      border-top: 1px solid rgba(255, 255, 255, 0.1);
-      padding-top: 0.6rem;
-    }
-    .viewer-shell {
-      position: relative;
-      border-radius: 18px;
-      overflow: hidden;
-      border: 1px solid var(--panel-border);
-      background: rgba(8, 12, 17, 0.6);
-    }
-    #c {
-      width: 100%;
-      height: 100%;
-      display: block;
-      cursor: grab;
-    }
-    #c:active { cursor: grabbing; }
-    .hud {
-      position: absolute;
-      left: 1rem; bottom: 1rem;
-      z-index: 5;
-      background: rgba(8, 12, 17, 0.72);
-      border: 1px solid rgba(157, 184, 215, 0.28);
-      color: var(--text-muted);
-      font-size: 0.72rem;
-      border-radius: 10px;
-      padding: 0.35rem 0.6rem;
-      pointer-events: none;
-      backdrop-filter: blur(8px);
-    }
-    .reset-btn {
-      position: absolute;
-      right: 1rem; bottom: 1rem;
-      z-index: 5;
-      background: var(--button-bg);
-      border: 1px solid var(--button-border);
-      color: var(--text-main);
-      font-size: 0.72rem;
-      border-radius: 8px;
-      padding: 0.35rem 0.7rem;
-      cursor: pointer;
-      backdrop-filter: blur(8px);
-    }
-    .reset-btn:hover { background: var(--button-bg-active); }
-    @media (max-width: 980px) {
-      body { overflow: auto; }
-      .app {
-        grid-template-columns: 1fr;
-        grid-template-rows: auto minmax(55vh, 1fr);
-        height: auto; min-height: 100dvh; padding: 0.75rem;
-      }
-      .sidebar { border-radius: 14px; }
-      .viewer-shell { border-radius: 14px; min-height: 62vh; }
-      .layers-panel { max-height: 160px; }
-    }
+    .back-btn:hover { background: var(--accent-dim); }
+    .nav-grid { max-width: 960px; margin: 0 auto; padding: 1.5rem; }
+    .page-header { margin-bottom: 1.5rem; }
+    .page-header h1 { font-size: 1.6rem; margin-bottom: 0.3rem; }
+    .page-header .sub { color: var(--text-muted); font-size: 0.9rem; line-height: 1.6; }
+    .card-section { margin-bottom: 2rem; }
+    .card-section h2 { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); margin-bottom: 0.8rem; }
+    .cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 0.8rem; }
+    .card { display: block; padding: 1.2rem; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; text-decoration: none; color: var(--text); transition: border-color 200ms, transform 100ms; }
+    .card:hover { border-color: var(--accent); transform: translateY(-1px); }
+    .card h3 { font-size: 1rem; margin-bottom: 0.4rem; color: var(--accent); }
+    .card p { font-size: 0.82rem; color: var(--text-muted); line-height: 1.5; }
+    .card .tag { display: inline-block; margin-top: 0.6rem; padding: 0.15rem 0.5rem; font-size: 0.7rem; border-radius: 4px; background: var(--accent-dim); color: var(--accent); }
+    .tag-hot { background: rgba(224,96,80,0.12); color: var(--hot); }
+    .tag-cold { background: rgba(80,144,208,0.12); color: var(--cold); }
+    .tag-green { background: rgba(80,184,112,0.12); color: var(--green); }
+    .tag-gas { background: rgba(212,176,48,0.12); color: var(--gas); }
+    .card-thumb { width: 100%; height: 120px; object-fit: cover; border-radius: 6px; margin-bottom: 0.8rem; border: 1px solid var(--border); }
+    .doc-view { display: none; max-width: 800px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
+    .doc-view.active { display: block; }
+    .doc-content { line-height: 1.7; font-size: 0.95rem; }
+    .doc-content h1 { font-size: 1.5rem; margin: 2rem 0 1rem; border-bottom: 1px solid var(--border); padding-bottom: 0.5rem; }
+    .doc-content h2 { font-size: 1.25rem; margin: 1.8rem 0 0.8rem; color: var(--accent); }
+    .doc-content h3 { font-size: 1.05rem; margin: 1.4rem 0 0.6rem; }
+    .doc-content h4 { font-size: 0.95rem; margin: 1.2rem 0 0.5rem; color: var(--text-muted); }
+    .doc-content p { margin: 0.6rem 0; }
+    .doc-content ul, .doc-content ol { margin: 0.6rem 0; padding-left: 1.5rem; }
+    .doc-content li { margin: 0.3rem 0; }
+    .doc-content strong { color: #fff; }
+    .doc-content code { background: rgba(126,192,255,0.08); padding: 0.15rem 0.4rem; border-radius: 3px; font-size: 0.88em; font-family: 'SF Mono', 'Fira Code', monospace; }
+    .doc-content pre { background: #0a0e14; border: 1px solid var(--border); border-radius: 6px; padding: 1rem; overflow-x: auto; margin: 1rem 0; }
+    .doc-content pre code { background: none; padding: 0; }
+    .doc-content table { width: 100%; border-collapse: collapse; margin: 1rem 0; font-size: 0.85rem; }
+    .doc-content th { text-align: left; padding: 0.6rem 0.8rem; background: var(--surface); border: 1px solid var(--border); color: var(--accent); font-weight: 600; }
+    .doc-content td { padding: 0.5rem 0.8rem; border: 1px solid var(--border); }
+    .doc-content tr:nth-child(even) td { background: rgba(255,255,255,0.02); }
+    .doc-content a { color: var(--accent); }
+    .doc-content blockquote { border-left: 3px solid var(--accent); padding: 0.5rem 1rem; margin: 1rem 0; background: var(--accent-dim); border-radius: 0 6px 6px 0; }
+    .doc-content hr { border: none; border-top: 1px solid var(--border); margin: 2rem 0; }
+    .doc-error { padding: 2rem; text-align: center; color: var(--text-muted); }
+    .doc-error a { color: var(--accent); }
   </style>
+  <script src="https://cdn.jsdelivr.net/npm/marked@14.0.0/marked.min.js"></script>
 </head>
 <body>
-  <main class="app">
-    <aside class="sidebar">
-      <section class="title-block">
-        <h1>20 Elsie Lane #217</h1>
-        <p>Rinnai RXP199iN tankless water heater + open-loop hydronic heating. Interactive 3D installation model.</p>
-      </section>
+  <div class="top-bar" id="topBar">
+    <span class="top-title">20 Elsie Lane #217</span>
+    <span class="top-sub">Boiler Replacement Package</span>
+  </div>
 
-      <section>
-        <p class="section-label">Drawings &amp; Documents</p>
-        <div style="display:flex;flex-direction:column;gap:6px;">
-          <a href="docs.html" style="display:block;padding:10px 12px;background:var(--button-bg);border:1px solid var(--accent);border-radius:8px;color:var(--accent);text-decoration:none;font-size:0.85rem;font-weight:600;transition:background 200ms;">All Documentation &rarr;</a>
-          <a href="ELEVATION.html" style="display:block;padding:8px 12px;background:var(--button-bg);border:1px solid var(--button-border);border-radius:8px;color:var(--accent);text-decoration:none;font-size:0.82rem;transition:background 200ms;">Overview &amp; Elevation</a>
-          <a href="PID.html" style="display:block;padding:8px 12px;background:var(--button-bg);border:1px solid var(--button-border);border-radius:8px;color:var(--accent);text-decoration:none;font-size:0.82rem;transition:background 200ms;">P&amp;ID Schematic</a>
-          <a href="MANIFOLD-DETAIL.html" style="display:block;padding:8px 12px;background:var(--button-bg);border:1px solid var(--button-border);border-radius:8px;color:var(--accent);text-decoration:none;font-size:0.82rem;transition:background 200ms;">Manifold &amp; Connections</a>
-          <a href="VENTING.html" style="display:block;padding:8px 12px;background:var(--button-bg);border:1px solid var(--button-border);border-radius:8px;color:var(--accent);text-decoration:none;font-size:0.82rem;transition:background 200ms;">Venting Detail</a>
-          <a href="ELECTRICAL.html" style="display:block;padding:8px 12px;background:var(--button-bg);border:1px solid var(--button-border);border-radius:8px;color:var(--accent);text-decoration:none;font-size:0.82rem;transition:background 200ms;">Electrical &amp; Heat Call</a>
-        </div>
-      </section>
+  <div class="nav-grid" id="navGrid">
+    <div class="page-header">
+      <h1>20 Elsie Lane #217</h1>
+      <p class="sub">Rinnai RXP199iN tankless water heater + open-loop hydronic heating. Complete installation package: technical diagrams, step-by-step guide, parts list, cost model.</p>
+    </div>
 
-      <section>
-        <p class="section-label">Selected Component</p>
-        <div class="info-panel empty" id="infoPanel">
-          <span class="info-hint">Click any component to inspect it.</span>
-        </div>
-      </section>
+    <div class="card-section">
+      <h2>Technical Diagrams</h2>
+      <div class="cards">
+        <a href="ELEVATION.html" class="card">
+          <h3>Overview + Elevation</h3>
+          <p>Front elevation and side cross-section of the 36" x 32" x 80" utility closet. Component positions, vent routing, dimensions.</p>
+          <span class="tag tag-cold">2 Diagrams</span>
+        </a>
+        <a href="PID.html" class="card">
+          <img src="generated/v2-04-pid-openloop.png" alt="" class="card-thumb"/>
+          <h3>P+ID Schematic</h3>
+          <p>Open-loop system schematic. DHW and hydronic circuits, component schedule, TMV cutaway.</p>
+          <span class="tag tag-hot">2 Diagrams</span>
+        </a>
+        <a href="MANIFOLD-DETAIL.html" class="card">
+          <h3>Manifold + Connections</h3>
+          <p>Pipe routing schematic. Six components, two circuits, assembly order, pressure testing.</p>
+          <span class="tag tag-green">1 Diagram</span>
+        </a>
+        <a href="VENTING.html" class="card">
+          <h3>Venting Detail</h3>
+          <p>Twin 3" PVC two-pipe venting from top of unit. Side cross-section, clearances.</p>
+          <span class="tag tag-cold">1 Diagram</span>
+        </a>
+        <a href="ELECTRICAL.html" class="card">
+          <h3>Electrical + Heat Call</h3>
+          <p>7-step heat call sequence, single-zone wiring diagram, zone valve cutaway.</p>
+          <span class="tag tag-gas">3 Diagrams</span>
+        </a>
+      </div>
+    </div>
 
-      <section>
-        <p class="section-label">Layers</p>
-        <div class="layers-panel" id="layersPanel"></div>
-      </section>
+    <div class="card-section">
+      <h2>Documentation</h2>
+      <div class="cards">
+        <a href="#" class="card" onclick="loadDoc('INSTALLATION-GUIDE.md','Installation Guide');return false;">
+          <h3>Step-by-Step Installation Guide</h3>
+          <p>Complete 7-step guide: tools, materials, mounting, venting, piping, electrical, testing.</p>
+          <span class="tag">Guide</span>
+        </a>
+        <a href="#" class="card" onclick="loadDoc('COMPONENT-INVENTORY.md','Component Inventory');return false;">
+          <h3>Component Inventory + Shopping List</h3>
+          <p>What you have, what to buy, Home Depot + Amazon links, prices.</p>
+          <span class="tag">Shopping</span>
+        </a>
+        <a href="#" class="card" onclick="loadDoc('BOILER-REPLACEMENT-PLAN.md','Full Replacement Plan');return false;">
+          <h3>Full Replacement Plan</h3>
+          <p>Complete analysis: combi vs tankless, code compliance, unit selection, wiring.</p>
+          <span class="tag">Reference</span>
+        </a>
+        <a href="#" class="card" onclick="loadDoc('COST-MODEL-80-MONTH.md','80-Month Cost Model');return false;">
+          <h3>80-Month Cost Model</h3>
+          <p>DIY vs Enbridge rental vs pro install. Break-even analysis.</p>
+          <span class="tag">Financial</span>
+        </a>
+        <a href="#" class="card" onclick="loadDoc('COMBI-VS-TANKLESS-DEEP-DIVE.md','Combi vs Tankless');return false;">
+          <h3>Combi vs Tankless Deep Dive</h3>
+          <p>What's inside a combi boiler vs this open-loop build. Tradeoffs.</p>
+          <span class="tag">Technical</span>
+        </a>
+      </div>
+    </div>
 
-      <section>
-        <p class="section-label">Closet</p>
-        <div class="spec-panel">
-          <div class="spec-row"><span>Width</span><span class="spec-value">36"</span></div>
-          <div class="spec-row"><span>Depth</span><span class="spec-value">32"</span></div>
-          <div class="spec-row"><span>Height</span><span class="spec-value">80" (flat ceiling)</span></div>
-          <div class="spec-row"><span>Left wall</span><span class="spec-value">Exterior</span></div>
-          <div class="spec-row"><span>Air handler</span><span class="spec-value">64-80" AFF</span></div>
-        </div>
-      </section>
+    <div class="card-section">
+      <h2>Interactive</h2>
+      <div class="cards">
+        <a href="viewer.html" class="card">
+          <h3>3D Installation Model</h3>
+          <p>Interactive Three.js viewer. Orbit, zoom, toggle layers, click to inspect components.</p>
+          <span class="tag">3D Viewer</span>
+        </a>
+      </div>
+    </div>
+  </div>
 
-      <section>
-        <p class="section-label">Rinnai RXP199iN</p>
-        <div class="spec-panel">
-          <div class="spec-row"><span>BTU</span><span class="spec-value">199,000</span></div>
-          <div class="spec-row"><span>Flow</span><span class="spec-value">11.1 GPM</span></div>
-          <div class="spec-row"><span>UEF</span><span class="spec-value">0.96 (condensing)</span></div>
-          <div class="spec-row"><span>Dimensions</span><span class="spec-value">18.5"W x 30.11"H x 11.41"D</span></div>
-          <div class="spec-row"><span>Position</span><span class="spec-value">Left-biased, 24" AFF, back wall</span></div>
-          <div class="spec-row"><span>Gas port</span><span class="spec-value">Right side, 2.83" above bottom</span></div>
-          <div class="spec-row"><span>Bottom ports</span><span class="spec-value">Cold, Hot, Condensate (L-R)</span></div>
-          <div class="spec-row"><span>Vents</span><span class="spec-value">Twin 3" PVC, 62" AFF (under AH)</span></div>
-          <div class="spec-row"><span>Gas route</span><span class="spec-value">LEFT ceiling near front, under unit</span></div>
-          <div class="spec-row"><span>Blower</span><span class="spec-value">Built-in combustion fan</span></div>
-          <div class="spec-row"><span>Controller</span><span class="spec-value">MCC-91-2 (160F unlock)</span></div>
-        </div>
-      </section>
+  <div class="doc-view" id="docView">
+    <div class="doc-content" id="docContent"></div>
+  </div>
 
-      <p class="footer-note">v11: Sharp 90° elbows. All pipes on back wall. Heating supply/return connect to AH front face. Expansion tank right side. April 2026.</p>
-    </aside>
+  <script>
+    const navGrid = document.getElementById('navGrid');
+    const docView = document.getElementById('docView');
+    const docContent = document.getElementById('docContent');
+    const topBar = document.getElementById('topBar');
 
-    <section class="viewer-shell" aria-label="3D boiler closet model">
-      <canvas id="c"></canvas>
-      <div class="hud">Click to select. Drag to orbit. Scroll to zoom. Right-drag to pan.</div>
-      <button class="reset-btn" id="resetBtn">Reset View</button>
-    </section>
-  </main>
-
-  <script type="importmap">
-  {
-    "imports": {
-      "three": "https://cdn.jsdelivr.net/npm/three@0.169.0/build/three.module.js",
-      "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.169.0/examples/jsm/"
+    function showNav() {
+      navGrid.style.display = '';
+      docView.classList.remove('active');
+      topBar.innerHTML = '<span class="top-title">20 Elsie Lane #217</span><span class="top-sub">Boiler Replacement Package</span>';
+      history.pushState(null, '', './');
     }
-  }
-  </script>
 
-  <script type="module">
-    import * as THREE from 'three';
-    import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
-    import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
-
-    // ── Layer definitions ──────────────────────────────────
-    const LAYER_DEFS = [
-      { name: 'Walls & Floor',    color: '#888888', prefixes: ['Floor','Ceiling','WallLeft','WallRight','WallBack'] },
-      { name: 'Air Handler',      color: '#a8a090', prefixes: ['AirHandler','SupplyDuct','AH_'] },
-      { name: 'Rinnai Unit',      color: '#d0d4da', prefixes: ['Rinnai','MountBracket','Port_','MCC'] },
-      { name: 'Exhaust Vent',     color: '#e8e8e6', prefixes: ['VentExh_'] },
-      { name: 'Intake Vent',      color: '#e0e8e0', prefixes: ['VentInt_'] },
-      { name: 'Gas (CSST)',       color: '#d4b030', prefixes: ['Gas_','GasShutoff','GasTee','GasOut'] },
-      { name: 'Cold Supply',      color: '#c8b090', prefixes: ['Cold_','V1','DrainValve','ColdBlend','T1','ColdTee','TapShutoff'] },
-      { name: 'Hot / DHW',        color: '#c0a880', prefixes: ['Hot_','V2','T2','TMV','DHW_'] },
-      { name: 'Heating Supply',   color: '#b8a078', prefixes: ['HS_','ZoneValve','ZV_','Exp','ExpTank','ExpTee'] },
-      { name: 'Heating Return',   color: '#a89070', prefixes: ['HR_','CircPump','CheckValve','CV_'] },
-      { name: 'Condensate',       color: '#e8e6e4', prefixes: ['Cond_','Neutralizer','DrainChannel'] },
-      { name: 'Electrical',       color: '#555860', prefixes: ['ElecSwitch','ElecXfmr','ElecOutlet'] },
-      { name: 'Floor Drain',      color: '#404040', prefixes: ['FloorDrain','Drain_'] },
-    ];
-
-    // ── Component descriptions ─────────────────────────────
-    const DESCRIPTIONS = {
-      // Rinnai unit (mounted left-biased: 24" AFF, top ~54", 10" below AH)
-      'Rinnai': 'Rinnai RXP199iN tankless water heater. 199K BTU, 11.1 GPM, 0.96 UEF. Condensing, built-in combustion fan. Mounted at 24" AFF, left-biased (X=4\u201322.5"), top at ~54" (10" below AH). Gas from LEFT ceiling near front, routes under unit to right-side port. [NEW \u2014 $2,100 secondhand]',
-      'RinnaiFace': 'Front panel. 24" service clearance required in front.',
-      'RinnaiDisplay': 'LCD display: temperature, error codes, status.',
-      'MountBracketTop': 'Top wall bracket. Secures to back wall studs. [NEW \u2014 included with unit]',
-      'MountBracketBot': 'Bottom wall bracket. [NEW \u2014 included with unit]',
-      'Port_Cold': 'Cold inlet (3/4" MNPT). Short copper stub \u2192 SharkBite FNPT adapter \u2192 CPVC. No soldering needed.',
-      'Port_Hot': 'Hot outlet (3/4" MNPT). Short copper stub \u2192 SharkBite FNPT adapter \u2192 CPVC.',
-      'Port_Cond': 'Condensate drain (1/2" MNPT). PVC line to neutralizer. [NEW]',
-      'Port_Gas': 'Gas port (3/4" MNPT). Right side, 2.83" above bottom. CSST connects here. [REUSE existing CSST]',
-      'Port_VentExh': 'Exhaust vent stub (3" PVC). Top of unit. Back vent = OUT.',
-      'Port_VentInt': 'Intake vent stub (3" PVC). Top of unit. Front vent = IN.',
-      'MCC912': 'MCC-91-2 controller. Unlocks 160\u00b0F for hydronic mode. [NEW \u2014 Rinnai accessory]',
-      // Air handler
-      'AirHandler': 'Air handler (64\u201380" AFF). Fan coil for hydronic heating. [REUSE EXISTING]',
-      'SupplyDuct': 'Supply duct to HVAC distribution above ceiling. [REUSE EXISTING]',
-      'AH_SupplyStub': 'AH supply connection (1" CPVC). FRONT FACE at Y=4", 72" AFF. [REUSE EXISTING stub, SharkBite transition]',
-      'AH_ReturnStub': 'AH return connection (1" CPVC). FRONT FACE at Y=4", 68" AFF. [REUSE EXISTING stub, SharkBite transition]',
-      // Vents \u2014 62" AFF, UNDER air handler (64\u201380"), 12" apart
-      'VentExh_Run': '3" PVC exhaust. Back vent at 62" AFF (under AH). Runs along back wall, exits left (exterior) wall. [REUSE existing PVC + new elbows]',
-      'VentExh_Cap': 'Exhaust termination cap. [REUSE EXISTING]',
-      'VentInt_Run': '3" PVC intake. Front vent at 62" AFF (under AH). 12" forward of exhaust, exits left wall. [REUSE existing PVC + new elbows]',
-      'VentInt_Cap': 'Intake termination cap. [REUSE EXISTING]',
-      // Gas (CSST) \u2014 drops from LEFT ceiling, routes UNDER Rinnai to right-side port
-      'Gas_Line': '3/4" CSST gas supply. Yellow corrugated SS. Drops from LEFT ceiling at X=4", runs horizontal at 28" AFF (under Rinnai) along back wall to right-side port. [REUSE EXISTING \u2014 reconnect]',
-      'GasShutoff': 'Gas shutoff valve. SharkBite brass ball valve on vertical drop from ceiling. [REUSE EXISTING]',
-      'GasShutoff_ball': 'Gas shutoff ball housing bulge. [REUSE EXISTING]',
-      'GasShutoff_h': 'Gas shutoff lever handle. [REUSE EXISTING]',
-      'GasTee_Out': 'Gas tee for outdoor branch. SharkBite T-body brass. [REUSE EXISTING]',
-      'GasTee_Out_br': 'Gas tee outdoor branch stub. [REUSE EXISTING]',
-      'Gas_Outdoor': '3/4" CSST branch to outdoor gas connection (BBQ/patio). Exits left wall. [REUSE EXISTING]',
-      'GasOutShutoff': 'Outdoor gas shutoff valve. SharkBite brass. [REUSE EXISTING]',
-      'GasOutShutoff_ball': 'Outdoor gas shutoff ball housing. [REUSE EXISTING]',
-      'GasOutShutoff_h': 'Outdoor gas shutoff lever handle. [REUSE EXISTING]',
-      // Cold supply \u2014 CPVC + SharkBite + outdoor tap (manifold at 24" AFF)
-      'Cold_Supply': '3/4" CPVC cold water supply. Rises from floor to manifold at 24" AFF, up to Rinnai port at 32". All SharkBite push-to-connect. No soldering. [NEW CPVC, reuse floor riser]',
-      'V1': 'Cold isolation valve. SharkBite ball valve with ball housing bulge + lever handle. [NEW SharkBite]',
-      'V1_ball': 'V1 ball housing bulge. [NEW SharkBite]',
-      'V1_h': 'V1 lever handle. [NEW SharkBite]',
-      'T1': 'Cold tee. SharkBite T-body brass. Junction: Rinnai + TMV blend + heating return. [NEW SharkBite]',
-      'T1_br': 'Cold tee branch stub. [NEW SharkBite]',
-      'DrainValve_Drop': 'Drain drop from V1. CPVC. [NEW]',
-      'DrainValve': 'Drain valve. SharkBite brass ball valve. Service drain. [REUSE EXISTING]',
-      'DrainValve_ball': 'Drain valve ball housing. [REUSE EXISTING]',
-      'DrainValve_h': 'Drain valve lever handle. [REUSE EXISTING]',
-      'ColdBlend_Run': '5/8" CPVC cold blend line. T1 to TMV for tempering at 29" AFF. [NEW CPVC run]',
-      'ColdTee_Tap': 'Outdoor tap tee. SharkBite T-body brass. Branches cold to exterior hose bib. [REUSE EXISTING]',
-      'ColdTee_Tap_br': 'Outdoor tap tee branch stub. [REUSE EXISTING]',
-      'Cold_OutdoorTap': '3/4" CPVC to outdoor tap/hose bib. Exits left (exterior) wall. [REUSE EXISTING]',
-      'TapShutoff': 'Outdoor tap shutoff. SharkBite ball valve. [REUSE EXISTING]',
-      'TapShutoff_ball': 'Tap shutoff ball housing. [REUSE EXISTING]',
-      'TapShutoff_h': 'Tap shutoff lever handle. [REUSE EXISTING]',
-      // Hot / DHW \u2014 CPVC (manifold at 24" AFF, DHW at 29")
-      'Hot_FromPort': '3/4" CPVC hot from Rinnai. Port at 32" drops to manifold at 24" AFF. SharkBite at port. [NEW CPVC]',
-      'V2': 'Hot isolation valve. SharkBite ball valve with ball housing + lever. [NEW SharkBite]',
-      'V2_ball': 'V2 ball housing bulge. [NEW SharkBite]',
-      'V2_h': 'V2 lever handle. [NEW SharkBite]',
-      'T2': 'Hot tee. SharkBite T-body brass. Junction: DHW (via TMV) + heating supply. [NEW SharkBite]',
-      'T2_br': 'Hot tee branch stub (down to heating supply at 20"). [NEW SharkBite]',
-      'Hot_ToTMV': '3/4" CPVC hot to TMV at 29" AFF. [NEW CPVC run]',
-      'TMV': 'Thermostatic mixing valve. SharkBite brass. Blends 140\u2013160\u00b0F to 120\u00b0F DHW. [NEW \u2014 ~$80]',
-      'DHW_Out': '3/4" CPVC tempered DHW to fixtures. 120\u00b0F. Exits right wall. [NEW CPVC to existing distribution]',
-      // Heating supply \u2014 CPVC (12" AFF, riser up front wall to AH)
-      'HS_Run': '1" CPVC heating supply. T2 \u2192 zone valve \u2192 riser up front wall to AH front face. SharkBite connections. [NEW CPVC]',
-      'ZoneValve': 'Honeywell V8043E zone valve (24V). End switch fires Rinnai S1/S2 + circ pump relay. [REUSE EXISTING]',
-      'ZV_Actuator': 'Zone valve actuator. 24V from Nest R-W. [REUSE EXISTING]',
-      'ExpTee': 'Expansion tank tee. SharkBite T-body brass. [REUSE EXISTING or NEW SharkBite]',
-      'ExpTee_br': 'Expansion tank tee branch stub. [REUSE EXISTING]',
-      'Exp_Run': 'Expansion branch. CPVC to wall-mounted tank. [NEW CPVC]',
-      'ExpTank': 'Expansion tank. Wall-mounted beside Rinnai on back wall. Absorbs thermal expansion. [REUSE EXISTING]',
-      'ExpTank_Cap': 'Expansion tank dome. [REUSE EXISTING]',
-      // Heating return \u2014 CPVC + cast iron pump (14" AFF, riser down front wall)
-      'HR_Run': '1" CPVC heating return. AH front face \u2192 riser down front wall \u2192 circ pump \u2192 check valve \u2192 T1. [NEW CPVC]',
-      'CircPump': 'Circ pump. Cast iron body. Moves water through fan coil loop. [REUSE EXISTING]',
-      'CircPump_Motor': 'Circ pump motor. Cast iron. [REUSE EXISTING]',
-      'CheckValve': 'Check valve. SharkBite brass. Prevents backflow. [REUSE EXISTING]',
-      'CV_Arrow': 'Check valve flow indicator. [REUSE EXISTING]',
-      // Condensate \u2014 PVC (wall-mounted neutralizer, floor channel to drain)
-      'Cond_Drop': 'PVC condensate drain to wall-mounted neutralizer. [NEW \u2014 condensing unit requirement]',
-      'Neutralizer': 'Condensate neutralizer. Wall-mounted on back wall. Calcium carbonate media. [NEW \u2014 ~$40]',
-      'Cond_ToDrain': 'PVC condensate from neutralizer to floor channel. [NEW routing]',
-      'DrainChannel': 'Floor drain channel. Shallow trough for condensate drainage. Keeps floor clear. [NEW]',
-      // Electrical (LEFT/exterior wall per photos) — switch, transformer, outlet only
-      'ElecSwitch': 'Light switch on LEFT (exterior) wall. [REUSE EXISTING]',
-      'ElecXfmr': '24V transformer. Powers zone valve + Rinnai controls. Mounted on left wall. [REUSE EXISTING]',
-      'ElecOutlet': '120V outlet. Rinnai blower + electronics plug in here. [REUSE EXISTING]',
-      'FloorDrain': 'Floor drain. RIGHT side at X=28" (per photos). [REUSE EXISTING]',
-    };
-
-    // ── DOM refs ───────────────────────────────────────────
-    const canvas = document.getElementById('c');
-    const shell = canvas.parentElement;
-    const infoPanel = document.getElementById('infoPanel');
-    const layersPanel = document.getElementById('layersPanel');
-    const resetBtn = document.getElementById('resetBtn');
-
-    // ── Scene setup ────────────────────────────────────────
-    const scene = new THREE.Scene();
-    scene.background = new THREE.Color(0x0f141b);
-
-    const camera = new THREE.PerspectiveCamera(40, 1, 0.01, 50);
-    camera.position.set(1.8, 1.5, 1.2);
-
-    const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-    renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = 1.4;
-    renderer.outputColorSpace = THREE.SRGBColorSpace;
-
-    // ── Controls ───────────────────────────────────────────
-    const controls = new OrbitControls(camera, canvas);
-    controls.enableDamping = true;
-    controls.dampingFactor = 0.08;
-    controls.minDistance = 0.3;
-    controls.maxDistance = 5;
-    controls.maxPolarAngle = Math.PI * 0.92;
-    controls.target.set(0.45, 0.8, -0.4);
-
-    const defaultTarget = new THREE.Vector3(0.45, 0.8, -0.4);
-    const defaultPosition = new THREE.Vector3(1.8, 1.5, 1.2);
-
-    // ── Lighting ───────────────────────────────────────────
-    const hemi = new THREE.HemisphereLight(0xddeeff, 0x445566, 0.8);
-    scene.add(hemi);
-
-    const key = new THREE.DirectionalLight(0xffffff, 1.5);
-    key.position.set(2, 3, 1);
-    scene.add(key);
-
-    const fill = new THREE.DirectionalLight(0x8899bb, 0.6);
-    fill.position.set(-1.5, 2, -0.5);
-    scene.add(fill);
-
-    const interior = new THREE.PointLight(0xffeedd, 0.8, 4);
-    interior.position.set(0.45, 0.5, -0.4);
-    scene.add(interior);
-
-    // ── State ──────────────────────────────────────────────
-    const allMeshes = [];
-    const layerGroups = LAYER_DEFS.map(d => ({ ...d, meshes: [], visible: true }));
-    let selectedMesh = null;
-    let savedMaterial = null;
-    let targetPos = null;  // smooth camera target
-
-    // ── Model loading ──────────────────────────────────────
-    const loader = new GLTFLoader();
-    loader.load('./boiler_closet.glb?v=' + Date.now(), (gltf) => {
-      scene.add(gltf.scene);
-
-      gltf.scene.traverse((child) => {
-        if (!child.isMesh) return;
-        allMeshes.push(child);
-
-        // Assign to layer group
-        for (const group of layerGroups) {
-          if (group.prefixes.some(p => child.name.startsWith(p))) {
-            group.meshes.push(child);
-            break;
-          }
-        }
-      });
-
-      buildLayerUI();
-      console.log(`Loaded: ${allMeshes.length} meshes`);
-    });
-
-    // ── Layer UI ───────────────────────────────────────────
-    function buildLayerUI() {
-      layersPanel.innerHTML = '';
-      for (const group of layerGroups) {
-        const label = document.createElement('label');
-        label.className = 'layer-item';
-
-        const cb = document.createElement('input');
-        cb.type = 'checkbox';
-        cb.checked = true;
-        cb.addEventListener('change', () => {
-          group.visible = cb.checked;
-          for (const m of group.meshes) m.visible = cb.checked;
+    function loadDoc(file, title) {
+      fetch(file)
+        .then(function(r) {
+          if (!r.ok) throw new Error('Could not load file (HTTP ' + r.status + ')');
+          return r.text();
+        })
+        .then(function(md) {
+          navGrid.style.display = 'none';
+          docContent.innerHTML = marked.parse(md);
+          docView.classList.add('active');
+          topBar.innerHTML = '<a class="back-btn" onclick="showNav();return false;" href="#">&larr; Back</a><span class="top-title" style="margin-left:0.8rem;">' + title + '</span>';
+          window.scrollTo(0, 0);
+          history.pushState({ doc: file, title: title }, '', '#' + file);
+        })
+        .catch(function(err) {
+          navGrid.style.display = 'none';
+          docContent.innerHTML = '<div class="doc-error"><p>Could not load <strong>' + file + '</strong></p><p style="font-size:0.85rem;">' + err.message + '</p><p style="margin-top:1rem;"><a href="#" onclick="showNav();return false;">&larr; Back to index</a></p></div>';
+          docView.classList.add('active');
+          topBar.innerHTML = '<a class="back-btn" onclick="showNav();return false;" href="#">&larr; Back</a><span class="top-title" style="margin-left:0.8rem;">Error</span>';
         });
-
-        const dot = document.createElement('span');
-        dot.className = 'layer-dot';
-        dot.style.background = group.color;
-
-        const text = document.createElement('span');
-        text.textContent = `${group.name} (${group.meshes.length})`;
-
-        label.append(cb, dot, text);
-        layersPanel.appendChild(label);
-      }
     }
 
-    // ── Selection ──────────────────────────────────────────
-    const raycaster = new THREE.Raycaster();
-    const mouse = new THREE.Vector2();
-    let mouseDownPos = null;
+    window.addEventListener('popstate', function() { showNav(); });
 
-    canvas.addEventListener('pointerdown', (e) => {
-      mouseDownPos = { x: e.clientX, y: e.clientY };
-    });
-
-    canvas.addEventListener('pointerup', (e) => {
-      if (!mouseDownPos) return;
-      const dx = e.clientX - mouseDownPos.x;
-      const dy = e.clientY - mouseDownPos.y;
-      // Only select on click (not drag)
-      if (Math.abs(dx) + Math.abs(dy) < 5) {
-        onSelect(e);
-      }
-      mouseDownPos = null;
-    });
-
-    function onSelect(event) {
-      const rect = canvas.getBoundingClientRect();
-      mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
-      mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
-
-      raycaster.setFromCamera(mouse, camera);
-      const hits = raycaster.intersectObjects(allMeshes, false);
-
-      // Find first visible hit
-      const hit = hits.find(h => h.object.visible);
-
-      if (hit) {
-        selectMesh(hit.object);
-      } else {
-        deselectMesh();
-      }
+    if (location.hash && location.hash.length > 1) {
+      var file = decodeURIComponent(location.hash.slice(1));
+      var title = file.replace('.md', '').replace(/-/g, ' ');
+      loadDoc(file, title);
     }
-
-    function selectMesh(mesh) {
-      deselectMesh();
-      selectedMesh = mesh;
-      savedMaterial = mesh.material;
-
-      // Highlight: clone material + add emissive glow
-      const hlMat = mesh.material.clone();
-      hlMat.emissive = new THREE.Color(0x2266ff);
-      hlMat.emissiveIntensity = 0.35;
-      mesh.material = hlMat;
-
-      // Camera aim lock: orbit target -> mesh center
-      const box = new THREE.Box3().setFromObject(mesh);
-      targetPos = box.getCenter(new THREE.Vector3());
-
-      // Update info panel
-      const name = mesh.name;
-      const group = layerGroups.find(g => g.meshes.includes(mesh));
-      const desc = findDescription(name);
-
-      infoPanel.classList.remove('empty');
-      infoPanel.innerHTML = `
-        <div class="info-name">${cleanName(name)}</div>
-        <div class="info-group">${group ? group.name : 'Unknown'}</div>
-        ${desc ? `<div class="info-desc">${desc}</div>` : ''}
-      `;
-    }
-
-    function deselectMesh() {
-      if (selectedMesh && savedMaterial) {
-        selectedMesh.material = savedMaterial;
-      }
-      selectedMesh = null;
-      savedMaterial = null;
-      infoPanel.classList.add('empty');
-      infoPanel.innerHTML = '<span class="info-hint">Click any component to inspect it.</span>';
-    }
-
-    function findDescription(name) {
-      if (DESCRIPTIONS[name]) return DESCRIPTIONS[name];
-      // Try prefix match
-      for (const [key, desc] of Object.entries(DESCRIPTIONS)) {
-        if (name.startsWith(key)) return desc;
-      }
-      return null;
-    }
-
-    function cleanName(name) {
-      return name
-        .replace(/_/g, ' ')
-        .replace(/\b\w/g, c => c.toUpperCase())
-        .replace(/\./g, ' ');
-    }
-
-    // ── Reset view ─────────────────────────────────────────
-    resetBtn.addEventListener('click', () => {
-      deselectMesh();
-      targetPos = defaultTarget.clone();
-      camera.position.copy(defaultPosition);
-    });
-
-    // ── Resize ─────────────────────────────────────────────
-    function onResize() {
-      const w = shell.clientWidth;
-      const h = shell.clientHeight;
-      camera.aspect = w / h;
-      camera.updateProjectionMatrix();
-      renderer.setSize(w, h);
-    }
-    window.addEventListener('resize', onResize);
-
-    // ── Animation loop ─────────────────────────────────────
-    function animate() {
-      requestAnimationFrame(animate);
-
-      // Smooth camera target transition
-      if (targetPos) {
-        controls.target.lerp(targetPos, 0.06);
-        if (controls.target.distanceTo(targetPos) < 0.0005) {
-          controls.target.copy(targetPos);
-          targetPos = null;
-        }
-      }
-
-      controls.update();
-      renderer.render(scene, camera);
-    }
-
-    onResize();
-    animate();
   </script>
 </body>
 </html>
