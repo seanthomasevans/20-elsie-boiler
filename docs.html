@@ -96,8 +96,8 @@
 </head>
 <body>
   <div class="top-bar" id="topBar">
-    <span class="top-title">20 Elsie Lane #217</span>
-    <span class="top-sub">Boiler Replacement Package</span>
+    <a href="index.html" class="back-btn">&larr; 3D Model</a>
+    <span class="top-title">Documentation &amp; Drawings</span>
   </div>
 
   <div class="nav-grid" id="navGrid">
@@ -169,16 +169,6 @@
       </div>
     </div>
 
-    <div class="card-section">
-      <h2>Interactive</h2>
-      <div class="cards">
-        <a href="viewer.html" class="card">
-          <h3>3D Installation Model</h3>
-          <p>Interactive Three.js viewer. Orbit, zoom, toggle layers, click to inspect components.</p>
-          <span class="tag">3D Viewer</span>
-        </a>
-      </div>
-    </div>
   </div>
 
   <div class="doc-view" id="docView">
@@ -194,7 +184,7 @@
     function showNav() {
       navGrid.style.display = '';
       docView.classList.remove('active');
-      topBar.innerHTML = '<span class="top-title">20 Elsie Lane #217</span><span class="top-sub">Boiler Replacement Package</span>';
+      topBar.innerHTML = '<a href="index.html" class="back-btn">&larr; 3D Model</a><span class="top-title" style="margin-left:0.8rem;">Documentation &amp; Drawings</span>';
       history.pushState(null, '', './');
     }
 

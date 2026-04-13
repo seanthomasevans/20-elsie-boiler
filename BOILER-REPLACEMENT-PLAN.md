@@ -127,7 +127,7 @@ This list covers BOTH paths. Items marked **(combi only)** or **(tankless only)*
 | PVC 90 degree elbows | 2" or 3" | 4-6 | $3-5 ea |
 | PVC 45 degree elbows | 2" or 3" | 2-4 | $3-4 ea |
 | PVC couplings | 2" or 3" | 4-6 | $2-3 ea |
-| Concentric vent termination kit | Manufacturer-specific or universal | 1 | $60-100 |
+| Vent termination caps (2x for two-pipe) | Manufacturer-specific or universal | 2 | $30-50 ea |
 | PVC cement (medium body) | Oatey or IPS | 1 can | $12-15 |
 | PVC primer (purple) | Oatey | 1 can | $8-10 |
 | Wall thimble / escutcheon | For exterior wall penetration | 1 | $15-25 |
