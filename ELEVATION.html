@@ -3,368 +3,136 @@
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title>System Elevation - 20 Elsie #217</title>
+  <title>Overview &amp; Elevation - 20 Elsie #217</title>
   <style>
     :root {
-      --bg: #0e1218;
-      --surface: #151b24;
-      --surface-2: #1a2230;
-      --border: rgba(164, 180, 201, 0.15);
-      --border-accent: rgba(126, 192, 255, 0.25);
-      --text: #e8ecf2;
-      --text-muted: #8a95a8;
-      --text-dim: #5a6578;
-      --accent: #7ec0ff;
-      --accent-dim: rgba(126, 192, 255, 0.10);
-      --hot: #e06050;
-      --cold: #5090d0;
-      --gas: #d4b030;
-      --green: #50b870;
-      --vent: #a0a0a0;
-      --cond: #80c0c0;
+      --bg: #0e1218; --surface: #151b24; --surface-2: #1a2230;
+      --border: rgba(164,180,201,0.15); --border-accent: rgba(126,192,255,0.25);
+      --text: #e8ecf2; --text-muted: #8a95a8; --text-dim: #5a6578;
+      --accent: #7ec0ff; --accent-dim: rgba(126,192,255,0.10);
+      --hot: #e06050; --cold: #5090d0; --gas: #d4b030; --green: #50b870;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
     html { font-size: 15px; scroll-behavior: smooth; }
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      min-height: 100vh;
-      -webkit-font-smoothing: antialiased;
-    }
-
-    /* Top bar */
-    .top-bar {
-      position: sticky; top: 0; z-index: 100;
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 0.6rem 1.2rem;
-      background: rgba(14, 18, 24, 0.95);
-      backdrop-filter: blur(16px);
-      border-bottom: 1px solid var(--border);
-    }
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; -webkit-font-smoothing: antialiased; }
+    .top-bar { position: sticky; top: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between; padding: 0.6rem 1.2rem; background: rgba(14,18,24,0.95); backdrop-filter: blur(16px); border-bottom: 1px solid var(--border); }
     .top-left { display: flex; align-items: center; gap: 0.8rem; }
-    .back-btn {
-      display: inline-flex; align-items: center; gap: 0.35rem;
-      padding: 0.35rem 0.7rem;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      color: var(--accent);
-      text-decoration: none;
-      font-size: 0.8rem;
-      transition: background 150ms;
-    }
+    .back-btn { display: inline-flex; align-items: center; gap: 0.35rem; padding: 0.35rem 0.7rem; background: var(--surface); border: 1px solid var(--border); border-radius: 6px; color: var(--accent); text-decoration: none; font-size: 0.8rem; transition: background 150ms; }
     .back-btn:hover { background: var(--accent-dim); }
-    .top-title {
-      font-size: 0.8rem;
-      color: var(--text-muted);
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
+    .top-title { font-size: 0.8rem; color: var(--text-muted); }
     .nav-pills { display: flex; gap: 0.3rem; }
-    .nav-pill {
-      padding: 0.3rem 0.6rem;
-      font-size: 0.72rem;
-      border-radius: 4px;
-      text-decoration: none;
-      color: var(--text-muted);
-      background: var(--surface);
-      border: 1px solid var(--border);
-      transition: all 150ms;
-      white-space: nowrap;
-    }
+    .nav-pill { padding: 0.3rem 0.6rem; font-size: 0.72rem; border-radius: 4px; text-decoration: none; color: var(--text-muted); background: var(--surface); border: 1px solid var(--border); transition: all 150ms; white-space: nowrap; }
     .nav-pill:hover { color: var(--accent); border-color: var(--border-accent); }
     .nav-pill.active { color: var(--accent); background: var(--accent-dim); border-color: var(--border-accent); }
-
-    /* Hero image */
-    .diagram-hero {
-      max-width: 1100px;
-      margin: 1.5rem auto 0;
-      padding: 0 1rem;
-    }
-    .diagram-frame {
-      position: relative;
-      border-radius: 12px;
-      overflow: hidden;
-      border: 1px solid var(--border);
-      background: #0a0e14;
-      cursor: zoom-in;
-    }
+    .content { max-width: 960px; margin: 0 auto; padding: 1.5rem 1.2rem 4rem; }
+    .page-header { margin-bottom: 1.5rem; }
+    .page-header h1 { font-size: 1.5rem; font-weight: 600; margin-bottom: 0.3rem; }
+    .page-header .subtitle { font-size: 0.88rem; color: var(--text-muted); line-height: 1.5; }
+    .diagram-section { margin-bottom: 2.5rem; }
+    .diagram-section h2 { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); margin-bottom: 0.8rem; }
+    .diagram-frame { position: relative; border-radius: 10px; overflow: hidden; border: 1px solid var(--border); background: #0a0e14; cursor: zoom-in; margin-bottom: 0.8rem; }
     .diagram-frame.zoomed { cursor: zoom-out; position: fixed; inset: 0; z-index: 200; border-radius: 0; border: none; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.92); }
-    .diagram-frame img {
-      width: 100%;
-      height: auto;
-      display: block;
-    }
+    .diagram-frame img { width: 100%; height: auto; display: block; }
     .diagram-frame.zoomed img { width: auto; max-width: 95vw; max-height: 95vh; object-fit: contain; }
-    .zoom-hint {
-      position: absolute; bottom: 0.8rem; right: 0.8rem;
-      padding: 0.25rem 0.6rem;
-      background: rgba(0,0,0,0.7);
-      border-radius: 4px;
-      font-size: 0.7rem;
-      color: var(--text-muted);
-      pointer-events: none;
-    }
+    .zoom-hint { position: absolute; bottom: 0.6rem; right: 0.6rem; padding: 0.2rem 0.5rem; background: rgba(0,0,0,0.7); border-radius: 4px; font-size: 0.68rem; color: var(--text-muted); pointer-events: none; }
     .diagram-frame.zoomed .zoom-hint { display: none; }
-
-    /* Content */
-    .content {
-      max-width: 900px;
-      margin: 2rem auto 4rem;
-      padding: 0 1.2rem;
-    }
-    .page-header {
-      margin-bottom: 2rem;
-    }
-    .page-header h1 {
-      font-size: 1.5rem;
-      font-weight: 600;
-      margin-bottom: 0.3rem;
-    }
-    .page-header .subtitle {
-      font-size: 0.88rem;
-      color: var(--text-muted);
-      line-height: 1.5;
-    }
-
-    /* Specs grid */
-    .specs-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-      gap: 0.6rem;
-      margin: 1.5rem 0;
-    }
-    .spec-card {
-      padding: 0.9rem 1rem;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-    }
-    .spec-card .label {
-      font-size: 0.68rem;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      color: var(--text-dim);
-      margin-bottom: 0.25rem;
-    }
-    .spec-card .value {
-      font-size: 1rem;
-      font-weight: 600;
-      color: var(--text);
-    }
-    .spec-card .unit {
-      font-weight: 400;
-      font-size: 0.82rem;
-      color: var(--text-muted);
-    }
-
-    /* Legend */
-    .legend {
-      margin: 2rem 0;
-    }
-    .legend h2 {
-      font-size: 0.72rem;
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      color: var(--text-muted);
-      margin-bottom: 0.8rem;
-    }
-    .legend-items {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.5rem;
-    }
-    .legend-item {
-      display: flex;
-      align-items: center;
-      gap: 0.4rem;
-      padding: 0.35rem 0.7rem;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      font-size: 0.78rem;
-    }
-    .legend-dot {
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
-      flex-shrink: 0;
-    }
-
-    /* Annotations */
-    .annotations {
-      margin: 2rem 0;
-    }
-    .annotations h2 {
-      font-size: 0.72rem;
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      color: var(--text-muted);
-      margin-bottom: 0.8rem;
-    }
-    .annotation-list {
-      display: grid;
-      gap: 0.5rem;
-    }
-    .annotation {
-      display: grid;
-      grid-template-columns: 2.5rem 1fr;
-      gap: 0.8rem;
-      padding: 0.8rem 1rem;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      align-items: start;
-    }
-    .annotation .num {
-      font-size: 0.75rem;
-      font-weight: 700;
-      color: var(--accent);
-      background: var(--accent-dim);
-      border-radius: 4px;
-      text-align: center;
-      padding: 0.2rem;
-    }
-    .annotation .desc { font-size: 0.85rem; line-height: 1.5; }
-    .annotation .desc strong { color: #fff; }
-
-    /* Section divider */
-    .section-divider {
-      border: none;
-      border-top: 1px solid var(--border);
-      margin: 2rem 0;
-    }
-
-    /* Notes */
-    .note-box {
-      padding: 1rem 1.2rem;
-      background: rgba(126, 192, 255, 0.06);
-      border: 1px solid var(--border-accent);
-      border-radius: 8px;
-      font-size: 0.83rem;
-      line-height: 1.6;
-      color: var(--text-muted);
-      margin: 1.5rem 0;
-    }
+    .diagram-caption { font-size: 0.82rem; color: var(--text-muted); line-height: 1.5; margin-bottom: 1rem; }
+    .diagram-caption strong { color: var(--text); }
+    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .specs-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 0.5rem; margin: 1rem 0; }
+    .spec-card { padding: 0.7rem 0.8rem; background: var(--surface); border: 1px solid var(--border); border-radius: 6px; }
+    .spec-card .label { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-dim); margin-bottom: 0.15rem; }
+    .spec-card .value { font-size: 0.95rem; font-weight: 600; }
+    .spec-card .unit { font-weight: 400; font-size: 0.8rem; color: var(--text-muted); }
+    .legend { margin: 1rem 0; }
+    .legend-items { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+    .legend-item { display: flex; align-items: center; gap: 0.35rem; padding: 0.3rem 0.6rem; background: var(--surface); border: 1px solid var(--border); border-radius: 5px; font-size: 0.75rem; }
+    .legend-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+    .note-box { padding: 0.9rem 1rem; background: rgba(126,192,255,0.06); border: 1px solid var(--border-accent); border-radius: 8px; font-size: 0.82rem; line-height: 1.6; color: var(--text-muted); margin: 1rem 0; }
     .note-box strong { color: var(--accent); }
-
-    @media (max-width: 640px) {
-      .nav-pills { display: none; }
-      .specs-grid { grid-template-columns: 1fr 1fr; }
-      .annotation { grid-template-columns: 2rem 1fr; }
-    }
+    .section-divider { border: none; border-top: 1px solid var(--border); margin: 2rem 0; }
+    @media (max-width: 640px) { .nav-pills { display: none; } .two-col { grid-template-columns: 1fr; } .specs-grid { grid-template-columns: 1fr 1fr; } }
   </style>
 </head>
 <body>
-
   <div class="top-bar">
     <div class="top-left">
       <a href="docs.html" class="back-btn">&larr; Docs</a>
-      <span class="top-title">System Elevation</span>
+      <span class="top-title">Overview &amp; Elevation</span>
     </div>
     <nav class="nav-pills">
-      <a href="ELEVATION.html" class="nav-pill active">Elevation</a>
+      <a href="ELEVATION.html" class="nav-pill active">Overview</a>
       <a href="PID.html" class="nav-pill">P&amp;ID</a>
       <a href="MANIFOLD-DETAIL.html" class="nav-pill">Manifold</a>
-      <a href="ELECTRICAL.html" class="nav-pill">Electrical</a>
       <a href="VENTING.html" class="nav-pill">Venting</a>
-      <a href="HEAT-SEQUENCE.html" class="nav-pill">Heat Call</a>
+      <a href="ELECTRICAL.html" class="nav-pill">Electrical</a>
     </nav>
-  </div>
-
-  <div class="diagram-hero">
-    <div class="diagram-frame" onclick="this.classList.toggle('zoomed')">
-      <img src="generated/01-elevation.png" alt="System elevation diagram showing Rinnai RXP199iN and air handler positions in utility closet"/>
-      <span class="zoom-hint">Click to zoom</span>
-    </div>
   </div>
 
   <div class="content">
     <div class="page-header">
-      <h1>System Elevation - Front View</h1>
-      <p class="subtitle">Utility closet layout showing Rinnai RXP199iN tankless water heater and First Company 36HX air handler positions, pipe routing, and vent penetration.</p>
+      <h1>Overview &amp; Elevation</h1>
+      <p class="subtitle">Spatial layout of the utility closet at 20 Elsie Lane #217. Interior closet, 36" wide, 32" deep, 80" tall. Rinnai RXP199iN tankless water heater at 24" AFF with First Company 36HX air handler above at 64" AFF. Vent exits through left exterior wall.</p>
     </div>
 
     <div class="specs-grid">
-      <div class="spec-card">
-        <div class="label">Closet dimensions</div>
-        <div class="value">36" <span class="unit">W</span> x 32" <span class="unit">D</span> x 80" <span class="unit">H</span></div>
-      </div>
-      <div class="spec-card">
-        <div class="label">Rinnai position</div>
-        <div class="value">24" <span class="unit">AFF (bottom)</span></div>
-      </div>
-      <div class="spec-card">
-        <div class="label">Air handler position</div>
-        <div class="value">64-80" <span class="unit">AFF (edge to edge)</span></div>
-      </div>
-      <div class="spec-card">
-        <div class="label">Rinnai dimensions</div>
-        <div class="value">18.5" <span class="unit">W</span> x 31.3" <span class="unit">H</span> x 11.45" <span class="unit">D</span></div>
-      </div>
-      <div class="spec-card">
-        <div class="label">Unit weight</div>
-        <div class="value">73 <span class="unit">lb (mounted)</span></div>
-      </div>
-      <div class="spec-card">
-        <div class="label">Vent exit</div>
-        <div class="value">Left wall <span class="unit">(exterior)</span></div>
-      </div>
-    </div>
-
-    <div class="legend">
-      <h2>Pipe Legend</h2>
-      <div class="legend-items">
-        <div class="legend-item"><span class="legend-dot" style="background: var(--hot)"></span> Hot water (DHW + heating supply)</div>
-        <div class="legend-item"><span class="legend-dot" style="background: var(--cold)"></span> Cold water supply</div>
-        <div class="legend-item"><span class="legend-dot" style="background: var(--gas)"></span> Gas supply (3/4" NPT)</div>
-        <div class="legend-item"><span class="legend-dot" style="background: var(--vent)"></span> PVC vent (exhaust + intake)</div>
-        <div class="legend-item"><span class="legend-dot" style="background: var(--cond)"></span> Condensate drain</div>
-        <div class="legend-item"><span class="legend-dot" style="background: var(--green)"></span> Heating return</div>
-      </div>
+      <div class="spec-card"><div class="label">Closet</div><div class="value">36"<span class="unit">W</span> x 32"<span class="unit">D</span> x 80"<span class="unit">H</span></div></div>
+      <div class="spec-card"><div class="label">Rinnai position</div><div class="value">24" <span class="unit">AFF (bottom)</span></div></div>
+      <div class="spec-card"><div class="label">Air handler</div><div class="value">64-80" <span class="unit">AFF</span></div></div>
+      <div class="spec-card"><div class="label">Rinnai size</div><div class="value">18.5"<span class="unit">W</span> x 31.3"<span class="unit">H</span></div></div>
+      <div class="spec-card"><div class="label">Weight</div><div class="value">73 <span class="unit">lb</span></div></div>
+      <div class="spec-card"><div class="label">Vent exit</div><div class="value">Left wall <span class="unit">(exterior)</span></div></div>
     </div>
 
     <hr class="section-divider"/>
 
-    <div class="annotations">
-      <h2>Key Details</h2>
-      <div class="annotation-list">
-        <div class="annotation">
-          <div class="num">A</div>
-          <div class="desc"><strong>Rinnai RXP199iN</strong> mounted at 24" AFF on backing board. All connections exit from the bottom: gas (3/4" NPT), cold in (3/4" NPT), hot out (3/4" NPT), condensate (1/2" NPT). 199,000 BTU, 0.98 UEF.</div>
-        </div>
-        <div class="annotation">
-          <div class="num">B</div>
-          <div class="desc"><strong>First Company 36HX Air Handler</strong> mounted at 64-80" AFF. Horizontal fan coil with 1/2" copper supply/return connections. Receives potable hot water from the Rinnai for hydronic heating.</div>
-        </div>
-        <div class="annotation">
-          <div class="num">C</div>
-          <div class="desc"><strong>PVC concentric vent</strong> exits through left exterior wall. System 636 certified. 3" exhaust inside 5" intake pipe. Must maintain minimum clearances per Rinnai installation manual.</div>
-        </div>
-        <div class="annotation">
-          <div class="num">D</div>
-          <div class="desc"><strong>Manifold zone</strong> between Rinnai and floor. Contains TMV (Cash Acme HG110-HX), expansion tank (Watts PLT-5), isolation valves, and zone valve (Honeywell V8043E). All on 3/4" CPVC with SharkBite fittings.</div>
-        </div>
-        <div class="annotation">
-          <div class="num">E</div>
-          <div class="desc"><strong>Gas supply</strong> enters from left wall. Existing 3/4" black iron to unit. Drip leg with sediment trap at bottom of vertical run. Gas shutoff valve within 6' of unit.</div>
-        </div>
+    <!-- Isometric overview -->
+    <div class="diagram-section">
+      <h2>Isometric Overview</h2>
+      <div class="diagram-frame" onclick="this.classList.toggle('zoomed')">
+        <img src="generated/v2-13-isometric.png" alt="Isometric wireframe of utility closet with appliance positions"/>
+        <span class="zoom-hint">Click to zoom</span>
+      </div>
+      <p class="diagram-caption">Wireframe view of the utility closet interior. The <strong>Rinnai RXP199iN</strong> mounts on the back wall at 24" above finished floor. The <strong>First Company 36HX air handler</strong> sits above at 64-80" AFF. Vent pipe exits through the left wall (exterior brick). Manifold zone occupies the space between the Rinnai and the floor.</p>
+    </div>
+
+    <!-- Front and side elevations -->
+    <div class="diagram-section">
+      <h2>Front Elevation</h2>
+      <div class="diagram-frame" onclick="this.classList.toggle('zoomed')">
+        <img src="generated/v2-01-elevation-front.png" alt="Front elevation of utility closet showing component positions and dimensions"/>
+        <span class="zoom-hint">Click to zoom</span>
+      </div>
+      <p class="diagram-caption">Front view showing the full 36" width and 80" height. The Rinnai is centered on the back wall, occupying roughly half the closet width (18.5" of 36"). All connections exit from the <strong>bottom</strong> of the unit: gas (3/4" NPT), cold in (3/4" NPT), hot out (3/4" NPT), condensate (1/2" NPT). The horizontal air handler spans the full closet width above.</p>
+    </div>
+
+    <div class="diagram-section">
+      <h2>Side Elevation (Cross Section)</h2>
+      <div class="diagram-frame" onclick="this.classList.toggle('zoomed')">
+        <img src="generated/v2-03-elevation-side.png" alt="Side cross-section showing closet depth, wall composition, and vent routing"/>
+        <span class="zoom-hint">Click to zoom</span>
+      </div>
+      <p class="diagram-caption">Cross-section showing the 32" closet depth. Left wall is <strong>exterior brick</strong> through which the PVC concentric vent exits. The vent runs horizontally with a 1/4" per foot downward slope back toward the unit (for condensate drainage). <strong>Note:</strong> The heater is mounted INSIDE the closet on the back wall, not on the exterior wall. The diagram label "exterior" refers to the wall material, not the heater placement.</p>
+    </div>
+
+    <div class="legend">
+      <div class="legend-items">
+        <div class="legend-item"><span class="legend-dot" style="background: var(--hot)"></span> Hot water supply</div>
+        <div class="legend-item"><span class="legend-dot" style="background: var(--cold)"></span> Cold water supply</div>
+        <div class="legend-item"><span class="legend-dot" style="background: var(--gas)"></span> Gas (3/4" NPT)</div>
+        <div class="legend-item"><span class="legend-dot" style="background: var(--green)"></span> Heating circuit</div>
+        <div class="legend-item"><span class="legend-dot" style="background: #a0a0a0"></span> PVC vent</div>
+        <div class="legend-item"><span class="legend-dot" style="background: #80c0c0"></span> Condensate</div>
       </div>
     </div>
 
     <div class="note-box">
-      <strong>Code note:</strong> Ontario Building Code requires combustion air supply for gas appliances in enclosed spaces. The RXP199iN uses sealed combustion (direct vent), drawing air through the concentric vent. No additional combustion air openings needed in the closet. TB-043 bulletin approves open-loop hydronic use with potable water.
+      <strong>Interior closet install:</strong> This is NOT an exterior/garage wall mount. The Rinnai sits inside a 36" x 32" utility closet in a condo unit. The left wall happens to be an exterior wall (brick), which provides the vent exit path. Sealed combustion (direct vent) means no additional combustion air openings needed in the closet.
     </div>
   </div>
 
   <script>
-    document.addEventListener('keydown', function(e) {
-      if (e.key === 'Escape') {
-        document.querySelectorAll('.zoomed').forEach(el => el.classList.remove('zoomed'));
-      }
-    });
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') document.querySelectorAll('.zoomed').forEach(el => el.classList.remove('zoomed')); });
   </script>
 </body>
 </html>
