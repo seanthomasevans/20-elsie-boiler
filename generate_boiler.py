@@ -61,7 +61,7 @@ P_COLD_X = RCX - inch(2.55)   # ~15.7"
 P_HOT_X = RCX                  # ~18"
 P_COND_X = RCX + inch(2.55)   # ~20.55"
 P_Y = RCY
-P_Z = RB                       # Ports exit bottom at 32"
+P_Z = RB                       # Ports exit bottom at 24"
 
 GAS_X = RX1                    # Gas port on RIGHT side
 GAS_Y = RCY
@@ -523,13 +523,16 @@ def build_vents(M):
 # BUILD: Gas — CSST from LEFT ceiling, routes under Rinnai
 # ============================================================
 def build_gas(M):
-    # CSST drops from LEFT ceiling near front (Y=10"), steps back to back wall,
-    # runs horizontal under Rinnai to right-side gas port
+    # CSST drops from LEFT ceiling near front (Y=10"), steps back to WALL,
+    # runs horizontal along wall under Rinnai, steps forward to gas port depth,
+    # rises to right-side gas port. Routed at Y_WALL to avoid crossing
+    # cold/hot/condensate port drops (which are at P_Y=26.3").
     pipe_run("Gas_Line", [
         (GAS_CEIL_X, GAS_CEIL_Y, CH + inch(2)),      # From ceiling
         (GAS_CEIL_X, GAS_CEIL_Y, GAS_UNDER_Z),        # Drop to under-Rinnai height
-        (GAS_CEIL_X, GAS_Y, GAS_UNDER_Z),             # Step back to Rinnai depth
-        (RX1 + inch(2), GAS_Y, GAS_UNDER_Z),          # Run right under Rinnai
+        (GAS_CEIL_X, Y_WALL, GAS_UNDER_Z),            # Step back to WALL (not P_Y)
+        (RX1 + inch(2), Y_WALL, GAS_UNDER_Z),         # Run right along wall
+        (RX1 + inch(2), GAS_Y, GAS_UNDER_Z),          # Step forward to gas port depth
         (RX1 + inch(2), GAS_Y, GAS_Z),                # Rise to gas port
     ], R_GAS, M["csst"], BEND_GAS)
 
@@ -590,7 +593,7 @@ def build_cold_supply(M):
     EXP_WALL_Z = RB + inch(20)    # ~44" AFF
     EXP_HORIZ_Z = inch(8)         # Below all manifold pipes
     # Tee off cold riser at 8" AFF
-    sharkbite_tee("ExpTee", COLD_X, Y_WALL, EXP_HORIZ_Z, R_PIPE, M, 'Z', 'X')
+    sharkbite_tee("ExpTee", COLD_X, Y_WALL, EXP_HORIZ_Z, R_PIPE, M, 'Z', '-Y')
     # Route: step forward to Y_BLEND (avoids Y_WALL manifold pipes),
     # horizontal to X=29", vertical to tank height, step back to wall
     pipe_run("Exp_Run", [
