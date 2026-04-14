@@ -1,9 +1,12 @@
 """
 Generate 3D model of boiler closet at 20 Elsie Lane #217.
 Rinnai RXP199iN tankless + open-loop hydronic heating.
-v12: Expansion tank on COLD supply (was incorrectly on heating supply riser).
-Gas line at 23" AFF clears manifold zone (was 20", intersected pipes).
-Sharp 90° SharkBite elbows everywhere. All manifold pipes against back wall.
+v13: Port positions corrected per Figure 3 (DRAIN/HOT/COLD L→R, individual depths).
+     Gas port: 0.60" above bottom, 2.83" from front face.
+     Z_HOT layer added (18") to separate hot/cold horizontal runs.
+     Condensate neutralizer moved below manifold (gravity drain).
+     SharkBite MNPT adapters at water ports, 2"→3" vent adapters.
+     R_COND corrected to 1/2" nominal per Table 2.
 
 Run: blender --background --python generate_boiler.py
 
@@ -55,20 +58,28 @@ RCY = (RY0 + RY1) / 2   # ~26.3"
 
 
 # ============================================================
-# Port positions (per Figure 3, relative to Rinnai body)
+# Port positions — per Figure 3: Supply Connections
+# Bottom view (L→R): DRAIN, HOT, COLD. Gas on RIGHT SIDE panel.
+# 7.13" DRAIN-to-COLD span, 5.10" HOT-to-COLD, 2.03" DRAIN-to-HOT.
+# Each port has a DIFFERENT depth from front face.
 # ============================================================
-P_COLD_X = RCX - inch(2.55)   # ~15.7"
-P_HOT_X = RCX                  # ~18"
-P_COND_X = RCX + inch(2.55)   # ~20.55"
-P_Y = RCY
-P_Z = RB                       # Ports exit bottom at 24"
+P_DRAIN_X = RX0 + inch(5.69)    # Condensate drain, leftmost bottom port
+P_HOT_X   = RX0 + inch(7.72)    # Hot outlet, 2.03" right of drain
+P_COLD_X  = RX0 + inch(12.82)   # Cold inlet, 5.10" right of hot
+P_DRAIN_Y = RY0 + inch(6.20)    # Deepest (closest to back wall)
+P_HOT_Y   = RY0 + inch(5.32)    # Shallowest of three bottom ports
+P_COLD_Y  = RY0 + inch(5.60)    # In between
+P_Z = RB                         # All water ports exit bottom at 24" AFF
 
-GAS_X = RX1                    # Gas port on RIGHT side
-GAS_Y = RCY
-GAS_Z = RB + inch(2.83)        # ~34.83"
+# Gas port — RIGHT SIDE panel, low and near front
+GAS_X = RX1                      # Flush with right side panel
+GAS_Z = RB + inch(0.60)          # 0.60" above bottom edge (~24.6" AFF)
+GAS_Y = RY0 + inch(2.83)         # 2.83" from front face (~23.4")
 
-V_EXH_X = RX0 + inch(5.91)    # Exhaust on left side of top
-V_INT_X = RX0 + inch(15.97)   # Intake on right side of top
+# Vent connections — TOP of unit, 2" nominal (needs 2"→3" adapter for System 636)
+V_EXH_X = RX0 + inch(5.91)      # Exhaust on left side of top
+V_INT_X = RX0 + inch(15.97)     # Intake on right side of top
+V_Y     = RY0 + inch(6.08)      # Vent depth from front (per Figure 2 side view)
 
 
 # ============================================================
@@ -78,17 +89,19 @@ R_VENT = inch(1.5)
 R_GAS = inch(0.375)
 R_PIPE = inch(0.375)     # 3/4" CPVC
 R_HEAT = inch(0.5)       # 1" CPVC
-R_COND = inch(0.19)
+R_COND = inch(0.25)      # 1/2" MNPT per Table 2
 R_SMALL = inch(0.3)
 
 
 # ============================================================
 # Manifold heights — staggered to prevent intersections
-# All below Rinnai bottom (24"). Each level separated by 2-3".
+# All below Rinnai bottom (24"). Each level separated by 2".
+# Cold horizontal at Z_MANIFOLD, hot horizontal at Z_HOT (separate layers).
 # ============================================================
 Z_HEAT_S = inch(12)      # Heating supply (lowest)
 Z_HEAT_R = inch(14)      # Heating return
-Z_MANIFOLD = inch(16)    # Main cold + hot horizontal runs
+Z_MANIFOLD = inch(16)    # Cold supply horizontal
+Z_HOT = inch(18)         # Hot outlet horizontal (avoids cold/hot X-overlap)
 Z_BLEND = inch(19)       # Cold blend to TMV (crosses over manifold)
 Z_DHW = inch(21)         # DHW / TMV height
 
@@ -114,15 +127,15 @@ SHUTOFF_Z = inch(56)              # Gas shutoff on left-side drop
 
 # ============================================================
 # Component positions along manifold (X axis)
-# Rinnai shifted left: cold port ~10.7", hot port ~13.25", cond ~15.8"
-# Cold manifold: X=3" to X=10" (left side, under cold port)
-# Hot manifold: X=13" to X=28" (right side, under hot port)
-# No X overlap = no intersection at same height
+# Port order L→R: DRAIN ~9.7", HOT ~11.7", COLD ~16.8"
+# Cold manifold at Z_MANIFOLD: X=3" to X=16.8" (left side)
+# Hot manifold at Z_HOT: X=11.7" to X=19" (right side, separate height)
+# No intersection: cold and hot at different Z heights.
 # ============================================================
 COLD_X = inch(3)           # Cold entry from floor (left of Rinnai)
 V1_X = inch(5)             # Cold shutoff
 T1_X = inch(8)             # Cold tee (return merge + blend branch)
-V2_X = inch(16)            # Hot shutoff (clear of condensate at X≈15.8")
+V2_X = inch(14)            # Hot shutoff (between hot port and T2)
 T2_X = inch(19)            # Hot tee (DHW + heating branch)
 ZV_X = inch(22)            # Zone valve (on heating supply)
 TMV_X = inch(26)           # TMV
@@ -466,14 +479,26 @@ def build_rinnai(M):
     box("MountBracketBot", RX0 + inch(2), RX1 - inch(2), RY1, RY1 + inch(0.5),
         RB + inch(1), RB + inch(3), M["bracket"])
 
-    # Port stubs (copper at threads for SharkBite transition)
+    # Port stubs — each at correct X/Y per Figure 3
     stub = inch(3)
-    cyl("Port_Cold", (P_COLD_X, P_Y, RB - stub / 2), R_PIPE * 1.4, stub, M["copper_stub"])
-    cyl("Port_Hot", (P_HOT_X, P_Y, RB - stub / 2), R_PIPE * 1.4, stub, M["copper_stub"])
-    cyl("Port_Cond", (P_COND_X, P_Y, RB - stub / 2), R_COND * 2, stub, M["port"])
+    cyl("Port_Cold", (P_COLD_X, P_COLD_Y, RB - stub / 2), R_PIPE * 1.4, stub, M["copper_stub"])
+    cyl("Port_Hot", (P_HOT_X, P_HOT_Y, RB - stub / 2), R_PIPE * 1.4, stub, M["copper_stub"])
+    cyl("Port_Drain", (P_DRAIN_X, P_DRAIN_Y, RB - stub / 2), R_COND * 2, stub, M["port"])
     cyl("Port_Gas", (RX1 + inch(1), GAS_Y, GAS_Z), R_GAS * 1.4, inch(2), M["port"], 'X')
-    cyl("Port_VentExh", (V_EXH_X, P_Y, RT + inch(1)), R_VENT, inch(2), M["port"])
-    cyl("Port_VentInt", (V_INT_X, P_Y, RT + inch(1)), R_VENT, inch(2), M["port"])
+
+    # SharkBite MNPT push-to-connect adapters at water ports
+    adpt = inch(1.5)
+    cyl("Adapt_Cold", (P_COLD_X, P_COLD_Y, RB - stub - adpt / 2), R_PIPE * 1.6, adpt, M["sharkbite"])
+    cyl("Adapt_Hot", (P_HOT_X, P_HOT_Y, RB - stub - adpt / 2), R_PIPE * 1.6, adpt, M["sharkbite"])
+    cyl("Adapt_Drain", (P_DRAIN_X, P_DRAIN_Y, RB - stub - adpt / 2), R_COND * 1.8, adpt, M["sharkbite"])
+
+    # Vent port stubs — 2" nominal (needs 2"→3" adapter for System 636)
+    R_VENT_PORT = inch(1.0)   # 2" nominal OD
+    cyl("Port_VentExh", (V_EXH_X, V_Y, RT + inch(0.5)), R_VENT_PORT, inch(1), M["port"])
+    cyl("Port_VentInt", (V_INT_X, V_Y, RT + inch(0.5)), R_VENT_PORT, inch(1), M["port"])
+    # 2"→3" vent adapters (stepped transition)
+    cyl("VentAdapt_Exh", (V_EXH_X, V_Y, RT + inch(1.5)), R_VENT * 1.05, inch(2), M["pvc"])
+    cyl("VentAdapt_Int", (V_INT_X, V_Y, RT + inch(1.5)), R_VENT * 1.05, inch(2), M["pvc"])
 
     box("MCC912", RX1 + inch(1), RX1 + inch(7), RY0, RY0 + inch(1.5),
         RT - inch(5), RT - inch(2), M["controller"])
@@ -484,16 +509,16 @@ def build_rinnai(M):
 # ============================================================
 def build_vents(M):
     # Exhaust (back vent = out): rises from top, sharp 90° PVC elbows at each turn
-    # Segments: vertical rise, 90° elbow, depth run, 90° elbow, horizontal to wall
+    # 3" System 636 pipe (after 2"→3" adapter at unit top)
     pipe_run("VentExh_Run", [
-        (V_EXH_X, P_Y, RT + inch(1)),
-        (V_EXH_X, P_Y, VENT_Z),
+        (V_EXH_X, V_Y, RT + inch(2.5)),
+        (V_EXH_X, V_Y, VENT_Z),
         (V_EXH_X, VENT_Y_EXH, VENT_Z),
         (-EXT_T - inch(1), VENT_Y_EXH, VENT_Z),
     ], R_VENT, M["pvc"], sharp=True)
 
     # PVC elbows at each turn (visual markers)
-    cyl("VentExh_Elb1", (V_EXH_X, P_Y, VENT_Z),
+    cyl("VentExh_Elb1", (V_EXH_X, V_Y, VENT_Z),
         R_VENT * 1.3, R_VENT * 2, M["pvc"])
     cyl("VentExh_Elb2", (V_EXH_X, VENT_Y_EXH, VENT_Z),
         R_VENT * 1.3, R_VENT * 2, M["pvc"], 'X')
@@ -503,14 +528,14 @@ def build_vents(M):
 
     # Intake (front vent = in): 12" forward of exhaust, sharp 90° elbows
     pipe_run("VentInt_Run", [
-        (V_INT_X, P_Y, RT + inch(1)),
-        (V_INT_X, P_Y, VENT_Z),
+        (V_INT_X, V_Y, RT + inch(2.5)),
+        (V_INT_X, V_Y, VENT_Z),
         (V_INT_X, VENT_Y_INT, VENT_Z),
         (-EXT_T - inch(1), VENT_Y_INT, VENT_Z),
     ], R_VENT, M["pvc"], sharp=True)
 
     # PVC elbows at each turn
-    cyl("VentInt_Elb1", (V_INT_X, P_Y, VENT_Z),
+    cyl("VentInt_Elb1", (V_INT_X, V_Y, VENT_Z),
         R_VENT * 1.3, R_VENT * 2, M["pvc"])
     cyl("VentInt_Elb2", (V_INT_X, VENT_Y_INT, VENT_Z),
         R_VENT * 1.3, R_VENT * 2, M["pvc"], 'X')
@@ -524,16 +549,16 @@ def build_vents(M):
 # ============================================================
 def build_gas(M):
     # CSST drops from LEFT ceiling near front (Y=10"), steps back to WALL,
-    # runs horizontal along wall under Rinnai, steps forward to gas port depth,
-    # rises to right-side gas port. Routed at Y_WALL to avoid crossing
-    # cold/hot/condensate port drops (which are at P_Y=26.3").
+    # runs horizontal along wall under Rinnai at Z=23", steps forward to
+    # gas port depth (Y=23.4"), rises to gas port (Z=24.6").
+    # Routed at Y_WALL to avoid crossing port drops (Y=25-27").
     pipe_run("Gas_Line", [
         (GAS_CEIL_X, GAS_CEIL_Y, CH + inch(2)),      # From ceiling
-        (GAS_CEIL_X, GAS_CEIL_Y, GAS_UNDER_Z),        # Drop to under-Rinnai height
-        (GAS_CEIL_X, Y_WALL, GAS_UNDER_Z),            # Step back to WALL (not P_Y)
+        (GAS_CEIL_X, GAS_CEIL_Y, GAS_UNDER_Z),        # Drop to under-Rinnai height (23")
+        (GAS_CEIL_X, Y_WALL, GAS_UNDER_Z),            # Step back to WALL
         (RX1 + inch(2), Y_WALL, GAS_UNDER_Z),         # Run right along wall
         (RX1 + inch(2), GAS_Y, GAS_UNDER_Z),          # Step forward to gas port depth
-        (RX1 + inch(2), GAS_Y, GAS_Z),                # Rise to gas port
+        (RX1 + inch(2), GAS_Y, GAS_Z),                # Rise to gas port (24.6")
     ], R_GAS, M["csst"], BEND_GAS)
 
     # Gas shutoff on the left-side vertical drop
@@ -553,14 +578,14 @@ def build_gas(M):
 # BUILD: Cold supply (CPVC, from floor, outdoor tap branch)
 # ============================================================
 def build_cold_supply(M):
-    # Cold riser from floor against back wall, horizontal to port, up to port
-    # Sharp 90° elbows (SharkBite) at each turn
+    # Cold riser from floor against back wall, horizontal right to under cold port,
+    # step forward to port depth, rise to port. Sharp 90° SharkBite elbows.
     pipe_run("Cold_Supply", [
         (COLD_X, Y_WALL, -inch(2)),
         (COLD_X, Y_WALL, Z_MANIFOLD),
         (P_COLD_X, Y_WALL, Z_MANIFOLD),
-        (P_COLD_X, P_Y, Z_MANIFOLD),
-        (P_COLD_X, P_Y, P_Z - inch(1)),
+        (P_COLD_X, P_COLD_Y, Z_MANIFOLD),
+        (P_COLD_X, P_COLD_Y, P_Z - inch(1)),
     ], R_PIPE, M["cpvc"], sharp=True)
 
     # V1 cold isolation valve — on wall
@@ -623,25 +648,25 @@ def build_cold_supply(M):
 # BUILD: Hot water out (CPVC)
 # ============================================================
 def build_hot_out(M):
-    # Hot drops from port to wall, runs right along wall to T2. Sharp 90s.
+    # Hot drops from port to Z_HOT (separate height from cold), runs right to T2.
     pipe_run("Hot_FromPort", [
-        (P_HOT_X, P_Y, P_Z - inch(1)),
-        (P_HOT_X, P_Y, Z_MANIFOLD),
-        (P_HOT_X, Y_WALL, Z_MANIFOLD),
-        (T2_X, Y_WALL, Z_MANIFOLD),
+        (P_HOT_X, P_HOT_Y, P_Z - inch(1)),
+        (P_HOT_X, P_HOT_Y, Z_HOT),
+        (P_HOT_X, Y_WALL, Z_HOT),
+        (T2_X, Y_WALL, Z_HOT),
     ], R_PIPE, M["cpvc_hot"], sharp=True)
 
-    sharkbite_valve("V2", V2_X, Y_WALL, Z_MANIFOLD, R_PIPE, M)
-    sharkbite_tee("T2", T2_X, Y_WALL, Z_MANIFOLD, R_PIPE, M, 'X', '-Z')
+    sharkbite_valve("V2", V2_X, Y_WALL, Z_HOT, R_PIPE, M)
+    sharkbite_tee("T2", T2_X, Y_WALL, Z_HOT, R_PIPE, M, 'X', '-Z')
 
 
 # ============================================================
 # BUILD: TMV and DHW (CPVC)
 # ============================================================
 def build_tmv_dhw(M):
-    # Hot from T2 to TMV — routes along back wall with sharp 90° SharkBite elbows
+    # Hot from T2 at Z_HOT up to TMV — routes along back wall, sharp 90° elbows
     pipe_run("Hot_ToTMV", [
-        (T2_X, Y_WALL, Z_MANIFOLD),
+        (T2_X, Y_WALL, Z_HOT),
         (T2_X, Y_WALL, Z_BLEND),
         (TMV_X, Y_WALL, Z_BLEND),
         (TMV_X, Y_WALL, Z_DHW),
@@ -663,10 +688,10 @@ def build_tmv_dhw(M):
 # Riser at X=29" avoids Rinnai body (X=8.75-27.25")
 # ============================================================
 def build_heat_supply(M):
-    # Supply: T2 drops to heat level, runs right along back wall to riser,
+    # Supply: T2 drops from Z_HOT to heat level, runs right along wall to riser,
     # up right wall to AH height, then forward + left to AH front face connection
     pipe_run("HS_Run", [
-        (T2_X, Y_WALL, Z_MANIFOLD),
+        (T2_X, Y_WALL, Z_HOT),
         (T2_X, Y_WALL, Z_HEAT_S),
         (RISER_S_X, Y_WALL, Z_HEAT_S),
         (RISER_S_X, Y_WALL, AH_SZ),
@@ -711,16 +736,17 @@ def build_heat_return(M):
 # BUILD: Condensate drain (PVC)
 # ============================================================
 def build_condensate(M):
-    # Condensate drops from port, routes to wall-mounted neutralizer on back wall
-    # Sharp 90° elbows, fully connected from port to drain
-    NEUT_Z = RB + inch(2)    # Just above Rinnai bottom, on back wall
-    NEUT_X = P_COND_X
+    # Condensate drops from DRAIN port (leftmost, X=9.7") by gravity to
+    # wall-mounted neutralizer BELOW manifold zone. Sharp 90° elbows.
+    NEUT_Z = inch(8)          # Neutralizer at 8" AFF (below manifold, above floor)
+    NEUT_X = P_DRAIN_X
 
-    # Drop from condensate port to neutralizer inlet (top of neutralizer box)
+    # Drop from drain port straight down at port depth (avoids manifold at Y_WALL),
+    # then step back to wall below manifold zone
     pipe_run("Cond_Drop", [
-        (P_COND_X, P_Y, P_Z - inch(1)),
-        (P_COND_X, P_Y, NEUT_Z + inch(4)),
-        (P_COND_X, Y_WALL, NEUT_Z + inch(4)),
+        (P_DRAIN_X, P_DRAIN_Y, P_Z - inch(1)),
+        (P_DRAIN_X, P_DRAIN_Y, NEUT_Z + inch(4)),
+        (P_DRAIN_X, Y_WALL, NEUT_Z + inch(4)),
     ], R_COND, M["pvc"], sharp=True)
 
     # Neutralizer wall-mounted on back wall
@@ -832,18 +858,17 @@ def main():
 
     n = len([o for o in bpy.data.objects if o.type == 'MESH'])
     print(f"\n{'=' * 60}")
-    print(f"MODEL v12 (exp tank on cold supply, gas line clears manifold)")
+    print(f"MODEL v13 (ports per Figure 3, Z_HOT layer, gravity drain)")
     print(f"{'=' * 60}")
     print(f"Mesh objects: {n}")
     print(f"Exported: {glb}")
-    print(f"Rinnai: {RB/0.0254:.0f}\" AFF, top ~{RT/0.0254:.0f}\", left-biased X={RX0/0.0254:.0f}\"-{RX1/0.0254:.1f}\"")
-    print(f"Vents: {VENT_Z/0.0254:.0f}\" AFF UNDER air handler")
-    print(f"Gas: from LEFT ceiling near front (Y={GAS_CEIL_Y/0.0254:.0f}\"), under Rinnai")
-    print(f"Manifold: Z heights ({Z_HEAT_S/0.0254:.0f}/{Z_HEAT_R/0.0254:.0f}/{Z_MANIFOLD/0.0254:.0f}/{Z_BLEND/0.0254:.0f}/{Z_DHW/0.0254:.0f}\")")
-    print(f"Y-depth: P_Y={P_Y/0.0254:.1f}\", Y_RISER={Y_RISER/0.0254:.1f}\", Y_BLEND={Y_BLEND/0.0254:.1f}\"")
+    print(f"Rinnai: {RB/0.0254:.0f}\" AFF, top ~{RT/0.0254:.0f}\", X={RX0/0.0254:.0f}\"-{RX1/0.0254:.1f}\"")
+    print(f"Ports (L→R): DRAIN X={P_DRAIN_X/0.0254:.1f}\", HOT X={P_HOT_X/0.0254:.1f}\", COLD X={P_COLD_X/0.0254:.1f}\"")
+    print(f"Port depths: DRAIN Y={P_DRAIN_Y/0.0254:.1f}\", HOT Y={P_HOT_Y/0.0254:.1f}\", COLD Y={P_COLD_Y/0.0254:.1f}\"")
+    print(f"Gas port: Z={GAS_Z/0.0254:.1f}\" (0.60\" above bottom), Y={GAS_Y/0.0254:.1f}\" (2.83\" from front)")
+    print(f"Manifold Z: HS={Z_HEAT_S/0.0254:.0f} HR={Z_HEAT_R/0.0254:.0f} COLD={Z_MANIFOLD/0.0254:.0f} HOT={Z_HOT/0.0254:.0f} BLEND={Z_BLEND/0.0254:.0f} DHW={Z_DHW/0.0254:.0f}")
+    print(f"Vents: {VENT_Z/0.0254:.0f}\" AFF, 2\"→3\" adapters at unit top")
     print(f"Risers: X={RISER_R_X/0.0254:.0f}\" (return), X={RISER_S_X/0.0254:.0f}\" (supply)")
-    print(f"Electrical: switch + 24V xfmr + 120V outlet (not full panel)")
-    print(f"Gas outdoor: Z={OGAS_Z/0.0254:.0f}\" (above electrical)")
     print(f"{'=' * 60}")
 
 
