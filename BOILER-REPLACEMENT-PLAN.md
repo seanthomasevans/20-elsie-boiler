@@ -193,17 +193,18 @@ This list covers BOTH paths. Items marked **(combi only)** or **(tankless only)*
 
 The red-handle ball valves in your neighbor's photos are standard 3/4" brass full-port ball valves. Brand doesn't matter. Watts, Apollo, Webstone, or Home Depot generic all work.
 
-### 6. Expansion Tanks
+### 6. Expansion Tank
 
 | Part | Spec | Price (CAD) |
 |------|------|-------------|
-| Potable water expansion tank | Amtrol ST-5 or Watts PLT-5 (2 gallon) | $45-65 |
-| Heating loop expansion tank | Amtrol Extrol 15 (2 gal) | $50-80 |
-| 3/4" brass tee (to mount tanks) | | $5-8 ea |
+| Potable water expansion tank | Watts PLT-5 (2.1 gal, potable-rated) | $45-65 |
+| 3/4" SharkBite tee (to mount tank) | | $20 |
 
-**The grey tank on the floor in your neighbor's photos = the heating loop expansion tank.** Pre-charge pressure must match your incoming water pressure (Toronto is typically 50-70 PSI, most tanks ship at 40 PSI, adjust with a bicycle pump via the Schrader valve).
+**One tank only.** This is an open-loop system: potable water flows through the heating circuit and back. A closed-loop combi would need two tanks (one potable, one hydronic), but Sean's build uses one potable-rated tank on the cold supply that handles both circuits. Do NOT use a non-potable hydronic tank (like Amtrol Extrol) on this system.
 
-**Subtotal: ~$100-155**
+Pre-charge pressure must match your incoming water pressure (Toronto is typically 50-60 PSI, the PLT-5 ships at 12 PSI, adjust with a bicycle pump via the Schrader valve). Mount vertically, connection at top, tank hanging below. Position at ~44" AFF on right side of closet.
+
+**Subtotal: ~$65-85**
 
 ### 7. Buffer Tank
 
@@ -379,7 +380,7 @@ If you DO need a new one:
 | DHW water connections | $200 | $350 |
 | Heating loop piping | $200 | $400 |
 | Isolation valves | $70 | $110 |
-| Expansion tanks | $100 | $155 |
+| Expansion tank | $65 | $85 |
 | Circulation pump | $200 | $350 |
 | TMV | $100 | $160 |
 | Check valves / backflow | $60 | $95 |
@@ -404,7 +405,7 @@ If you DO need a new one:
 | DHW water connections | $200 | $350 |
 | Heating loop piping | $200 | $400 |
 | Isolation valves | $70 | $110 |
-| Expansion tanks | $100 | $155 |
+| Expansion tank | $65 | $85 |
 | Circulation pump | $0 | $0 |
 | TMV | $100 | $160 |
 | Check valves / backflow | $60 | $95 |
@@ -544,10 +545,9 @@ If you DO need a new one:
 2. Run return line from fan coil outlet back to unit's heating return port.
 3. Install isolation ball valves on both supply and return near fan coil
 4. Install check valve on return line (prevents thermosiphon)
-5. Install heating loop expansion tank on return line near unit
-6. **(Standard tankless only):** Install external circulation pump on return line, pushing toward unit. Isolation valves on both sides.
-7. Install zone valve on supply line to fan coil. Wire to thermostat circuit.
-8. Connect fan coil to existing ductwork. Sheet metal screws + foil tape / mastic. Check airflow direction arrow.
+5. **(Standard tankless only):** Install external circulation pump on return line, pushing toward unit. Isolation valves on both sides.
+6. Install zone valve on supply line to fan coil. Wire to thermostat circuit.
+7. Connect fan coil to existing ductwork. Sheet metal screws + foil tape / mastic. Check airflow direction arrow.
 
 ### Phase 5: Condensate Drain
 

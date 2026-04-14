@@ -30,7 +30,7 @@ Sean's system uses a standard tankless water heater with externally assembled co
 |---|---|---|
 | Heat exchanger | Dual (primary + plate HX) | Single (one HX does both jobs) |
 | Circulation pump | Built-in variable-speed | External cast-iron circ pump |
-| Expansion tank | Small internal vessel | External 2-gal Watts or Amtrol |
+| Expansion tank | Small internal vessel | Watts PLT-5 2.1 gal (potable-rated, on cold supply) |
 | Diverter/zone valve | Internal motorized diverter | External Honeywell zone valve |
 | DHW temperature control | Internal modulation | External TMV (thermostatic mixing valve) |
 | Heating controls | Built-in outdoor reset, frost protection | MCC912 controller + thermostat |
