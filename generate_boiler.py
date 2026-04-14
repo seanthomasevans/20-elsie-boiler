@@ -1,9 +1,9 @@
 """
 Generate 3D model of boiler closet at 20 Elsie Lane #217.
 Rinnai RXP199iN tankless + open-loop hydronic heating.
-v11: Sharp 90° SharkBite elbows everywhere. All manifold pipes against back wall.
-Expansion tank centered between Rinnai left edge and left wall (X=2").
-Condensate fully connected. Floor cleared. AH edge-to-edge.
+v12: Expansion tank on COLD supply (was incorrectly on heating supply riser).
+Gas line at 23" AFF clears manifold zone (was 20", intersected pipes).
+Sharp 90° SharkBite elbows everywhere. All manifold pipes against back wall.
 
 Run: blender --background --python generate_boiler.py
 
@@ -108,7 +108,7 @@ VENT_Y_INT = CD - inch(18)       # Front vent (intake), 12" forward of exhaust
 # ============================================================
 GAS_CEIL_X = inch(4)              # Left side of closet
 GAS_CEIL_Y = inch(10)             # Near closet opening (was near back wall)
-GAS_UNDER_Z = inch(20)            # Routes under Rinnai (bottom now at 24")
+GAS_UNDER_Z = inch(23)            # Routes under Rinnai (bottom at 24"), above manifold (highest Z_DHW=21")
 SHUTOFF_Z = inch(56)              # Gas shutoff on left-side drop
 
 
@@ -584,6 +584,28 @@ def build_cold_supply(M):
         (TMV_X, Y_WALL, Z_DHW),
     ], R_SMALL, M["cpvc"], sharp=True)
 
+    # Expansion tank on COLD supply line (right side of closet, ~44" AFF)
+    # Watts PLT-5 2.1 gal, potable-rated. Pre-charge to street pressure.
+    EXP_X = inch(29)
+    EXP_WALL_Z = RB + inch(20)    # ~44" AFF
+    EXP_HORIZ_Z = inch(8)         # Below all manifold pipes
+    # Tee off cold riser at 8" AFF
+    sharkbite_tee("ExpTee", COLD_X, Y_WALL, EXP_HORIZ_Z, R_PIPE, M, 'Z', 'X')
+    # Route: step forward to Y_BLEND (avoids Y_WALL manifold pipes),
+    # horizontal to X=29", vertical to tank height, step back to wall
+    pipe_run("Exp_Run", [
+        (COLD_X, Y_WALL, EXP_HORIZ_Z),
+        (COLD_X, Y_BLEND, EXP_HORIZ_Z),
+        (EXP_X, Y_BLEND, EXP_HORIZ_Z),
+        (EXP_X, Y_BLEND, RB + inch(16)),
+        (EXP_X, Y_WALL, RB + inch(16)),
+    ], R_PIPE, M["cpvc"], sharp=True)
+    # Tank hangs vertically on back wall, right side
+    cyl("ExpTank", (EXP_X, Y_WALL, EXP_WALL_Z - inch(4)),
+        inch(3), inch(9), M["exp_tank"])
+    cyl("ExpTank_Cap", (EXP_X, Y_WALL, EXP_WALL_Z - inch(8.5)),
+        inch(2.8), inch(1.5), M["exp_tank"])
+
     # Outdoor tap branch (tee off cold riser, through left wall)
     sharkbite_tee("ColdTee_Tap", COLD_X, Y_WALL, TAP_Z, R_PIPE, M, 'Z', '-Y')
     pipe_run("Cold_OutdoorTap", [
@@ -654,22 +676,6 @@ def build_heat_supply(M):
     box("ZV_Actuator", ZV_X - inch(1), ZV_X + inch(1), Y_WALL - inch(1), Y_WALL + inch(1),
         Z_HEAT_S + inch(1.5), Z_HEAT_S + inch(4), M["zv_actuator"])
 
-    # Expansion tank wall-mounted on RIGHT side, centered between Rinnai right
-    # edge (X=22.5") and right wall (X=36"), so X≈29". Near top of Rinnai.
-    EXP_X = inch(29)
-    EXP_WALL_Z = RB + inch(20)    # Upper Rinnai height (~44" AFF, top at 54")
-    # Tee off supply riser to feed expansion tank
-    sharkbite_tee("ExpTee", RISER_S_X, Y_WALL, RB + inch(16), R_HEAT, M, 'Z', '-X')
-    pipe_run("Exp_Run", [
-        (RISER_S_X, Y_WALL, RB + inch(16)),
-        (EXP_X, Y_WALL, RB + inch(16)),
-    ], R_PIPE, M["cpvc"], sharp=True)
-
-    # Tank hangs vertically on back wall, right side
-    cyl("ExpTank", (EXP_X, Y_WALL, EXP_WALL_Z - inch(4)),
-        inch(3), inch(9), M["exp_tank"])
-    cyl("ExpTank_Cap", (EXP_X, Y_WALL, EXP_WALL_Z - inch(8.5)),
-        inch(2.8), inch(1.5), M["exp_tank"])
 
 
 # ============================================================
@@ -823,7 +829,7 @@ def main():
 
     n = len([o for o in bpy.data.objects if o.type == 'MESH'])
     print(f"\n{'=' * 60}")
-    print(f"MODEL v11 (sharp 90s, all pipes on back wall, exp tank left-centered)")
+    print(f"MODEL v12 (exp tank on cold supply, gas line clears manifold)")
     print(f"{'=' * 60}")
     print(f"Mesh objects: {n}")
     print(f"Exported: {glb}")
