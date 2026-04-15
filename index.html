@@ -29,7 +29,7 @@
     }
     .app {
       display: grid;
-      grid-template-columns: 320px minmax(0, 1fr);
+      grid-template-columns: 340px minmax(0, 1fr);
       height: 100dvh;
       gap: 1rem;
       padding: 1rem;
@@ -57,6 +57,44 @@
       font-size: 0.68rem;
       color: var(--text-muted);
     }
+    .version-toggle {
+      display: flex;
+      border: 1px solid var(--accent);
+      border-radius: 10px;
+      overflow: hidden;
+      font-size: 0.78rem;
+      font-weight: 600;
+    }
+    .version-toggle button {
+      flex: 1;
+      padding: 0.55rem 0.5rem;
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all 200ms ease;
+      line-height: 1.3;
+    }
+    .version-toggle button.active {
+      background: var(--accent);
+      color: #0a0f14;
+    }
+    .version-toggle button:not(.active):hover {
+      background: rgba(126, 192, 255, 0.12);
+      color: var(--text-main);
+    }
+    .version-badge {
+      display: inline-block;
+      font-size: 0.62rem;
+      padding: 0.1rem 0.35rem;
+      border-radius: 4px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      vertical-align: middle;
+      margin-left: 0.3rem;
+    }
+    .badge-tankless { background: #2a5a3a; color: #8fd4a8; }
+    .badge-combi { background: #3a4a6a; color: #8fb8e8; }
     .info-panel {
       border: 1px solid var(--accent);
       border-radius: 12px;
@@ -77,7 +115,7 @@
       border-radius: 12px;
       padding: 0.5rem;
       background: rgba(255, 255, 255, 0.02);
-      max-height: 280px;
+      max-height: 240px;
       overflow-y: auto;
     }
     .layer-item {
@@ -129,14 +167,6 @@
     .notes ul { padding-left: 0.9rem; margin: 0.2rem 0; }
     .notes li { margin-bottom: 0.2rem; }
     .notes strong { color: var(--text-main); }
-    .footer-note {
-      margin-top: auto;
-      color: var(--text-muted);
-      font-size: 0.68rem;
-      line-height: 1.5;
-      border-top: 1px solid rgba(255, 255, 255, 0.1);
-      padding-top: 0.6rem;
-    }
     .viewer-shell {
       position: relative;
       border-radius: 18px;
@@ -178,6 +208,19 @@
       backdrop-filter: blur(8px);
     }
     .reset-btn:hover { background: var(--button-bg-active); }
+    .loading-overlay {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(8, 12, 17, 0.85);
+      z-index: 10;
+      font-size: 0.88rem;
+      color: var(--accent);
+      transition: opacity 400ms ease;
+    }
+    .loading-overlay.hidden { opacity: 0; pointer-events: none; }
     @media (max-width: 980px) {
       body { overflow: auto; }
       .app {
@@ -196,7 +239,21 @@
     <aside class="sidebar">
       <section class="title-block">
         <h1>20 Elsie Lane #217</h1>
-        <p>Rinnai RXP199iN tankless water heater + open-loop hydronic heating. Interactive 3D installation model.</p>
+        <p id="subtitle"></p>
+      </section>
+
+      <section>
+        <p class="section-label">Configuration</p>
+        <div class="version-toggle">
+          <button id="btnTankless" onclick="switchVersion('tankless')">
+            RXP199iN<span class="version-badge badge-tankless">v13</span><br>
+            <span style="font-weight:400;font-size:0.7rem;color:var(--text-muted)">Tankless + External</span>
+          </button>
+          <button id="btnCombi" onclick="switchVersion('combi')">
+            i120CN<span class="version-badge badge-combi">v14</span><br>
+            <span style="font-weight:400;font-size:0.7rem;color:var(--text-muted)">Combi Boiler</span>
+          </button>
+        </div>
       </section>
 
       <section>
@@ -214,38 +271,30 @@
       <section>
         <p class="section-label">Closet</p>
         <div class="spec-panel">
-          <div class="spec-row"><span>Width</span><span class="spec-value">36"</span></div>
-          <div class="spec-row"><span>Depth</span><span class="spec-value">32"</span></div>
-          <div class="spec-row"><span>Height</span><span class="spec-value">80" (flat ceiling)</span></div>
+          <div class="spec-row"><span>Width</span><span class="spec-value">36&Prime;</span></div>
+          <div class="spec-row"><span>Depth</span><span class="spec-value">32&Prime;</span></div>
+          <div class="spec-row"><span>Height</span><span class="spec-value">80&Prime; (flat ceiling)</span></div>
           <div class="spec-row"><span>Left wall</span><span class="spec-value">Exterior</span></div>
-          <div class="spec-row"><span>Air handler</span><span class="spec-value">64-80" AFF</span></div>
+          <div class="spec-row"><span>Air handler</span><span class="spec-value" id="ahSpec"></span></div>
         </div>
       </section>
 
       <section>
-        <p class="section-label">Rinnai RXP199iN</p>
-        <div class="spec-panel">
-          <div class="spec-row"><span>BTU</span><span class="spec-value">199,000</span></div>
-          <div class="spec-row"><span>Flow</span><span class="spec-value">11.1 GPM</span></div>
-          <div class="spec-row"><span>UEF</span><span class="spec-value">0.96 (condensing)</span></div>
-          <div class="spec-row"><span>Dimensions</span><span class="spec-value">18.5"W x 30.11"H x 11.41"D</span></div>
-          <div class="spec-row"><span>Position</span><span class="spec-value">Left-biased, 24" AFF, back wall</span></div>
-          <div class="spec-row"><span>Gas port</span><span class="spec-value">Right side, 0.60" above bottom, 2.83" from front</span></div>
-          <div class="spec-row"><span>Bottom ports</span><span class="spec-value">Drain, Hot, Cold (L-R per Figure 3)</span></div>
-          <div class="spec-row"><span>Vents</span><span class="spec-value">Twin 3" PVC, 62" AFF (under AH)</span></div>
-          <div class="spec-row"><span>Gas route</span><span class="spec-value">LEFT ceiling near front, under unit</span></div>
-          <div class="spec-row"><span>Blower</span><span class="spec-value">Built-in combustion fan</span></div>
-          <div class="spec-row"><span>Controller</span><span class="spec-value">MCC-91-2 (160F unlock)</span></div>
-        </div>
+        <p class="section-label" id="unitLabel"></p>
+        <div class="spec-panel" id="unitSpecs"></div>
       </section>
 
-      <a href="docs.html" style="display:block;margin-top:auto;padding:12px 16px;background:var(--button-bg);border:1px solid var(--accent);border-radius:10px;color:var(--accent);text-decoration:none;font-size:0.88rem;font-weight:600;text-align:center;transition:background 200ms;">Documentation &amp; Drawings &rarr;</a>
+      <section id="archSection" style="display:none">
+        <p class="section-label">Architecture</p>
+        <div class="notes" id="archNotes"></div>
+      </section>
     </aside>
 
     <section class="viewer-shell" aria-label="3D boiler closet model">
       <canvas id="c"></canvas>
       <div class="hud">Click to select. Drag to orbit. Scroll to zoom. Right-drag to pan.</div>
       <button class="reset-btn" id="resetBtn">Reset View</button>
+      <div class="loading-overlay" id="loadingOverlay">Loading model...</div>
     </section>
   </main>
 
@@ -263,127 +312,209 @@
     import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
     import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 
-    // ── Layer definitions ──────────────────────────────────
-    const LAYER_DEFS = [
-      { name: 'Walls & Floor',    color: '#888888', prefixes: ['Floor','Ceiling','WallLeft','WallRight','WallBack'] },
-      { name: 'Air Handler',      color: '#a8a090', prefixes: ['AirHandler','SupplyDuct','AH_'] },
-      { name: 'Rinnai Unit',      color: '#d0d4da', prefixes: ['Rinnai','MountBracket','Port_','MCC'] },
-      { name: 'Exhaust Vent',     color: '#e8e8e6', prefixes: ['VentExh_'] },
-      { name: 'Intake Vent',      color: '#e0e8e0', prefixes: ['VentInt_'] },
-      { name: 'Gas (CSST)',       color: '#d4b030', prefixes: ['Gas_','GasShutoff','GasTee','GasOut'] },
-      { name: 'Cold Supply',      color: '#c8b090', prefixes: ['Cold_','V1','DrainValve','ColdBlend','T1','ColdTee','TapShutoff','Exp','ExpTank','ExpTee'] },
-      { name: 'Hot / DHW',        color: '#c0a880', prefixes: ['Hot_','V2','T2','TMV','DHW_'] },
-      { name: 'Heating Supply',   color: '#b8a078', prefixes: ['HS_','ZoneValve','ZV_'] },
-      { name: 'Heating Return',   color: '#a89070', prefixes: ['HR_','CircPump','CheckValve','CV_'] },
-      { name: 'Condensate',       color: '#e8e6e4', prefixes: ['Cond_','Neutralizer','DrainChannel'] },
-      { name: 'Electrical',       color: '#555860', prefixes: ['ElecSwitch','ElecXfmr','ElecOutlet'] },
-      { name: 'Floor Drain',      color: '#404040', prefixes: ['FloorDrain','Drain_'] },
-    ];
+    // ================================================================
+    // VERSION CONFIGS
+    // ================================================================
 
-    // ── Component descriptions ─────────────────────────────
-    const DESCRIPTIONS = {
-      // Rinnai unit (mounted left-biased: 24" AFF, top ~54", 10" below AH)
-      'Rinnai': 'Rinnai RXP199iN tankless water heater. 199K BTU, 11.1 GPM, 0.96 UEF. Condensing, built-in combustion fan. Mounted at 24" AFF, left-biased (X=4\u201322.5"), top at ~54" (10" below AH). Gas from LEFT ceiling near front, routes under unit to right-side port. [NEW \u2014 $2,100 secondhand]',
-      'RinnaiFace': 'Front panel. 24" service clearance required in front.',
-      'RinnaiDisplay': 'LCD display: temperature, error codes, status.',
-      'MountBracketTop': 'Top wall bracket. Secures to back wall studs. [NEW \u2014 included with unit]',
-      'MountBracketBot': 'Bottom wall bracket. [NEW \u2014 included with unit]',
-      'Port_Cold': 'Cold inlet (3/4" MNPT). Short copper stub \u2192 SharkBite FNPT adapter \u2192 CPVC. No soldering needed.',
-      'Port_Hot': 'Hot outlet (3/4" MNPT). Short copper stub \u2192 SharkBite FNPT adapter \u2192 CPVC.',
-      'Port_Drain': 'Condensate drain (1/2" MNPT). Leftmost bottom port. PVC line to neutralizer. [NEW]',
-      'Adapt_Cold': 'SharkBite 3/4" MNPT push-to-connect adapter at cold inlet. [NEW ~$12]',
-      'Adapt_Hot': 'SharkBite 3/4" MNPT push-to-connect adapter at hot outlet. [NEW ~$12]',
-      'Adapt_Drain': 'SharkBite 1/2" MNPT push-to-connect adapter at condensate drain. [NEW ~$8]',
-      'Port_Gas': 'Gas port (3/4" MNPT). Right side, 0.60" above bottom, 2.83" from front. CSST connects here. [REUSE existing CSST]',
-      'Port_VentExh': 'Exhaust vent connection (2" nominal). Top of unit. Back vent = OUT.',
-      'Port_VentInt': 'Intake vent connection (2" nominal). Top of unit. Front vent = IN.',
-      'VentAdapt_Exh': '2" to 3" vent adapter. Transitions from Rinnai 2" outlet to System 636 3" PVC. [NEW ~$15]',
-      'VentAdapt_Int': '2" to 3" vent adapter. Transitions from Rinnai 2" inlet to System 636 3" PVC. [NEW ~$15]',
-      'MCC912': 'MCC-91-2 controller. Unlocks 160\u00b0F for hydronic mode. [NEW \u2014 Rinnai accessory]',
-      // Air handler
-      'AirHandler': 'Air handler (64\u201380" AFF). Fan coil for hydronic heating. [REUSE EXISTING]',
-      'SupplyDuct': 'Supply duct to HVAC distribution above ceiling. [REUSE EXISTING]',
-      'AH_SupplyStub': 'AH supply connection (1" CPVC). FRONT FACE at Y=4", 72" AFF. [REUSE EXISTING stub, SharkBite transition]',
-      'AH_ReturnStub': 'AH return connection (1" CPVC). FRONT FACE at Y=4", 68" AFF. [REUSE EXISTING stub, SharkBite transition]',
-      // Vents \u2014 62" AFF, UNDER air handler (64\u201380"), 12" apart
-      'VentExh_Run': '3" PVC exhaust. Back vent at 62" AFF (under AH). Runs along back wall, exits left (exterior) wall. [REUSE existing PVC + new elbows]',
-      'VentExh_Cap': 'Exhaust termination cap. [REUSE EXISTING]',
-      'VentInt_Run': '3" PVC intake. Front vent at 62" AFF (under AH). 12" forward of exhaust, exits left wall. [REUSE existing PVC + new elbows]',
-      'VentInt_Cap': 'Intake termination cap. [REUSE EXISTING]',
-      // Gas (CSST) \u2014 drops from LEFT ceiling, routes UNDER Rinnai to right-side port
-      'Gas_Line': '3/4" CSST gas supply. Yellow corrugated SS. Drops from LEFT ceiling at X=4", runs horizontal at 28" AFF (under Rinnai) along back wall to right-side port. [REUSE EXISTING \u2014 reconnect]',
-      'GasShutoff': 'Gas shutoff valve. SharkBite brass ball valve on vertical drop from ceiling. [REUSE EXISTING]',
-      'GasShutoff_ball': 'Gas shutoff ball housing bulge. [REUSE EXISTING]',
-      'GasShutoff_h': 'Gas shutoff lever handle. [REUSE EXISTING]',
-      'GasTee_Out': 'Gas tee for outdoor branch. SharkBite T-body brass. [REUSE EXISTING]',
-      'GasTee_Out_br': 'Gas tee outdoor branch stub. [REUSE EXISTING]',
-      'Gas_Outdoor': '3/4" CSST branch to outdoor gas connection (BBQ/patio). Exits left wall. [REUSE EXISTING]',
-      'GasOutShutoff': 'Outdoor gas shutoff valve. SharkBite brass. [REUSE EXISTING]',
-      'GasOutShutoff_ball': 'Outdoor gas shutoff ball housing. [REUSE EXISTING]',
-      'GasOutShutoff_h': 'Outdoor gas shutoff lever handle. [REUSE EXISTING]',
-      // Cold supply \u2014 CPVC + SharkBite + outdoor tap (manifold at 24" AFF)
-      'Cold_Supply': '3/4" CPVC cold water supply. Rises from floor to manifold at 24" AFF, up to Rinnai port at 32". All SharkBite push-to-connect. No soldering. [NEW CPVC, reuse floor riser]',
-      'V1': 'Cold isolation valve. SharkBite ball valve with ball housing bulge + lever handle. [NEW SharkBite]',
-      'V1_ball': 'V1 ball housing bulge. [NEW SharkBite]',
-      'V1_h': 'V1 lever handle. [NEW SharkBite]',
-      'T1': 'Cold tee. SharkBite T-body brass. Junction: Rinnai + TMV blend + heating return. [NEW SharkBite]',
-      'T1_br': 'Cold tee branch stub. [NEW SharkBite]',
-      'DrainValve_Drop': 'Drain drop from V1. CPVC. [NEW]',
-      'DrainValve': 'Drain valve. SharkBite brass ball valve. Service drain. [REUSE EXISTING]',
-      'DrainValve_ball': 'Drain valve ball housing. [REUSE EXISTING]',
-      'DrainValve_h': 'Drain valve lever handle. [REUSE EXISTING]',
-      'ColdBlend_Run': '5/8" CPVC cold blend line. T1 to TMV for tempering at 29" AFF. [NEW CPVC run]',
-      'ColdTee_Tap': 'Outdoor tap tee. SharkBite T-body brass. Branches cold to exterior hose bib. [REUSE EXISTING]',
-      'ColdTee_Tap_br': 'Outdoor tap tee branch stub. [REUSE EXISTING]',
-      'Cold_OutdoorTap': '3/4" CPVC to outdoor tap/hose bib. Exits left (exterior) wall. [REUSE EXISTING]',
-      'TapShutoff': 'Outdoor tap shutoff. SharkBite ball valve. [REUSE EXISTING]',
-      'TapShutoff_ball': 'Tap shutoff ball housing. [REUSE EXISTING]',
-      'TapShutoff_h': 'Tap shutoff lever handle. [REUSE EXISTING]',
-      // Hot / DHW \u2014 CPVC (manifold at 24" AFF, DHW at 29")
-      'Hot_FromPort': '3/4" CPVC hot from Rinnai. Port at 32" drops to manifold at 24" AFF. SharkBite at port. [NEW CPVC]',
-      'V2': 'Hot isolation valve. SharkBite ball valve with ball housing + lever. [NEW SharkBite]',
-      'V2_ball': 'V2 ball housing bulge. [NEW SharkBite]',
-      'V2_h': 'V2 lever handle. [NEW SharkBite]',
-      'T2': 'Hot tee. SharkBite T-body brass. Junction: DHW (via TMV) + heating supply. [NEW SharkBite]',
-      'T2_br': 'Hot tee branch stub (down to heating supply at 20"). [NEW SharkBite]',
-      'Hot_ToTMV': '3/4" CPVC hot to TMV at 29" AFF. [NEW CPVC run]',
-      'TMV': 'Thermostatic mixing valve. SharkBite brass. Blends 140\u2013160\u00b0F to 120\u00b0F DHW. [NEW \u2014 ~$80]',
-      'DHW_Out': '3/4" CPVC tempered DHW to fixtures. 120\u00b0F. Exits right wall. [NEW CPVC to existing distribution]',
-      // Heating supply \u2014 CPVC (12" AFF, riser up front wall to AH)
-      'HS_Run': '1" CPVC heating supply. T2 \u2192 zone valve \u2192 riser up front wall to AH front face. SharkBite connections. [NEW CPVC]',
-      'ZoneValve': 'Honeywell V8043E zone valve (24V). End switch fires Rinnai S1/S2 + circ pump relay. [REUSE EXISTING]',
-      'ZV_Actuator': 'Zone valve actuator. 24V from Nest R-W. [REUSE EXISTING]',
-      'ExpTee': 'Expansion tank tee. SharkBite T-body brass. On COLD supply line, upstream of Rinnai. [NEW SharkBite]',
-      'ExpTee_br': 'Expansion tank tee branch stub. [NEW]',
-      'Exp_Run': 'Expansion branch. CPVC to wall-mounted tank at ~44" AFF. [NEW CPVC]',
-      'ExpTank': 'Watts PLT-5 expansion tank. 2.1 gal, POTABLE-rated. On cold supply, right side of closet (X=29"), ~44" AFF. Absorbs thermal expansion when Rinnai heats water. Pre-charge to match street pressure (50\u201360 PSI). One tank only \u2014 open-loop system means potable water serves both DHW and heating. [NEW \u2014 ~$55]',
-      'ExpTank_Cap': 'Expansion tank Schrader valve cap. Use bicycle pump here to pre-charge. [NEW]',
-      // Heating return \u2014 CPVC + cast iron pump (14" AFF, riser down front wall)
-      'HR_Run': '1" CPVC heating return. AH front face \u2192 riser down front wall \u2192 circ pump \u2192 check valve \u2192 T1. [NEW CPVC]',
-      'CircPump': 'Circ pump. Cast iron body. Moves water through fan coil loop. [REUSE EXISTING]',
-      'CircPump_Motor': 'Circ pump motor. Cast iron. [REUSE EXISTING]',
-      'CheckValve': 'Check valve. SharkBite brass. Prevents backflow. [REUSE EXISTING]',
-      'CV_Arrow': 'Check valve flow indicator. [REUSE EXISTING]',
-      // Condensate \u2014 PVC (wall-mounted neutralizer, floor channel to drain)
-      'Cond_Drop': 'PVC condensate drain to wall-mounted neutralizer. [NEW \u2014 condensing unit requirement]',
-      'Neutralizer': 'Condensate neutralizer. Wall-mounted on back wall. Calcium carbonate media. [NEW \u2014 ~$40]',
-      'Cond_ToDrain': 'PVC condensate from neutralizer to floor channel. [NEW routing]',
-      'DrainChannel': 'Floor drain channel. Shallow trough for condensate drainage. Keeps floor clear. [NEW]',
-      // Electrical (LEFT/exterior wall per photos) — switch, transformer, outlet only
-      'ElecSwitch': 'Light switch on LEFT (exterior) wall. [REUSE EXISTING]',
-      'ElecXfmr': '24V transformer. Powers zone valve + Rinnai controls. Mounted on left wall. [REUSE EXISTING]',
-      'ElecOutlet': '120V outlet. Rinnai blower + electronics plug in here. [REUSE EXISTING]',
-      'FloorDrain': 'Floor drain. RIGHT side at X=28" (per photos). [REUSE EXISTING]',
+    const VERSIONS = {
+      tankless: {
+        glb: './boiler_closet_v13_rxp199in.glb',
+        subtitle: 'Rinnai RXP199iN tankless water heater + open-loop hydronic heating. Interactive 3D installation model.',
+        ahSpec: '64\u201380\u2033 AFF',
+        unitLabel: 'Rinnai RXP199iN',
+        unitSpecs: `
+          <div class="spec-row"><span>BTU</span><span class="spec-value">199,000</span></div>
+          <div class="spec-row"><span>Flow</span><span class="spec-value">11.1 GPM</span></div>
+          <div class="spec-row"><span>UEF</span><span class="spec-value">0.96 (condensing)</span></div>
+          <div class="spec-row"><span>Dimensions</span><span class="spec-value">18.5\u2033W \u00d7 30.11\u2033H \u00d7 11.41\u2033D</span></div>
+          <div class="spec-row"><span>Position</span><span class="spec-value">Left-biased, 24\u2033 AFF, back wall</span></div>
+          <div class="spec-row"><span>Gas port</span><span class="spec-value">Right side, 0.60\u2033 above bottom</span></div>
+          <div class="spec-row"><span>Bottom ports</span><span class="spec-value">Drain, Hot, Cold (L\u2013R)</span></div>
+          <div class="spec-row"><span>Vents</span><span class="spec-value">Twin 3\u2033 PVC (via 2\u2033\u21923\u2033 adapter)</span></div>
+          <div class="spec-row"><span>Controller</span><span class="spec-value">MCC-91-2 (160\u00b0F unlock)</span></div>
+          <div class="spec-row"><span>Loop type</span><span class="spec-value">Open loop (potable water)</span></div>
+          <div class="spec-row"><span>Cost</span><span class="spec-value">~$3,145 total</span></div>
+        `,
+        archNotes: '',
+        layers: [
+          { name: 'Walls & Floor',    color: '#888888', prefixes: ['Floor','Ceiling','WallLeft','WallRight','WallBack'] },
+          { name: 'Air Handler',      color: '#a8a090', prefixes: ['AirHandler','SupplyDuct','AH_'] },
+          { name: 'Rinnai Unit',      color: '#d0d4da', prefixes: ['Rinnai','MountBracket','Port_','MCC'] },
+          { name: 'Exhaust Vent',     color: '#e8e8e6', prefixes: ['VentExh_'] },
+          { name: 'Intake Vent',      color: '#e0e8e0', prefixes: ['VentInt_'] },
+          { name: 'Gas (CSST)',       color: '#d4b030', prefixes: ['Gas_','GasShutoff','GasTee','GasOut'] },
+          { name: 'Cold Supply',      color: '#4a90d9', prefixes: ['Cold_','V1','DrainValve','ColdBlend','T1','ColdTee','TapShutoff','Exp','ExpTank','ExpTee'] },
+          { name: 'Hot / DHW',        color: '#d94a4a', prefixes: ['Hot_','V2','T2','TMV','DHW_'] },
+          { name: 'Heating Supply',   color: '#e07030', prefixes: ['HS_','ZoneValve','ZV_'] },
+          { name: 'Heating Return',   color: '#7050b0', prefixes: ['HR_','CircPump','CheckValve','CV_'] },
+          { name: 'Condensate',       color: '#e8e6e4', prefixes: ['Cond_','Neutralizer','DrainChannel'] },
+          { name: 'Electrical',       color: '#555860', prefixes: ['ElecSwitch','ElecXfmr','ElecOutlet'] },
+          { name: 'Floor Drain',      color: '#404040', prefixes: ['FloorDrain','Drain_'] },
+        ],
+        descriptions: {
+          'Rinnai': 'Rinnai RXP199iN tankless water heater. 199K BTU, 11.1 GPM, 0.96 UEF. Condensing, built-in combustion fan. Mounted at 24\u2033 AFF, left-biased (X=4\u201322.5\u2033), top at ~54\u2033 (10\u2033 below AH). [NEW \u2014 $2,100 secondhand]',
+          'RinnaiFace': 'Front panel. 24\u2033 service clearance required in front.',
+          'RinnaiDisplay': 'LCD display: temperature, error codes, status.',
+          'MountBracketTop': 'Top wall bracket. Secures to back wall studs. [Included with unit]',
+          'MountBracketBot': 'Bottom wall bracket. [Included with unit]',
+          'Port_Cold': 'Cold inlet (3/4\u2033 MNPT). Short copper stub \u2192 SharkBite FNPT adapter \u2192 CPVC.',
+          'Port_Hot': 'Hot outlet (3/4\u2033 MNPT). Short copper stub \u2192 SharkBite FNPT adapter \u2192 CPVC.',
+          'Port_Drain': 'Condensate drain (1/2\u2033 MNPT). Leftmost bottom port. PVC to neutralizer.',
+          'Port_Gas': 'Gas port (3/4\u2033 MNPT). Right side, 0.60\u2033 above bottom, 2.83\u2033 from front. [REUSE existing CSST]',
+          'Port_VentExh': 'Exhaust vent (2\u2033 nominal). Top of unit, rear. 2\u2033\u21923\u2033 adapter to System 636 PVC.',
+          'Port_VentInt': 'Intake vent (2\u2033 nominal). Top of unit, front. 2\u2033\u21923\u2033 adapter to System 636 PVC.',
+          'MCC912': 'MCC-91-2 controller. Unlocks 160\u00b0F for hydronic mode. [Rinnai accessory]',
+          'AirHandler': 'Air handler (64\u201380\u2033 AFF). Fan coil for hydronic heating. [REUSE EXISTING]',
+          'SupplyDuct': 'Supply duct to HVAC distribution above ceiling. [REUSE EXISTING]',
+          'VentExh_Run': '3\u2033 PVC exhaust at 62\u2033 AFF (under AH). Exits left (exterior) wall. [NEW PVC + elbows]',
+          'VentExh_Cap': 'Exhaust termination cap. [REUSE EXISTING]',
+          'VentInt_Run': '3\u2033 PVC intake at 62\u2033 AFF. 12\u2033 forward of exhaust. Exits left wall. [NEW PVC + elbows]',
+          'VentInt_Cap': 'Intake termination cap. [REUSE EXISTING]',
+          'Gas_Line': '3/4\u2033 CSST gas supply. Yellow corrugated SS. [REUSE EXISTING]',
+          'GasShutoff': 'Gas shutoff valve. Brass ball valve on supply drop. [REUSE EXISTING]',
+          'Cold_Supply': '3/4\u2033 CPVC cold water supply. Floor to manifold. SharkBite push-to-connect. [NEW CPVC]',
+          'V1': 'Cold isolation valve. SharkBite ball valve. [NEW]',
+          'T1': 'Cold tee. Junction: Rinnai + TMV blend + heating return. [NEW SharkBite]',
+          'ColdBlend_Run': '5/8\u2033 CPVC cold blend line to TMV for tempering at 29\u2033 AFF. [NEW]',
+          'ColdTee_Tap': 'Outdoor tap tee. Branches cold to exterior hose bib. [REUSE EXISTING]',
+          'Cold_OutdoorTap': '3/4\u2033 CPVC to outdoor tap/hose bib. Exits left wall. [REUSE EXISTING]',
+          'TapShutoff': 'Outdoor tap shutoff. SharkBite ball valve. [REUSE EXISTING]',
+          'Hot_FromPort': '3/4\u2033 CPVC hot from Rinnai port. [NEW CPVC]',
+          'V2': 'Hot isolation valve. SharkBite ball valve. [NEW]',
+          'T2': 'Hot tee. Junction: DHW (via TMV) + heating supply. [NEW SharkBite]',
+          'Hot_ToTMV': '3/4\u2033 CPVC hot to TMV at 29\u2033 AFF. [NEW]',
+          'TMV': 'Thermostatic mixing valve. Blends 140\u2013160\u00b0F to 120\u00b0F DHW. [NEW \u2014 ~$80]',
+          'DHW_Out': '3/4\u2033 CPVC tempered DHW to fixtures. 120\u00b0F. [NEW to existing distribution]',
+          'HS_Run': '1\u2033 CPVC heating supply. T2 \u2192 zone valve \u2192 riser to AH. [NEW CPVC]',
+          'ZoneValve': 'Honeywell V8043E zone valve (24V). End switch fires Rinnai + circ pump. [REUSE EXISTING]',
+          'ExpTee': 'Expansion tank tee. On COLD supply, upstream of Rinnai. [NEW SharkBite]',
+          'ExpTank': 'Watts PLT-5 expansion tank. 2.1 gal, POTABLE-rated. One tank only (open-loop). Pre-charge 50\u201360 PSI. [NEW \u2014 ~$55]',
+          'HR_Run': '1\u2033 CPVC heating return. AH \u2192 circ pump \u2192 check valve \u2192 T1. [NEW CPVC]',
+          'CircPump': 'Circ pump. Cast iron body. Moves water through fan coil loop. [REUSE EXISTING]',
+          'CheckValve': 'Check valve. SharkBite brass. Prevents backflow. [REUSE EXISTING]',
+          'Cond_Drop': 'PVC condensate drain to neutralizer. [NEW]',
+          'Neutralizer': 'Condensate neutralizer. Calcium carbonate media. [NEW \u2014 ~$40]',
+          'DrainChannel': 'Floor drain channel for condensate. [NEW]',
+          'ElecSwitch': 'Light switch on left (exterior) wall. [REUSE EXISTING]',
+          'ElecXfmr': '24V transformer. Powers zone valve + Rinnai controls. [REUSE EXISTING]',
+          'ElecOutlet': '120V outlet. Rinnai power supply. [REUSE EXISTING]',
+          'FloorDrain': 'Floor drain. Right side at X=28\u2033. [REUSE EXISTING]',
+        }
+      },
+
+      combi: {
+        glb: './boiler_closet_v14_i120cn.glb',
+        subtitle: 'Rinnai i120CN I-Series Combi Boiler. Closed-loop hydronic heating + DHW. Interactive 3D installation model.',
+        ahSpec: 'Temp-Mizer HV-52H, 64\u201380\u2033 AFF',
+        unitLabel: 'Rinnai i120CN Combi',
+        unitSpecs: `
+          <div class="spec-row"><span>CH output</span><span class="spec-value">120,000 BTU</span></div>
+          <div class="spec-row"><span>DHW output</span><span class="spec-value">199,000 BTU</span></div>
+          <div class="spec-row"><span>AFUE</span><span class="spec-value">95.5% (condensing)</span></div>
+          <div class="spec-row"><span>DHW flow</span><span class="spec-value">11.1 GPM max</span></div>
+          <div class="spec-row"><span>Dimensions</span><span class="spec-value">18.5\u2033W \u00d7 26.4\u2033H \u00d7 10.9\u2033D</span></div>
+          <div class="spec-row"><span>Position</span><span class="spec-value">Left-biased, 24\u2033 AFF, back wall</span></div>
+          <div class="spec-row"><span>Gas port</span><span class="spec-value">Right side, 3/4\u2033 NPT</span></div>
+          <div class="spec-row"><span>DHW ports</span><span class="spec-value">3/4\u2033 NPT (hot + cold)</span></div>
+          <div class="spec-row"><span>CH ports</span><span class="spec-value">1\u2033 NPT (supply + return)</span></div>
+          <div class="spec-row"><span>Condensate</span><span class="spec-value">1/2\u2033 NPT</span></div>
+          <div class="spec-row"><span>Vents</span><span class="spec-value">Twin 2\u2033 PVC (native)</span></div>
+          <div class="spec-row"><span>Integrated</span><span class="spec-value">Pump, plate HX, proportional valve, outdoor reset</span></div>
+          <div class="spec-row"><span>Loop type</span><span class="spec-value">Closed loop (treated water)</span></div>
+          <div class="spec-row"><span>Cost</span><span class="spec-value">~$4,438 total</span></div>
+        `,
+        archNotes: `<ul>
+          <li><strong>Closed-loop CH:</strong> Treated water recirculates through fan coil. Separate from potable DHW.</li>
+          <li><strong>Integrated pump:</strong> Grundfos UPS 15-78 built into unit. No external circ pump.</li>
+          <li><strong>Flat plate HX:</strong> Internal heat exchanger isolates CH water from DHW.</li>
+          <li><strong>DHW priority:</strong> Internal proportional valve auto-diverts capacity to DHW on demand.</li>
+          <li><strong>Two expansion tanks:</strong> Potable (DHW, blue) + hydronic (CH, red). Separate circuits.</li>
+          <li><strong>Fill valve:</strong> On CH return for charging closed loop.</li>
+          <li><strong>Eliminated:</strong> TMV, zone valve, external pump, MCC-91-2, check valve.</li>
+        </ul>`,
+        layers: [
+          { name: 'Walls & Floor',    color: '#888888', prefixes: ['Floor','Ceiling','WallLeft','WallRight','WallBack'] },
+          { name: 'Air Handler',      color: '#a8a090', prefixes: ['AirHandler','SupplyDuct'] },
+          { name: 'Rinnai Unit',      color: '#d0d4da', prefixes: ['Rinnai','MountBracket','Port_'] },
+          { name: 'Exhaust Vent',     color: '#e8e8e6', prefixes: ['VentExh_'] },
+          { name: 'Intake Vent',      color: '#e0e8e0', prefixes: ['VentInt_'] },
+          { name: 'Gas (CSST)',       color: '#d4b030', prefixes: ['Gas_','GasShutoff','GasTee','GasOut'] },
+          { name: 'DHW Cold',         color: '#4a90d9', prefixes: ['DHW_Cold','V1_','ExpTee_DHW','ExpTank_DHW','Exp_DHW','ColdTee','Cold_Outdoor','TapShutoff'] },
+          { name: 'DHW Hot',          color: '#d94a4a', prefixes: ['DHW_Hot','V2_'] },
+          { name: 'CH Supply',        color: '#e07030', prefixes: ['CH_Supply'] },
+          { name: 'CH Return',        color: '#7050b0', prefixes: ['CH_Return','ExpTee_CH','ExpTank_CH','Exp_CH','FillValve'] },
+          { name: 'Condensate',       color: '#e8e6e4', prefixes: ['Cond_','Neutralizer','DrainChannel'] },
+          { name: 'Electrical',       color: '#555860', prefixes: ['ElecSwitch','ElecXfmr','ElecOutlet'] },
+          { name: 'Floor Drain',      color: '#404040', prefixes: ['FloorDrain','Drain_'] },
+        ],
+        descriptions: {
+          'Rinnai': 'Rinnai i120CN I-Series Combi Boiler. CH: 120K BTU, DHW: 199K BTU, 95.5% AFUE. Integrated Grundfos UPS 15-78 pump, flat plate HX, proportional valve, servo DHW controller, outdoor reset sensor. Mounted at 24\u2033 AFF. [NEW \u2014 ~$3,800]',
+          'RinnaiFace': 'Front panel. LCD display for temperature, error codes, status. 24\u2033 service clearance required.',
+          'RinnaiDisplay': 'LCD display: temperature setpoint, error codes, operating mode (CH/DHW/standby).',
+          'MountBracketTop': 'Top wall bracket. Secures to back wall studs. [Included with unit]',
+          'MountBracketBot': 'Bottom wall bracket. [Included with unit]',
+          'Port_Cond': 'Condensate drain (1/2\u2033 NPT). Leftmost bottom port. PVC to neutralizer.',
+          'Port_CH_Ret': 'Central heating return (1\u2033 NPT). Closed-loop water returns from fan coil.',
+          'Port_DHW_Hot': 'DHW hot outlet (3/4\u2033 NPT). Tempered potable water to fixtures.',
+          'Port_DHW_Cold': 'DHW cold inlet (3/4\u2033 NPT). Potable cold water supply.',
+          'Port_CH_Sup': 'Central heating supply (1\u2033 NPT). Rightmost bottom port. Hot water to fan coil.',
+          'Port_Gas': 'Gas port (3/4\u2033 NPT). Right side of unit. [REUSE existing CSST]',
+          'Port_VentExh': 'Exhaust vent (2\u2033 nominal). Top of unit, rear. Native 2\u2033 PVC, no adapter.',
+          'Port_VentInt': 'Intake vent (2\u2033 nominal). Top of unit, front. Native 2\u2033 PVC, no adapter.',
+          'AirHandler': 'Temp-Mizer HV-52H air handler (64\u201380\u2033 AFF). 32,700 BTU @ 130\u00b0F EWT, 550 CFM. [REUSE EXISTING]',
+          'SupplyDuct': 'Supply duct to HVAC distribution above ceiling. [REUSE EXISTING]',
+          'VentExh_Run': '2\u2033 PVC exhaust at 62\u2033 AFF (under AH). Exits left (exterior) wall. Native 2\u2033 from unit. [NEW PVC]',
+          'VentExh_Elb1': '2\u2033 PVC 90\u00b0 elbow. Exhaust vertical-to-horizontal transition. [NEW]',
+          'VentExh_Elb2': '2\u2033 PVC 90\u00b0 elbow. Exhaust turn through exterior wall. [NEW]',
+          'VentExh_Cap': 'Exhaust termination cap on exterior wall. [NEW]',
+          'VentInt_Run': '2\u2033 PVC intake at 62\u2033 AFF. 12\u2033 forward of exhaust. Exits left wall. [NEW PVC]',
+          'VentInt_Elb1': '2\u2033 PVC 90\u00b0 elbow. Intake transition. [NEW]',
+          'VentInt_Elb2': '2\u2033 PVC 90\u00b0 elbow. Intake turn through exterior wall. [NEW]',
+          'VentInt_Cap': 'Intake termination cap on exterior wall. [NEW]',
+          'Gas_Line': '3/4\u2033 CSST gas supply. Yellow corrugated SS. [REUSE EXISTING]',
+          'GasShutoff': 'Gas shutoff valve. Brass ball valve on supply drop. [REUSE EXISTING]',
+          'GasTee_Out': 'Gas tee for outdoor branch. Brass T-body. [REUSE EXISTING]',
+          'Gas_Outdoor': '3/4\u2033 CSST branch to outdoor gas (BBQ/patio). [REUSE EXISTING]',
+          'GasOutShutoff': 'Outdoor gas shutoff valve. Brass ball valve. [REUSE EXISTING]',
+          'DHW_Cold_Supply': '3/4\u2033 CPVC cold water supply to Rinnai DHW cold inlet. SharkBite. [NEW CPVC]',
+          'V1_ColdShut': 'Cold isolation valve. SharkBite ball valve. [NEW]',
+          'ExpTee_DHW': 'DHW expansion tank tee. On cold supply, upstream of Rinnai. [NEW]',
+          'ExpTank_DHW': 'Watts PLT-5 expansion tank (POTABLE). 2.1 gal, blue. Pre-charge 50\u201360 PSI. MUST be potable-rated. [NEW \u2014 ~$55]',
+          'ColdTee_Tap': 'Outdoor tap tee. Branches cold to exterior hose bib. [REUSE EXISTING]',
+          'Cold_OutdoorTap': '3/4\u2033 CPVC to outdoor tap/hose bib. Exits left wall. [REUSE EXISTING]',
+          'TapShutoff': 'Outdoor tap shutoff. SharkBite ball valve. [REUSE EXISTING]',
+          'DHW_Hot_Out': '3/4\u2033 CPVC hot from Rinnai DHW outlet. Pre-tempered by internal servo. No external TMV needed. [NEW CPVC]',
+          'V2_HotShut': 'Hot isolation valve. SharkBite ball valve. [NEW]',
+          'CH_Supply': '1\u2033 CPVC central heating supply. Rinnai to air handler. Closed loop, treated water. [NEW CPVC]',
+          'CH_Return': '1\u2033 CPVC central heating return. Air handler to Rinnai. Closed loop. [NEW CPVC]',
+          'ExpTee_CH': 'CH expansion tank tee. On CH return line. [NEW]',
+          'ExpTank_CH': 'Watts ETX-15 expansion tank (HYDRONIC). 2.1 gal, red. Pre-charge 12\u201315 PSI. [NEW \u2014 ~$40]',
+          'FillValve': 'Fill valve on CH return. Opens to charge closed loop from potable supply. Close after filling. [NEW]',
+          'Cond_Drop': 'PVC condensate drop from unit to neutralizer. Gravity drain. [NEW]',
+          'Neutralizer': 'Condensate neutralizer. Rinnai 804000074. Calcium carbonate media. [NEW \u2014 ~$50]',
+          'Cond_ToDrain': 'PVC condensate from neutralizer to floor drain. [NEW]',
+          'DrainChannel': 'Floor drain channel for condensate. [NEW]',
+          'ElecSwitch': 'Light switch on left (exterior) wall. [REUSE EXISTING]',
+          'ElecXfmr': '24V transformer. Powers thermostat circuit. [REUSE EXISTING]',
+          'ElecOutlet': '120V outlet. Rinnai power supply. [REUSE EXISTING]',
+          'FloorDrain': 'Floor drain. Right side at X=28\u2033. [REUSE EXISTING]',
+          'Drain_X': 'Floor drain cross channel (X-axis). [REUSE EXISTING]',
+          'Drain_Y': 'Floor drain cross channel (Y-axis). [REUSE EXISTING]',
+        }
+      }
     };
 
-    // ── DOM refs ───────────────────────────────────────────
+    // ================================================================
+    // THREE.JS SETUP
+    // ================================================================
+
     const canvas = document.getElementById('c');
     const shell = canvas.parentElement;
     const infoPanel = document.getElementById('infoPanel');
     const layersPanel = document.getElementById('layersPanel');
     const resetBtn = document.getElementById('resetBtn');
+    const loadingOverlay = document.getElementById('loadingOverlay');
 
-    // ── Scene setup ────────────────────────────────────────
     const scene = new THREE.Scene();
     scene.background = new THREE.Color(0x0f141b);
 
@@ -396,7 +527,6 @@
     renderer.toneMappingExposure = 1.4;
     renderer.outputColorSpace = THREE.SRGBColorSpace;
 
-    // ── Controls ───────────────────────────────────────────
     const controls = new OrbitControls(camera, canvas);
     controls.enableDamping = true;
     controls.dampingFactor = 0.08;
@@ -408,52 +538,105 @@
     const defaultTarget = new THREE.Vector3(0.45, 0.8, -0.4);
     const defaultPosition = new THREE.Vector3(1.8, 1.5, 1.2);
 
-    // ── Lighting ───────────────────────────────────────────
     const hemi = new THREE.HemisphereLight(0xddeeff, 0x445566, 0.8);
     scene.add(hemi);
-
     const key = new THREE.DirectionalLight(0xffffff, 1.5);
     key.position.set(2, 3, 1);
     scene.add(key);
-
     const fill = new THREE.DirectionalLight(0x8899bb, 0.6);
     fill.position.set(-1.5, 2, -0.5);
     scene.add(fill);
-
     const interior = new THREE.PointLight(0xffeedd, 0.8, 4);
     interior.position.set(0.45, 0.5, -0.4);
     scene.add(interior);
 
-    // ── State ──────────────────────────────────────────────
-    const allMeshes = [];
-    const layerGroups = LAYER_DEFS.map(d => ({ ...d, meshes: [], visible: true }));
+    // ================================================================
+    // STATE
+    // ================================================================
+
+    let allMeshes = [];
+    let layerGroups = [];
     let selectedMesh = null;
     let savedMaterial = null;
-    let targetPos = null;  // smooth camera target
+    let targetPos = null;
+    let currentVersion = null;
+    let modelRoot = null;
+    let currentDescriptions = {};
 
-    // ── Model loading ──────────────────────────────────────
     const loader = new GLTFLoader();
-    loader.load('./boiler_closet.glb?v=' + Date.now(), (gltf) => {
-      scene.add(gltf.scene);
 
-      gltf.scene.traverse((child) => {
-        if (!child.isMesh) return;
-        allMeshes.push(child);
+    // ================================================================
+    // VERSION SWITCHING
+    // ================================================================
 
-        // Assign to layer group
-        for (const group of layerGroups) {
-          if (group.prefixes.some(p => child.name.startsWith(p))) {
-            group.meshes.push(child);
-            break;
+    function switchVersion(version) {
+      if (version === currentVersion) return;
+      currentVersion = version;
+      const cfg = VERSIONS[version];
+
+      document.getElementById('btnTankless').classList.toggle('active', version === 'tankless');
+      document.getElementById('btnCombi').classList.toggle('active', version === 'combi');
+
+      document.getElementById('subtitle').textContent = cfg.subtitle;
+      document.getElementById('ahSpec').textContent = cfg.ahSpec;
+      document.getElementById('unitLabel').textContent = cfg.unitLabel;
+      document.getElementById('unitSpecs').innerHTML = cfg.unitSpecs;
+
+      const archSection = document.getElementById('archSection');
+      if (cfg.archNotes) {
+        archSection.style.display = '';
+        document.getElementById('archNotes').innerHTML = cfg.archNotes;
+      } else {
+        archSection.style.display = 'none';
+      }
+
+      currentDescriptions = cfg.descriptions;
+
+      const url = new URL(window.location);
+      url.searchParams.set('v', version);
+      history.replaceState(null, '', url);
+
+      loadModel(cfg);
+    }
+
+    function loadModel(cfg) {
+      loadingOverlay.classList.remove('hidden');
+
+      deselectMesh();
+      if (modelRoot) {
+        scene.remove(modelRoot);
+        modelRoot = null;
+      }
+      allMeshes = [];
+
+      layerGroups = cfg.layers.map(d => ({ ...d, meshes: [], visible: true }));
+
+      loader.load(cfg.glb + '?v=' + Date.now(), (gltf) => {
+        modelRoot = gltf.scene;
+        scene.add(modelRoot);
+
+        modelRoot.traverse((child) => {
+          if (!child.isMesh) return;
+          allMeshes.push(child);
+
+          for (const group of layerGroups) {
+            if (group.prefixes.some(p => child.name.startsWith(p))) {
+              group.meshes.push(child);
+              break;
+            }
           }
-        }
+        });
+
+        buildLayerUI();
+        loadingOverlay.classList.add('hidden');
+        console.log(`Loaded ${currentVersion}: ${allMeshes.length} meshes`);
       });
+    }
 
-      buildLayerUI();
-      console.log(`Loaded: ${allMeshes.length} meshes`);
-    });
+    // ================================================================
+    // LAYER UI
+    // ================================================================
 
-    // ── Layer UI ───────────────────────────────────────────
     function buildLayerUI() {
       layersPanel.innerHTML = '';
       for (const group of layerGroups) {
@@ -480,7 +663,10 @@
       }
     }
 
-    // ── Selection ──────────────────────────────────────────
+    // ================================================================
+    // SELECTION
+    // ================================================================
+
     const raycaster = new THREE.Raycaster();
     const mouse = new THREE.Vector2();
     let mouseDownPos = null;
@@ -493,10 +679,7 @@
       if (!mouseDownPos) return;
       const dx = e.clientX - mouseDownPos.x;
       const dy = e.clientY - mouseDownPos.y;
-      // Only select on click (not drag)
-      if (Math.abs(dx) + Math.abs(dy) < 5) {
-        onSelect(e);
-      }
+      if (Math.abs(dx) + Math.abs(dy) < 5) onSelect(e);
       mouseDownPos = null;
     });
 
@@ -507,15 +690,10 @@
 
       raycaster.setFromCamera(mouse, camera);
       const hits = raycaster.intersectObjects(allMeshes, false);
-
-      // Find first visible hit
       const hit = hits.find(h => h.object.visible);
 
-      if (hit) {
-        selectMesh(hit.object);
-      } else {
-        deselectMesh();
-      }
+      if (hit) selectMesh(hit.object);
+      else deselectMesh();
     }
 
     function selectMesh(mesh) {
@@ -523,17 +701,14 @@
       selectedMesh = mesh;
       savedMaterial = mesh.material;
 
-      // Highlight: clone material + add emissive glow
       const hlMat = mesh.material.clone();
       hlMat.emissive = new THREE.Color(0x2266ff);
       hlMat.emissiveIntensity = 0.35;
       mesh.material = hlMat;
 
-      // Camera aim lock: orbit target -> mesh center
       const box = new THREE.Box3().setFromObject(mesh);
       targetPos = box.getCenter(new THREE.Vector3());
 
-      // Update info panel
       const name = mesh.name;
       const group = layerGroups.find(g => g.meshes.includes(mesh));
       const desc = findDescription(name);
@@ -547,9 +722,7 @@
     }
 
     function deselectMesh() {
-      if (selectedMesh && savedMaterial) {
-        selectedMesh.material = savedMaterial;
-      }
+      if (selectedMesh && savedMaterial) selectedMesh.material = savedMaterial;
       selectedMesh = null;
       savedMaterial = null;
       infoPanel.classList.add('empty');
@@ -557,29 +730,27 @@
     }
 
     function findDescription(name) {
-      if (DESCRIPTIONS[name]) return DESCRIPTIONS[name];
-      // Try prefix match
-      for (const [key, desc] of Object.entries(DESCRIPTIONS)) {
+      if (currentDescriptions[name]) return currentDescriptions[name];
+      for (const [key, desc] of Object.entries(currentDescriptions)) {
         if (name.startsWith(key)) return desc;
       }
       return null;
     }
 
     function cleanName(name) {
-      return name
-        .replace(/_/g, ' ')
-        .replace(/\b\w/g, c => c.toUpperCase())
-        .replace(/\./g, ' ');
+      return name.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase()).replace(/\./g, ' ');
     }
 
-    // ── Reset view ─────────────────────────────────────────
+    // ================================================================
+    // CONTROLS
+    // ================================================================
+
     resetBtn.addEventListener('click', () => {
       deselectMesh();
       targetPos = defaultTarget.clone();
       camera.position.copy(defaultPosition);
     });
 
-    // ── Resize ─────────────────────────────────────────────
     function onResize() {
       const w = shell.clientWidth;
       const h = shell.clientHeight;
@@ -589,11 +760,8 @@
     }
     window.addEventListener('resize', onResize);
 
-    // ── Animation loop ─────────────────────────────────────
     function animate() {
       requestAnimationFrame(animate);
-
-      // Smooth camera target transition
       if (targetPos) {
         controls.target.lerp(targetPos, 0.06);
         if (controls.target.distanceTo(targetPos) < 0.0005) {
@@ -601,13 +769,22 @@
           targetPos = null;
         }
       }
-
       controls.update();
       renderer.render(scene, camera);
     }
 
     onResize();
     animate();
+
+    // ================================================================
+    // INIT
+    // ================================================================
+
+    const params = new URLSearchParams(window.location.search);
+    const initVersion = params.get('v') === 'tankless' ? 'tankless' : 'combi';
+
+    window.switchVersion = switchVersion;
+    switchVersion(initVersion);
   </script>
 </body>
 </html>
