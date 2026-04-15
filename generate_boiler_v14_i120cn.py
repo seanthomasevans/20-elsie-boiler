@@ -1,14 +1,15 @@
 """
 Generate 3D model of boiler closet at 20 Elsie Lane #217.
 Rinnai i120CN I-Series Combi Boiler + closed-loop hydronic heating.
-v14: COMBI BOILER replaces RXP199iN tankless per HVAC tech (Dubay) recommendation.
-     Integrated pump, proportional valve, flat plate HX, servo DHW control.
-     No external TMV, zone valve, or circulation pump needed.
-     Closed CH loop (treated water) separate from DHW (potable).
-     5 bottom ports: Condensate, CH Return, DHW Hot, DHW Cold, CH Supply.
-     Gas on right side. 2" twin pipe PVC venting (native, no adapter).
+v14.1: Routing fixes per Sean's feedback:
+  - Cold water entry from LEFT WALL (under light switch), not floor
+  - CH expansion tank (red) moved to RIGHT SIDE of unit
+  - 90-degree SharkBite elbows at every right-angle pipe turn
+  - Fill valve repositioned, no longer clustered with expansion tee
+  - Gas outdoor branch lowered below transformer (was intersecting)
+  - Manifold tight against back wall, cold supply runs on left wall
 
-Run: blender --background --python generate_boiler.py
+Run: blender --background --python generate_boiler_v14_i120cn.py
 
 Coordinate system: X = width (left to right), Y = depth (front to back), Z = height.
 Origin = front-left-floor corner of closet interior.
@@ -49,9 +50,8 @@ RW = inch(18.5)
 RD = inch(10.9)
 RH = inch(26.4)
 RB = inch(24)          # Bottom at 24" AFF
-RT = RB + RH            # Top at ~50.4" AFF (13.6" below AH)
-
-RX0 = inch(4)            # Left edge at 4" (near gas entry)
+RT = RB + RH            # Top at ~50.4" AFF
+RX0 = inch(4)            # Left edge at 4"
 RX1 = RX0 + RW           # ~22.5"
 RY1 = CD                  # Flush with back wall
 RY0 = CD - RD             # ~21.1"
@@ -60,118 +60,120 @@ RCY = (RY0 + RY1) / 2     # ~26.55"
 
 
 # ============================================================
-# Port positions — ESTIMATED for i120CN combi (5 bottom + 1 side)
-# Bottom view L→R: COND, CH_RET, DHW_HOT, DHW_COLD, CH_SUP
-# Exact positions TBD from installation manual. Estimates based on
-# 18.5" width, internal component layout from brochure cutaway.
-# Gas port on RIGHT SIDE panel (same as RXP199iN).
+# Port positions -- ESTIMATED for i120CN combi (5 bottom + 1 side)
+# Bottom view L->R: COND, CH_RET, DHW_HOT, DHW_COLD, CH_SUP
 # ============================================================
-P_COND_X   = RX0 + inch(2.5)      # Condensate drain, far left
-P_CHRET_X  = RX0 + inch(5.5)      # CH Return (1" NPT), left-center
-P_HOT_X    = RX0 + inch(8.5)      # DHW Hot Outlet (3/4" NPT), center-left
-P_COLD_X   = RX0 + inch(11.5)     # DHW Cold Inlet (3/4" NPT), center-right
-P_CHSUP_X  = RX0 + inch(14.5)     # CH Supply (1" NPT), right-center
+P_COND_X   = RX0 + inch(2.5)
+P_CHRET_X  = RX0 + inch(5.5)
+P_HOT_X    = RX0 + inch(8.5)
+P_COLD_X   = RX0 + inch(11.5)
+P_CHSUP_X  = RX0 + inch(14.5)
 
-# All bottom ports share approximate depth (center of unit)
-P_Y = RCY                          # ~26.5" from front
-P_Z = RB                           # Ports exit bottom at 24" AFF
+P_Y = RCY
+P_Z = RB
 
-# Gas port — RIGHT SIDE panel, low and near front
-GAS_X = RX1                        # Flush with right side panel
-GAS_Z = RB + inch(0.60)            # 0.60" above bottom edge
-GAS_Y = RY0 + inch(2.83)           # 2.83" from front face
+# Gas port -- RIGHT SIDE panel
+GAS_Z = RB + inch(0.60)
+GAS_Y = RY0 + inch(2.83)
 
-# Vent connections — TOP of unit, 2" nominal twin pipe PVC (native, no adapter)
-V_EXH_X = RX0 + inch(5.91)        # Exhaust on left side of top
-V_INT_X = RX0 + inch(12.59)       # Intake on right side of top
-V_Y     = RCY                      # Centered depth
+# Vent connections -- TOP of unit, 2" nominal twin pipe PVC (native)
+V_EXH_X = RX0 + inch(5.91)
+V_INT_X = RX0 + inch(12.59)
+V_Y     = RCY
 
 
 # ============================================================
 # Pipe radii
 # ============================================================
-R_VENT = inch(1.0)        # 2" PVC (native, no 3" adapter needed)
+R_VENT = inch(1.0)        # 2" PVC (native)
 R_GAS = inch(0.375)       # 3/4" CSST
 R_PIPE = inch(0.375)      # 3/4" CPVC (DHW)
 R_HEAT = inch(0.5)        # 1" CPVC (CH loop)
 R_COND = inch(0.25)       # 1/2" condensate
-R_SMALL = inch(0.3)
 
 
 # ============================================================
-# Manifold heights — much simpler with combi (no cross-connections)
-# DHW and CH are completely separate circuits.
+# Manifold heights -- DHW and CH are completely separate circuits
 # ============================================================
 Z_CH_S = inch(12)         # CH supply horizontal
 Z_CH_R = inch(14)         # CH return horizontal
 Z_COLD = inch(16)         # Cold supply horizontal (DHW)
 Z_HOT  = inch(18)         # Hot outlet horizontal (DHW)
-Z_FILL = inch(10)         # Fill valve height (CH loop)
 
 
 # ============================================================
 # Vents: 2" PVC twin pipe, UNDER air handler at 62" AFF
-# Smaller pipes than RXP199iN (was 3"), more clearance in closet
 # ============================================================
 VENT_Z = inch(62)
-VENT_Y_EXH = CD - inch(6)         # Back vent (exhaust)
-VENT_Y_INT = CD - inch(18)        # Front vent (intake), 12" forward
+VENT_Y_EXH = CD - inch(6)
+VENT_Y_INT = CD - inch(18)
 
 
 # ============================================================
-# Gas routing — enters from LEFT ceiling, routes under Rinnai
+# Cold water entry -- LEFT WALL, under light switch
+# Existing PEX through wall, ball valve, copper stub.
+# SharkBite onto copper, CPVC begins.
 # ============================================================
-GAS_CEIL_X = inch(4)
-GAS_CEIL_Y = inch(10)
-GAS_UNDER_Z = inch(23)            # Under Rinnai (24"), above manifold (Z_HOT=18")
-SHUTOFF_Z = inch(56)
+COLD_ENTRY_Y = inch(12)        # Centered with light switch Y
+COLD_ENTRY_Z = inch(42)        # Under light switch (46-50")
+COLD_DROP_X  = inch(2)         # Vertical drop, 2" from left wall
+
+TAP_Z = inch(30)               # Outdoor tap tee height on vertical drop
 
 
 # ============================================================
-# Component positions — SIMPLER: no TMV, no blend line, no zone valve
-# DHW circuit: cold from floor -> unit cold inlet; unit hot outlet -> fixtures
-# CH circuit: unit CH supply -> riser -> AH; AH -> riser -> unit CH return
+# DHW expansion tank (potable, BLUE) -- RIGHT SIDE
 # ============================================================
-COLD_X = inch(3)           # Cold entry from floor (left of unit)
-V1_X = inch(5)             # Cold shutoff valve
-V2_X = inch(14)            # Hot shutoff valve
-V3_X = inch(10)            # CH supply shutoff (optional)
+EXP_DHW_TEE_X  = inch(8)       # Tee on back wall cold horizontal
+EXP_DHW_X      = inch(29)      # Tank X position (right of unit)
+EXP_DHW_CONN_Z = inch(36)      # Tank bottom connection Z
 
-# Risers: on walls, outside unit X range (4-22.5")
-RISER_S_X = CW - inch(2)  # CH supply riser on RIGHT WALL (~34")
-RISER_R_X = inch(2)        # CH return riser on LEFT WALL
+
+# ============================================================
+# Gas routing
+# ============================================================
+GAS_CEIL_X  = inch(4)
+GAS_CEIL_Y  = inch(10)
+GAS_UNDER_Z = inch(23)         # Under Rinnai (24"), above manifold
+SHUTOFF_Z   = inch(68)         # Gas shutoff (above transformer 54-60")
+OGAS_Z      = inch(52)         # Outdoor gas branch (below transformer)
+
+
+# ============================================================
+# CH circuit routing
+# ============================================================
+RISER_S_X = CW - inch(2)       # CH supply riser, right wall (~34")
+RISER_R_X = inch(2)            # CH return riser, left wall
+
+# CH expansion tank (hydronic, RED) -- RIGHT SIDE, on CH supply line
+CH_EXP_X      = inch(26)       # Tank X position
+CH_EXP_CONN_Z = inch(24)       # Tank bottom connection Z
+
+# Fill valve on CH return (separated from expansion tank)
+FILL_X = inch(6)
 
 # Y-depth offsets
-Y_WALL = CD - inch(2)      # Main horizontals against back wall
-Y_BLEND = CD - inch(4)     # Secondary runs slightly off wall
+Y_WALL = CD - inch(2)          # Main horizontals against back wall
 
-# AH connections — FRONT FACE
+# AH connections -- FRONT FACE
 AH_FRONT_Y = inch(2)
-AH_SX = inch(26)           # Supply connection X
-AH_RX = inch(10)           # Return connection X
-AH_SZ = AH_BTM + inch(4)   # Supply Z (68")
-AH_RZ = AH_BTM + inch(2)   # Return Z (66")
+AH_SX = inch(26)               # Supply connection X
+AH_RX = inch(10)               # Return connection X
+AH_SZ = AH_BTM + inch(4)       # Supply Z (68")
+AH_RZ = AH_BTM + inch(2)       # Return Z (66")
 
-# Floor drain — RIGHT side
+# DHW hot shutoff
+V2_X = inch(20)
+
+# Floor drain -- RIGHT side
 FD_X = CW - inch(8)
 FD_Y = inch(8)
 
-# Outdoor branches through left wall
-TAP_Z = inch(16)
-TAP_Y = inch(10)
-OGAS_Z = inch(60)
-OGAS_Y = inch(14)
-
 
 # ============================================================
-# Bend radii per pipe size
+# Bend radii (for smooth flexible routing only)
 # ============================================================
-BEND_VENT = inch(3)        # Smaller for 2" pipe
-BEND_MAIN = inch(2)
-BEND_HEAT = inch(2.5)
 BEND_GAS = inch(2)
-BEND_COND = inch(1.5)
-BEND_SMALL = inch(1.5)
 
 
 # ============================================================
@@ -412,6 +414,32 @@ def sharkbite_valve(name, x, y, z, pipe_r, M, axis='X'):
             y - ht, y + ht, z - hw, z + hw, M["valve_handle"])
 
 
+def pipe_with_elbows(base_name, waypoints, pipe_r, pipe_mat, elbow_mat, sharp=True):
+    """Pipe run with 90-degree elbow fittings at each right-angle turn.
+    Elbows are brass SharkBite push-to-connect (or PVC for condensate).
+    Each elbow gets a unique mesh name for the viewer packing list."""
+    pipe_run(base_name, waypoints, pipe_r, pipe_mat, sharp=sharp)
+    er = pipe_r * 1.7
+    el = pipe_r * 3.5
+    for i in range(1, len(waypoints) - 1):
+        p0 = Vector(waypoints[i - 1])
+        p1 = Vector(waypoints[i])
+        p2 = Vector(waypoints[i + 1])
+        d_in = (p1 - p0).normalized()
+        d_out = (p2 - p1).normalized()
+        dot = abs(d_in.dot(d_out))
+        if dot < 0.15:  # ~90 degree turn (cos 90 = 0)
+            cross = d_in.cross(d_out)
+            ax, ay, az = abs(cross.x), abs(cross.y), abs(cross.z)
+            if ax >= ay and ax >= az:
+                axis = 'X'
+            elif ay >= az:
+                axis = 'Y'
+            else:
+                axis = 'Z'
+            cyl(f"{base_name}_E{i}", tuple(p1), er, el, elbow_mat, axis)
+
+
 # ============================================================
 # BUILD: Closet shell
 # ============================================================
@@ -447,25 +475,20 @@ def build_rinnai(M):
     box("MountBracketBot", RX0 + inch(2), RX1 - inch(2), RY1, RY1 + inch(0.5),
         RB + inch(1), RB + inch(3), M["bracket"])
 
-    # Port stubs — 5 bottom ports + gas side
+    # Port stubs -- 5 bottom ports + gas side
     stub = inch(3)
-    # DHW ports (3/4" NPT)
     cyl("Port_DHW_Cold", (P_COLD_X, P_Y, RB - stub / 2), R_PIPE * 1.4, stub, M["copper_stub"])
     cyl("Port_DHW_Hot", (P_HOT_X, P_Y, RB - stub / 2), R_PIPE * 1.4, stub, M["copper_stub"])
-    # CH ports (1" NPT, larger)
     cyl("Port_CH_Sup", (P_CHSUP_X, P_Y, RB - stub / 2), R_HEAT * 1.4, stub, M["copper_stub"])
     cyl("Port_CH_Ret", (P_CHRET_X, P_Y, RB - stub / 2), R_HEAT * 1.4, stub, M["copper_stub"])
-    # Condensate (1/2" NPT)
     cyl("Port_Cond", (P_COND_X, P_Y, RB - stub / 2), R_COND * 2, stub, M["port"])
-    # Gas (3/4" NPT, right side)
     cyl("Port_Gas", (RX1 + inch(1), GAS_Y, GAS_Z), R_GAS * 1.4, inch(2), M["port"], 'X')
-    # Vent stubs (2" nominal, native)
     cyl("Port_VentExh", (V_EXH_X, V_Y, RT + inch(0.5)), R_VENT, inch(1), M["port"])
     cyl("Port_VentInt", (V_INT_X, V_Y, RT + inch(0.5)), R_VENT, inch(1), M["port"])
 
 
 # ============================================================
-# BUILD: Vents — 2" PVC twin pipe, native (no adapter needed)
+# BUILD: Vents -- 2" PVC twin pipe, native (no adapter needed)
 # ============================================================
 def build_vents(M):
     pipe_run("VentExh_Run", [
@@ -498,7 +521,9 @@ def build_vents(M):
 
 
 # ============================================================
-# BUILD: Gas — CSST from LEFT ceiling, routes under Rinnai
+# BUILD: Gas -- CSST from LEFT ceiling, routes under Rinnai
+# Flexible CSST uses smooth bends, no elbows needed.
+# Outdoor branch lowered to Z=52" to clear transformer (54-60").
 # ============================================================
 def build_gas(M):
     pipe_run("Gas_Line", [
@@ -510,8 +535,10 @@ def build_gas(M):
         (RX1 + inch(2), GAS_Y, GAS_Z),
     ], R_GAS, M["csst"], BEND_GAS)
 
+    # Shutoff valve on vertical drop (above transformer)
     sharkbite_valve("GasShutoff", GAS_CEIL_X, GAS_CEIL_Y, SHUTOFF_Z, R_GAS, M, 'Z')
 
+    # Outdoor gas branch -- right angle through left wall at Z=52"
     sharkbite_tee("GasTee_Out", GAS_CEIL_X, GAS_CEIL_Y, OGAS_Z, R_GAS, M, 'Z', '-X')
     pipe_run("Gas_Outdoor", [
         (GAS_CEIL_X, GAS_CEIL_Y, OGAS_Z),
@@ -522,110 +549,128 @@ def build_gas(M):
 
 # ============================================================
 # BUILD: DHW Cold Supply (potable, 3/4" CPVC)
-# Simple: floor riser -> shutoff -> unit cold inlet
+# Entry from LEFT WALL under light switch. Existing PEX + ball valve.
+# Down left wall, along left wall to back corner, along back wall
+# to cold port. Outdoor tap tee on vertical drop. DHW expansion
+# tank tee on back wall horizontal.
 # ============================================================
 def build_dhw_cold(M):
-    pipe_run("DHW_Cold_Supply", [
-        (COLD_X, Y_WALL, -inch(2)),
-        (COLD_X, Y_WALL, Z_COLD),
-        (P_COLD_X, Y_WALL, Z_COLD),
-        (P_COLD_X, P_Y, Z_COLD),
-        (P_COLD_X, P_Y, P_Z - inch(1)),
-    ], R_PIPE, M["cpvc"], sharp=True)
+    # Through-wall PEX stub (existing pipe from basement supply)
+    pipe_run("DHW_Cold_Entry", [
+        (-EXT_T - inch(1), COLD_ENTRY_Y, COLD_ENTRY_Z),
+        (COLD_DROP_X + inch(1), COLD_ENTRY_Y, COLD_ENTRY_Z),
+    ], R_PIPE * 1.2, M["cpvc"])
 
-    sharkbite_valve("V1_ColdShut", V1_X, Y_WALL, Z_COLD, R_PIPE, M)
+    # Existing ball valve at wall entry [REUSE]
+    sharkbite_valve("V1_ColdShut", inch(1), COLD_ENTRY_Y, COLD_ENTRY_Z, R_PIPE, M, 'X')
 
-    # Potable expansion tank on cold supply (Watts PLT-5, right side)
-    EXP_X = inch(29)
-    EXP_HORIZ_Z = inch(8)
-    sharkbite_tee("ExpTee_DHW", COLD_X, Y_WALL, EXP_HORIZ_Z, R_PIPE, M, 'Z', '-Y')
-    pipe_run("Exp_DHW_Run", [
-        (COLD_X, Y_WALL, EXP_HORIZ_Z),
-        (COLD_X, Y_BLEND, EXP_HORIZ_Z),
-        (EXP_X, Y_BLEND, EXP_HORIZ_Z),
-        (EXP_X, Y_BLEND, RB + inch(16)),
-        (EXP_X, Y_WALL, RB + inch(16)),
-    ], R_PIPE, M["cpvc"], sharp=True)
-    cyl("ExpTank_DHW", (EXP_X, Y_WALL, RB + inch(16) + inch(5)),
-        inch(3), inch(9), M["exp_tank"])
-    cyl("ExpTank_DHW_Cap", (EXP_X, Y_WALL, RB + inch(16) + inch(0.5)),
-        inch(2.8), inch(1.5), M["exp_tank"])
+    # 90-degree elbow: horizontal entry turns to vertical drop
+    cyl("DHW_Cold_Entry_Elb", (COLD_DROP_X, COLD_ENTRY_Y, COLD_ENTRY_Z),
+        R_PIPE * 1.7, R_PIPE * 3.5, M["sharkbite"], 'Y')
 
-    # Outdoor tap branch
-    sharkbite_tee("ColdTee_Tap", COLD_X, Y_WALL, TAP_Z, R_PIPE, M, 'Z', '-Y')
+    # Main cold supply: vertical drop on left wall, then back wall to port
+    # 4 elbows: at Z_COLD turn, left-back corner, port X turn, port Z turn
+    pipe_with_elbows("DHW_Cold_Supply", [
+        (COLD_DROP_X, COLD_ENTRY_Y, COLD_ENTRY_Z),    # start (after entry elbow)
+        (COLD_DROP_X, COLD_ENTRY_Y, Z_COLD),           # bottom of vertical drop
+        (COLD_DROP_X, Y_WALL, Z_COLD),                  # along left wall to back corner
+        (P_COLD_X, Y_WALL, Z_COLD),                     # along back wall to port X
+        (P_COLD_X, P_Y, Z_COLD),                        # jog to port depth
+        (P_COLD_X, P_Y, P_Z - inch(1)),                 # up to port
+    ], R_PIPE, M["cpvc"], M["sharkbite"])
+
+    # Outdoor tap tee on vertical drop at Z=30"
+    sharkbite_tee("ColdTee_Tap", COLD_DROP_X, COLD_ENTRY_Y, TAP_Z, R_PIPE, M, 'Z', '-X')
     pipe_run("Cold_OutdoorTap", [
-        (COLD_X, Y_WALL, TAP_Z),
-        (COLD_X, TAP_Y, TAP_Z),
-        (-EXT_T - inch(1), TAP_Y, TAP_Z),
+        (COLD_DROP_X, COLD_ENTRY_Y, TAP_Z),
+        (-EXT_T - inch(1), COLD_ENTRY_Y, TAP_Z),
     ], R_PIPE, M["cpvc"], sharp=True)
-    sharkbite_valve("TapShutoff", inch(2), TAP_Y, TAP_Z, R_PIPE, M, 'X')
+    sharkbite_valve("TapShutoff", inch(1), COLD_ENTRY_Y, TAP_Z, R_PIPE, M, 'X')
+
+    # DHW expansion tank (potable, BLUE) -- tee on back wall horizontal
+    sharkbite_tee("ExpTee_DHW", EXP_DHW_TEE_X, Y_WALL, Z_COLD, R_PIPE, M, 'X', 'Z')
+    # Branch: along back wall right, then up to tank. 1 elbow at turn.
+    pipe_with_elbows("Exp_DHW_Run", [
+        (EXP_DHW_TEE_X, Y_WALL, Z_COLD),               # from tee
+        (EXP_DHW_X, Y_WALL, Z_COLD),                    # along back wall right
+        (EXP_DHW_X, Y_WALL, EXP_DHW_CONN_Z),            # up to tank
+    ], R_PIPE, M["cpvc"], M["sharkbite"])
+
+    # Tank: Watts PLT-5, 2.1 gal, potable-rated, blue
+    cyl("ExpTank_DHW", (EXP_DHW_X, Y_WALL, EXP_DHW_CONN_Z + inch(5.5)),
+        inch(3.5), inch(10), M["exp_tank"])
+    cyl("ExpTank_DHW_Cap", (EXP_DHW_X, Y_WALL, EXP_DHW_CONN_Z + inch(0.5)),
+        inch(3.2), inch(1.5), M["exp_tank"])
 
 
 # ============================================================
 # BUILD: DHW Hot Outlet (potable, 3/4" CPVC)
-# Simple: unit hot outlet -> shutoff -> fixtures (exits right wall)
+# Unit hot outlet -> shutoff -> fixtures (exits right wall).
 # No TMV needed: servo-based temp control built into i120CN.
 # ============================================================
 def build_dhw_hot(M):
-    dhw_out_z = Z_HOT + inch(1.5)
-    pipe_run("DHW_Hot_Out", [
-        (P_HOT_X, P_Y, P_Z - inch(1)),
-        (P_HOT_X, P_Y, Z_HOT),
-        (P_HOT_X, Y_WALL, Z_HOT),
-        (CW + WALL_T + inch(1), Y_WALL, Z_HOT),
-    ], R_PIPE, M["cpvc_hot"], sharp=True)
+    # 2 elbows: at Z_HOT turn, at back wall turn
+    pipe_with_elbows("DHW_Hot_Out", [
+        (P_HOT_X, P_Y, P_Z - inch(1)),                  # from port
+        (P_HOT_X, P_Y, Z_HOT),                           # drop to manifold
+        (P_HOT_X, Y_WALL, Z_HOT),                        # to back wall
+        (CW + WALL_T + inch(1), Y_WALL, Z_HOT),          # exit right wall
+    ], R_PIPE, M["cpvc_hot"], M["sharkbite"])
 
     sharkbite_valve("V2_HotShut", V2_X, Y_WALL, Z_HOT, R_PIPE, M)
 
 
 # ============================================================
 # BUILD: CH Supply (closed loop, 1" CPVC)
-# Unit CH supply -> riser on right wall -> up to AH
+# Unit CH supply port -> back wall -> right wall riser -> up to AH.
+# CH expansion tank (hydronic, RED) branches off back wall horizontal.
 # ============================================================
 def build_ch_supply(M):
-    pipe_run("CH_Supply", [
-        (P_CHSUP_X, P_Y, P_Z - inch(1)),
-        (P_CHSUP_X, P_Y, Z_CH_S),
-        (P_CHSUP_X, Y_WALL, Z_CH_S),
-        (RISER_S_X, Y_WALL, Z_CH_S),
-        (RISER_S_X, Y_WALL, AH_SZ),
-        (RISER_S_X, AH_FRONT_Y, AH_SZ),
-        (AH_SX, AH_FRONT_Y, AH_SZ),
-    ], R_HEAT, M["cpvc_hot"], sharp=True)
+    # 5 elbows on main run
+    pipe_with_elbows("CH_Supply", [
+        (P_CHSUP_X, P_Y, P_Z - inch(1)),                # from port
+        (P_CHSUP_X, P_Y, Z_CH_S),                        # drop to manifold
+        (P_CHSUP_X, Y_WALL, Z_CH_S),                     # to back wall
+        (RISER_S_X, Y_WALL, Z_CH_S),                      # along back wall right
+        (RISER_S_X, Y_WALL, AH_SZ),                       # up right wall riser
+        (RISER_S_X, AH_FRONT_Y, AH_SZ),                   # forward to AH front
+        (AH_SX, AH_FRONT_Y, AH_SZ),                       # to AH supply stub
+    ], R_HEAT, M["cpvc_hot"], M["sharkbite"])
+
+    # CH expansion tank (hydronic, RED) -- tee on back wall at X=26"
+    # Branch goes straight up from tee to tank. No additional elbows.
+    sharkbite_tee("ExpTee_CH", CH_EXP_X, Y_WALL, Z_CH_S, R_HEAT, M, 'X', 'Z')
+    pipe_run("Exp_CH_Run", [
+        (CH_EXP_X, Y_WALL, Z_CH_S),                      # from tee
+        (CH_EXP_X, Y_WALL, CH_EXP_CONN_Z),                # straight up to tank
+    ], R_HEAT, M["cpvc"], sharp=True)
+
+    # Tank: Watts ETX-15, 2.1 gal, hydronic-rated, red
+    cyl("ExpTank_CH", (CH_EXP_X, Y_WALL, CH_EXP_CONN_Z + inch(5.5)),
+        inch(3.5), inch(10), M["exp_tank_ch"])
+    cyl("ExpTank_CH_Cap", (CH_EXP_X, Y_WALL, CH_EXP_CONN_Z + inch(0.5)),
+        inch(3.2), inch(1.5), M["exp_tank_ch"])
 
 
 # ============================================================
 # BUILD: CH Return (closed loop, 1" CPVC)
-# AH return -> riser on left wall -> back to unit CH return
+# AH return -> left wall riser down -> back wall -> unit CH return.
+# Fill valve on back wall horizontal (separated from expansion tank).
 # ============================================================
 def build_ch_return(M):
-    pipe_run("CH_Return", [
-        (AH_RX, AH_FRONT_Y, AH_RZ),
-        (RISER_R_X, AH_FRONT_Y, AH_RZ),
-        (RISER_R_X, Y_WALL, AH_RZ),
-        (RISER_R_X, Y_WALL, Z_CH_R),
-        (P_CHRET_X, Y_WALL, Z_CH_R),
-        (P_CHRET_X, P_Y, Z_CH_R),
-        (P_CHRET_X, P_Y, P_Z - inch(1)),
-    ], R_HEAT, M["cpvc"], sharp=True)
+    # 5 elbows on main run
+    pipe_with_elbows("CH_Return", [
+        (AH_RX, AH_FRONT_Y, AH_RZ),                      # from AH return stub
+        (RISER_R_X, AH_FRONT_Y, AH_RZ),                   # along AH front to left
+        (RISER_R_X, Y_WALL, AH_RZ),                        # back to wall
+        (RISER_R_X, Y_WALL, Z_CH_R),                        # down left wall
+        (P_CHRET_X, Y_WALL, Z_CH_R),                        # along back wall to port
+        (P_CHRET_X, P_Y, Z_CH_R),                           # to port depth
+        (P_CHRET_X, P_Y, P_Z - inch(1)),                    # up to port
+    ], R_HEAT, M["cpvc"], M["sharkbite"])
 
-    # CH expansion tank (hydronic, NOT potable) on return line
-    # Watts ETX-15 or similar, on left wall
-    CH_EXP_X = inch(2)
-    CH_EXP_Z = inch(36)
-    sharkbite_tee("ExpTee_CH", RISER_R_X, Y_WALL, Z_CH_R, R_HEAT, M, 'X', '-X')
-    pipe_run("Exp_CH_Run", [
-        (RISER_R_X, Y_WALL, Z_CH_R),
-        (CH_EXP_X, Y_WALL, Z_CH_R),
-        (CH_EXP_X, Y_WALL, CH_EXP_Z),
-    ], R_HEAT, M["cpvc"], sharp=True)
-    cyl("ExpTank_CH", (CH_EXP_X, Y_WALL, CH_EXP_Z + inch(5)),
-        inch(3), inch(9), M["exp_tank_ch"])
-    cyl("ExpTank_CH_Cap", (CH_EXP_X, Y_WALL, CH_EXP_Z + inch(0.5)),
-        inch(2.8), inch(1.5), M["exp_tank_ch"])
-
-    # Fill/purge valve on CH return (to fill closed loop)
-    FILL_X = inch(5)
+    # Fill/purge valve on CH return back wall horizontal
+    # Opens to charge closed loop from potable supply. Close after filling.
     sharkbite_valve("FillValve", FILL_X, Y_WALL, Z_CH_R, R_HEAT, M, 'X')
 
 
@@ -636,21 +681,23 @@ def build_condensate(M):
     NEUT_Z = inch(8)
     NEUT_X = P_COND_X
 
-    pipe_run("Cond_Drop", [
+    # Drop from port to neutralizer -- 1 PVC elbow at turn
+    pipe_with_elbows("Cond_Drop", [
         (P_COND_X, P_Y, P_Z - inch(1)),
         (P_COND_X, P_Y, NEUT_Z + inch(4)),
         (P_COND_X, Y_WALL, NEUT_Z + inch(4)),
-    ], R_COND, M["pvc"], sharp=True)
+    ], R_COND, M["pvc"], M["pvc"])
 
     box("Neutralizer", NEUT_X - inch(2), NEUT_X + inch(2),
         Y_WALL - inch(1.5), Y_WALL + inch(1), NEUT_Z, NEUT_Z + inch(4), M["pvc"])
 
-    pipe_run("Cond_ToDrain", [
+    # From neutralizer to floor drain -- 2 PVC elbows
+    pipe_with_elbows("Cond_ToDrain", [
         (NEUT_X, Y_WALL, NEUT_Z),
         (NEUT_X, Y_WALL, inch(0.5)),
         (FD_X, Y_WALL, inch(0.5)),
         (FD_X, FD_Y, inch(0.5)),
-    ], R_COND, M["drain"], sharp=True)
+    ], R_COND, M["drain"], M["pvc"])
 
     box("DrainChannel", NEUT_X - inch(1), FD_X + inch(1),
         Y_WALL - inch(1), Y_WALL + inch(0.5), -inch(0.3), inch(0.3), M["drain"])
@@ -738,12 +785,17 @@ def main():
     setup_cameras()
     setup_lighting()
 
-    glb = os.path.join(out_dir, "boiler_closet.glb")
+    glb = os.path.join(out_dir, "boiler_closet_v14_i120cn.glb")
     bpy.ops.export_scene.gltf(filepath=glb, export_format='GLB')
 
-    n = len([o for o in bpy.data.objects if o.type == 'MESH'])
+    meshes = [o for o in bpy.data.objects if o.type == 'MESH']
+    n = len(meshes)
+    n_elbows = len([o for o in meshes if '_E' in o.name and any(c.isdigit() for c in o.name.split('_E')[-1])])
+    n_elbows += len([o for o in meshes if 'Entry_Elb' in o.name])  # manual entry elbow
+    n_vent_elb = len([o for o in meshes if 'Vent' in o.name and 'Elb' in o.name])
+
     print(f"\n{'=' * 60}")
-    print(f"MODEL v14 (i120CN COMBI BOILER, closed loop CH)")
+    print(f"MODEL v14.1 (i120CN COMBI, routing fixes)")
     print(f"{'=' * 60}")
     print(f"Mesh objects: {n}")
     print(f"Exported: {glb}")
@@ -751,15 +803,13 @@ def main():
     print(f"  CH: 120K BTU, DHW: 199K BTU, 95.5% AFUE")
     print(f"  Bottom at {RB/0.0254:.0f}\" AFF, top at ~{RT/0.0254:.0f}\"")
     print(f"  X range: {RX0/0.0254:.0f}\"-{RX1/0.0254:.1f}\"")
-    print(f"Ports (L->R): COND={P_COND_X/0.0254:.1f} CH_RET={P_CHRET_X/0.0254:.1f} "
-          f"DHW_HOT={P_HOT_X/0.0254:.1f} DHW_COLD={P_COLD_X/0.0254:.1f} "
-          f"CH_SUP={P_CHSUP_X/0.0254:.1f}\"")
-    print(f"Gas: Z={GAS_Z/0.0254:.1f}\", Y={GAS_Y/0.0254:.1f}\"")
+    print(f"Cold entry: LEFT WALL at Y={COLD_ENTRY_Y/0.0254:.0f}\", Z={COLD_ENTRY_Z/0.0254:.0f}\"")
     print(f"Manifold Z: CH_S={Z_CH_S/0.0254:.0f} CH_R={Z_CH_R/0.0254:.0f} "
           f"COLD={Z_COLD/0.0254:.0f} HOT={Z_HOT/0.0254:.0f}")
-    print(f"Vents: 2\" PVC twin pipe at {VENT_Z/0.0254:.0f}\" AFF")
-    print(f"INTEGRATED: pump, proportional valve, flat plate HX, servo DHW")
-    print(f"ELIMINATED: TMV, zone valve, external pump, MCC-91-2, check valve")
+    print(f"Expansion tanks: DHW(blue) X={EXP_DHW_X/0.0254:.0f}\", "
+          f"CH(red) X={CH_EXP_X/0.0254:.0f}\" -- both RIGHT of unit")
+    print(f"90-degree elbows: {n_elbows} pipe + {n_vent_elb} vent = {n_elbows + n_vent_elb} total")
+    print(f"Gas outdoor branch: Z={OGAS_Z/0.0254:.0f}\" (below transformer 54-60\")")
     print(f"{'=' * 60}")
 
 
